@@ -27,13 +27,34 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
 
         const workDuration = this.calculateWorkTimeInMinutes(todayAttendances);
 
+        let currentStatus: string;
+        if (!todayAttendances || !todayAttendances.length || todayAttendances.at(-1).checkOut)
+            currentStatus = 'CHECKED_OUT'
+
+        if (todayAttendances.length && todayAttendances.at(-1).checkIn && !todayAttendances.at(-1).checkOut)
+            currentStatus = 'CHECKED_IN'
+
+        if (todayAttendances.length && todayAttendances.at(-1).stops.length && !todayAttendances.at(-1).stops.at(-1).getEndTime)
+            currentStatus = 'STOP'
+
+
         return {
-            now: utcNow,
+            nowDatetime: utcNow,
             user,
-            todayStartTime: DateUtil.setTimezone(todayAttendances?.at(0)?.getCheckIn),
-            lastEndTime: DateUtil.setTimezone(todayAttendances?.at(-1)?.getCheckOut),
-            workDuration,
-            remainingDuration: totalDailyMinutes - workDuration
+            remainingDuration: (totalDailyMinutes - workDuration) * 60,
+            todayStartTime: DateUtil.formatDateToTehran(todayAttendances?.at(0)?.getCheckIn?.toISOString(), 'HH:mm'),
+            lastEndTime: DateUtil.formatDateToTehran(
+                todayAttendances?.at(-1)?.getCheckOut?.toISOString() || todayAttendances?.at(-2)?.getCheckOut?.toISOString(),
+                'HH:mm'
+            ),
+            workDuration: workDuration * 60,
+            stopDuration: this.calculateStopsInMinutes(todayAttendances?.at(-1)),
+            currentStatus,
+            lastStartTime: DateUtil.setTimezone(todayAttendances?.at(-1)?.getCheckIn),
+            initTime: DateUtil.setTimezone(todayAttendances?.at(0)?.getCheckIn),
+            endTodayTime: DateUtil.endOfDay(),
+            currentDuration: this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60
+            // totalDailyMinutes: DateUtil.formatMinutesToTime(totalDailyMinutes),
         }
     }
 
@@ -46,15 +67,38 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
                 attendance.getCheckOut || DateUtil.nowUTC()
             );
 
-            console.log(attendance);
-
-
             const stopDuration = attendance.getStops.reduce((sum, stop) =>
                 sum + DateUtil.dateDifferenceInMinutes(stop.getStartTime, stop.getEndTime || DateUtil.nowUTC()), 0);
 
             duration -= stopDuration;
         }
 
-        return duration;
+        return Math.floor(duration);
+    }
+
+    private calculateStopsInMinutes(attendance: Attendance): number {
+        if (!attendance || !attendance?.stops?.length)
+            return 0;
+
+        let duration = 0;
+        for (let i = 0; i < attendance.stops.length; i++) {
+            const stop = attendance.stops[i];
+            duration += DateUtil.dateDifferenceInMinutes(
+                stop.getStartTime,
+                stop.getEndTime || DateUtil.nowUTC()
+            );
+        }
+
+        return Math.floor(duration);
+    }
+
+    private calculateCurrentTimeWorkInMinutes(attendance: Attendance): number {
+        if (!attendance)
+            return 0;
+
+        return Math.floor(DateUtil.dateDifferenceInMinutes(
+            attendance.checkIn,
+            attendance.checkOut || DateUtil.nowUTC()
+        ));
     }
 }

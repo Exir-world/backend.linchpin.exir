@@ -13,11 +13,14 @@ export class CreateStopHandler implements ICommandHandler<CreateStopCommand> {
     ) { }
 
     async execute(command: CreateStopCommand): Promise<Stop> {
-        const { attendanceId, reason } = command;
-        const attendance = await this.attendanceRepository.findById(attendanceId);
+        const { userId, reason } = command;
+        const attendance = await this.attendanceRepository.findLastByUserId(userId);
+        if (!attendance)
+            throw new BadRequestException('You are not checked in!');
+
         if (attendance.checkOut)
             throw new BadRequestException('You are checked out!');
 
-        return await this.stopRepository.createStop(attendanceId, reason);
+        return await this.stopRepository.createStop(attendance.id, reason);
     }
 }

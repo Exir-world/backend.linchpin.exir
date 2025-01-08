@@ -88,25 +88,25 @@ export class AttendanceController {
     @UseGuards(UserAuthGuard)
     @ApiOperation({ summary: 'Create a new stop for an attendance' })
     @Post('stop/new')
-    async createStop(@Body() createStopDto: CreateStopDto) {
+    async createStop(@Request() req, @Body() createStopDto: CreateStopDto) {
         return await this.attendanceService.createStop(
-            new CreateStopCommand(createStopDto.attendanceId, createStopDto.reason),
+            new CreateStopCommand(req.user.id, createStopDto.reason),
         );
     }
 
     @UseGuards(UserAuthGuard)
     @ApiOperation({ summary: 'End an existing stop' })
     @Post('stop/end')
-    async endStop(@Body() endStopDto: EndStopDto) {
+    async endStop(@Request() req) {
         return await this.attendanceService.endStop(
-            new EndStopCommand(endStopDto.stopId),
+            new EndStopCommand(req.user.id),
         );
     }
 
     @UseGuards(UserAuthGuard)
     @Get('daily')
     @ApiOperation({ summary: 'دریافت وضعیت روزانه حضور و غیاب کاربر' })
-    @ApiResponse({ status: 200, description: ' حضور و غیاب با موفقیت دریافت شد.' })
+    @ApiResponse({ status: 200, description: 'حضور و غیاب با موفقیت دریافت شد.' })
     async getDailyAttendanceStatus(@Request() req) {
         return this.attendanceService.getDailyAttendanceStatus(new GetDailyAttendanceStatusQuery(req.user.id));
     }

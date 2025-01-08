@@ -74,7 +74,13 @@ export class AttendanceService {
     }
 
     async getDailyAttendanceStatus(query: GetDailyAttendanceStatusQuery) {
-        return this.queryBus.execute(query);
+        try {
+            return this.queryBus.execute(query);
+
+        } catch (error) {
+            console.log(error);
+
+        }
     }
 
     async getMonthlyReport(query: GetMonthlyReportQuery) {

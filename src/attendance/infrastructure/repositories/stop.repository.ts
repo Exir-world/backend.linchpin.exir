@@ -26,10 +26,10 @@ export class StopRepositoryImpl implements StopRepository {
         return StopMapper.toDomain(newStop);
     }
 
-    async endStop(stopId: number): Promise<Stop> {
+    async endStop(userId: number): Promise<Stop> {
         const stop = await this.stopRepository.findOne({
-            where: { id: stopId },
-            relations: ['attendance']
+            where: { attendance: { userId } },
+            order: { startTime: 'DESC' }
         });
 
         if (!stop) {

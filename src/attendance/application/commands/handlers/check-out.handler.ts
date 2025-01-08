@@ -2,10 +2,14 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CheckOutCommand } from '../check-out.command';
 import { AttendanceRepository } from '../../ports/attendance.repository';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { StopRepository } from '../../ports/stop.repository';
 
 @CommandHandler(CheckOutCommand)
 export class CheckOutHandler implements ICommandHandler<CheckOutCommand> {
-    constructor(private readonly attendanceRepo: AttendanceRepository) { }
+    constructor(
+        private readonly attendanceRepo: AttendanceRepository,
+        private readonly stopRepo: StopRepository,
+    ) { }
 
     async execute(command: CheckOutCommand): Promise<void> {
         const attendance = await this.attendanceRepo.findLastByUserId(command.userId);
@@ -16,6 +20,11 @@ export class CheckOutHandler implements ICommandHandler<CheckOutCommand> {
             throw new BadRequestException('You are already checked out!');
 
         attendance.setCheckOut();
+        if (attendance.stops.length)
+            if (!attendance.stops.at(-1).getEndTime)
+                await this.stopRepo.endStop(command.userId);
+
+
         await this.attendanceRepo.save(attendance);
     }
 }

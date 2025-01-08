@@ -8,7 +8,7 @@ export class EndStopHandler implements ICommandHandler<EndStopCommand> {
     constructor(private readonly stopRepository: StopRepository) { }
 
     async execute(command: EndStopCommand): Promise<Stop> {
-        const { stopId } = command;
-        return await this.stopRepository.endStop(stopId);
+        const { userId } = command;
+        return await this.stopRepository.endStop(userId);
     }
 }

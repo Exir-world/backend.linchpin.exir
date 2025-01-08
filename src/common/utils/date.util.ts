@@ -147,4 +147,52 @@ export class DateUtil {
     static fromJsDate(date: Date) {
         return DateTime.fromJSDate(date);
     }
+
+    static formatDateToTehran(date: string, format: 'HH:mm' | 'HH:mm:ss' | 'YYYY-MM-DD', timezone: string = 'Asia/Tehran'): string {
+        if (!date)
+            return null;
+
+        let dateTime: DateTime;
+
+        // Check if date is in ISO format
+        if (date.includes('T')) {
+            dateTime = DateTime.fromISO(date, { zone: 'UTC' });
+        } else {
+            dateTime = DateTime.fromSQL(date, { zone: 'UTC' });
+        }
+
+
+        // مرحله ۲: تغییر تایم‌زون به تهران
+        const tehranDateTime = dateTime.setZone(timezone);
+
+        // مرحله ۳: فرمت‌دهی براساس ورودی کاربر
+        switch (format) {
+            case 'HH:mm':
+                return tehranDateTime.toFormat('HH:mm');
+            case 'HH:mm:ss':
+                return tehranDateTime.toFormat('HH:mm:ss');
+            case 'YYYY-MM-DD':
+                return tehranDateTime.toFormat('yyyy-MM-dd');
+            default:
+                throw new Error('Invalid format. Supported formats: HH:mm, HH:mm:ss, YYYY-MM-DD');
+        }
+    }
+
+    /**
+ * Converts minutes into a formatted string (HH:mm or mm)
+ * @param minutes - Number of minutes to convert
+ * @returns Formatted string in HH:mm or mm
+ */
+    static formatMinutesToTime(minutes: number): string {
+        minutes = Math.floor(minutes);
+
+        if (minutes < 0) {
+            throw new Error('Minutes cannot be negative');
+        }
+
+        const hours = Math.floor(minutes / 60); // Calculate hours
+        const remainingMinutes = minutes % 60; // Get remaining minutes
+
+        return `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}`; // HH:mm
+    }
 }
