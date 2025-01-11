@@ -7,7 +7,7 @@ pipeline {
         SONARQUBE_TOKEN = credentials('sonar-liyan-order')
         DOCKER_REGISTRY_URL = 'docker.sharifexchange.net'
         DOCKER_REGISTRY_CREDENTIALS_ID = credentials('docker_registry_user_pass')
-        IMAGE_NAME = 'backend.linchpin.exir.ex.pro'
+        IMAGE_NAME = 'backend.linchpin.ex.pro'
         IMAGE_TAG =  "${env.BUILD_NUMBER}" //'latest' // or use ${env.BUILD_NUMBER} for dynamic tagging
         // Telegram configuration
         TELEGRAM_TOKEN = credentials('telegram_bot_key')
