@@ -11,7 +11,6 @@ export const EnvValidationSchema = Joi.object({
         .description('The port the application will run on'),
 
     DATABASE_HOST: Joi.string()
-        .hostname()
         .required()
         .description('Database host address'),
 
