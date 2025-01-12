@@ -149,6 +149,8 @@ export class DateUtil {
     }
 
     static formatDateToTehran(date: string, format: 'HH:mm' | 'HH:mm:ss' | 'YYYY-MM-DD', timezone: string = 'Asia/Tehran'): string {
+        console.log(date);
+
         if (!date)
             return null;
 
@@ -156,9 +158,9 @@ export class DateUtil {
 
         // Check if date is in ISO format
         if (date.includes('T')) {
-            dateTime = DateTime.fromISO(date, { zone: 'UTC' });
+            dateTime = DateTime.fromISO(date);
         } else {
-            dateTime = DateTime.fromSQL(date, { zone: 'UTC' });
+            dateTime = DateTime.fromSQL(date);
         }
 
 
