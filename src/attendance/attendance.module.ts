@@ -23,6 +23,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { GetDailyAttendanceStatusHandler } from './application/queries/handlers/get-daily-attendance-status.handler';
 import { GetMonthlyReportHandler } from './application/queries/handlers/get-monthly-report.handler';
 import { AttendanceSharedRepositoryImpl } from './infrastructure/repositories/attendance-shared.repository';
+import { LeaveModule } from 'src/leave/leave.module';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import { AttendanceSharedRepositoryImpl } from './infrastructure/repositories/at
         ]),
         CqrsModule,
         AuthModule,
+        LeaveModule,
     ],
     controllers: [
         AttendanceController,
@@ -60,6 +62,10 @@ import { AttendanceSharedRepositoryImpl } from './infrastructure/repositories/at
         {
             provide: 'IUserSharedRepository',
             useExisting: 'UserSharedRepository', // اشاره به پیاده‌سازی موجود در AuthModule
+        },
+        {
+            provide: 'ILeaveSharedRepository',
+            useExisting: 'LeaveSharedRepository',
         },
         AttendanceSharedRepositoryImpl,
         {

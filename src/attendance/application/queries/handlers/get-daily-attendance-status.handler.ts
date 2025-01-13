@@ -19,7 +19,7 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         if (!user)
             throw new NotFoundException('User notfound!');
 
-        const utcNow = DateUtil.nowUTC();
+        const nowTehran = DateUtil.nowUTC2();
 
         const totalDailyMinutes = 8 * 45;
 
@@ -37,9 +37,13 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         if (todayAttendances.length && todayAttendances.at(-1).stops.length && !todayAttendances.at(-1).stops.at(-1).getEndTime)
             currentStatus = 'STOP'
 
+        const endOfDay = new Date();
+        endOfDay.setUTCHours(14);
+        endOfDay.setUTCMinutes(30);
+        endOfDay.setUTCSeconds(0);
 
         return {
-            nowDatetime: utcNow,
+            nowDatetime: nowTehran,
             user,
             remainingDuration: (totalDailyMinutes - workDuration) * 60,
             todayStartTime: DateUtil.formatDateToTehran(todayAttendances?.at(0)?.getCheckIn?.toISOString(), 'HH:mm'),
@@ -52,7 +56,7 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
             currentStatus,
             lastStartTime: DateUtil.setTimezone(todayAttendances?.at(-1)?.getCheckIn),
             initTime: DateUtil.setTimezone(todayAttendances?.at(0)?.getCheckIn),
-            endTodayTime: DateUtil.endOfDay(),
+            endTodayTime: DateUtil.setTimezone(endOfDay),
             currentDuration: this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60
             // totalDailyMinutes: DateUtil.formatMinutesToTime(totalDailyMinutes),
         }

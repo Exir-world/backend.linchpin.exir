@@ -5,5 +5,5 @@ export abstract class AttendanceRepository {
     abstract findById(id: number): Promise<Attendance | null>;
     abstract findLastByUserId(userId: number): Promise<Attendance | null>;
     abstract findTodayAttendance(userId: number): Promise<Attendance[]>;
-    abstract getMonthlyReports(userId: number, monthAgo: number);
+    abstract filterByUserAndRange(userId: number, startTime: Date, endTime: Date);
 }

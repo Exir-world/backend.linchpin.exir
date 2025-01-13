@@ -14,6 +14,7 @@ import { CancelRequestHandler } from './application/commands/handlers/cancel-req
 import { LeaveModule } from 'src/leave/leave.module';
 import { AttendanceModule } from 'src/attendance/attendance.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { GetRequestTypesHandler } from './application/queries/handlers/get-request-types.handler';
 
 @Module({
     imports: [
@@ -51,6 +52,7 @@ import { AuthModule } from 'src/auth/auth.module';
         // Query Handlers
         GetUserRequestsHandler,
         GetAllRequestsHandler,
+        GetRequestTypesHandler,
     ],
 })
 export class RequestsModule { }

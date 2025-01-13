@@ -10,10 +10,10 @@ export class AttendanceEntity {
     @Column()
     userId: number; // شناسه کاربر
 
-    @Column({ type: 'timestamp', nullable: false })
+    @Column({ type: 'timestamptz', nullable: false })
     checkIn: Date; // زمان ورود
 
-    @Column({ type: 'timestamp', nullable: true })
+    @Column({ type: 'timestamptz', nullable: true })
     checkOut: Date; // زمان خروج
 
     @OneToOne(() => WorkReportEntity, (workReport) => workReport.attendance, { cascade: true })
