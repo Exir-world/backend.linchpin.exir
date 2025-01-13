@@ -5,6 +5,7 @@ import { ReviewRequestCommand } from '../commands/review-request.command';
 import { GetUserRequestsQuery } from '../queries/get-user-requests.query';
 import { GetAllRequestsQuery } from '../queries/get-all-requests.query';
 import { CancelRequestCommand } from '../commands/cancel-request.command';
+import { GetRequestTypesQuery } from '../queries/get-request-types.query';
 
 @Injectable()
 export class RequestService {
@@ -31,5 +32,9 @@ export class RequestService {
 
     async cancelRequestByUser(command: CancelRequestCommand) {
         return this.commandBus.execute(command);
+    }
+
+    async getRequestTypes(query: GetRequestTypesQuery): Promise<any[]> {
+        return this.queryBus.execute(query);
     }
 }

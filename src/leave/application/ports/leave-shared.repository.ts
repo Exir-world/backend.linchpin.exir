@@ -6,4 +6,10 @@ export interface LeaveSharedRepository {
         endTime: Date,
         description: string,
     ): Promise<void>;
+
+    filterByUserAndRange(
+        userId: number,
+        startDate: Date,
+        endDate: Date
+    ): Promise<any[]>;
 }

@@ -11,6 +11,7 @@ import { RequestService } from '../application/services/requests.service';
 import { CancelRequestCommand } from '../application/commands/cancel-request.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { GetRequestTypesQuery } from '../application/queries/get-request-types.query';
 
 @ApiBearerAuth()
 @ApiTags('Requests') // نام بخش در Swagger
@@ -84,5 +85,12 @@ export class RequestController {
         return await this.requestService.cancelRequestByUser(
             new CancelRequestCommand(requestId, userId)
         );
+    }
+
+    @ApiOperation({ summary: 'لیست نوع درخواست ها' })
+    @ApiResponse({ status: 200, description: 'نوع درخواست ها' })
+    @Get('request-types')
+    async getRequestTypes() {
+        return await this.requestService.getRequestTypes(new GetRequestTypesQuery());
     }
 }

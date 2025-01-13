@@ -13,9 +13,9 @@ export class StopEntity {
     @Column({ nullable: true })
     reason?: string;
 
-    @CreateDateColumn({ name: 'start_time' })
+    @CreateDateColumn({ type: 'timestamptz', name: 'start_time' })
     startTime: Date;
 
-    @Column({ name: 'end_time', nullable: true })
+    @Column({ type: 'timestamptz', name: 'end_time', nullable: true })
     endTime?: Date;
 }

@@ -10,7 +10,12 @@ export class DateUtil {
     /**
      * دریافت زمان فعلی به صورت UTC
      */
-    static nowUTC(timeZone: string = 'Asia/Tehran'): DateTime {
+
+    static nowUTC(): DateTime {
+        return DateTime.utc();
+    }
+
+    static nowUTC2(timeZone: string = 'Asia/Tehran'): DateTime {
         return DateTime.utc().setZone(timeZone);
     }
 
@@ -65,6 +70,11 @@ export class DateUtil {
     static dateDifferenceInMinutes(firstDate: any, secondDate: any) {
         const diffInMs = Math.abs(new Date(secondDate).getTime() - new Date(firstDate).getTime());
         return diffInMs / (1000 * 60);
+    }
+
+    static dateDifferenceInDays(firstDate: any, secondDate: any) {
+        const diffInMs = Math.abs(new Date(secondDate).getTime() - new Date(firstDate).getTime());
+        return diffInMs / (1000 * 60 * 60 * 24);
     }
 
     /**
@@ -149,8 +159,6 @@ export class DateUtil {
     }
 
     static formatDateToTehran(date: string, format: 'HH:mm' | 'HH:mm:ss' | 'YYYY-MM-DD', timezone: string = 'Asia/Tehran'): string {
-        console.log(date);
-
         if (!date)
             return null;
 

@@ -51,17 +51,14 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         return entity ? AttendanceMapper.toDomain(entity) : null;
     }
 
-    async getMonthlyReports(userId: number, monthAgo: number) {
-        const monthHours = 45 * 24;
+    async filterByUserAndRange(userId: number, startTime: Date, endTime: Date) {
 
-        const monthStarts = DateUtil.getStartOfPreviousMonths(monthAgo);
-
-        const allRecords = await this.attendanceRepo.find({
+        const attendances = await this.attendanceRepo.find({
             where: {
                 userId,
                 checkIn: Between(
-                    monthStarts[monthStarts.length - 1].startDate.toJSDate(),
-                    monthStarts[0].startDate.plus({ months: 1 }).toJSDate()
+                    startTime,
+                    endTime
                 )
             },
             relations: [
@@ -72,44 +69,7 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
             }
         });
 
-        // گروه‌بندی و محاسبه زمان کار
-        const groupedWorkMinutes = monthStarts.map((month) => {
-            const startOfMonth = month.startDate;
-            const endOfMonth = month.startDate.plus({ months: 1 });
-
-            // فیلتر رکوردها برای این ماه
-            const monthRecords = allRecords.filter(record => {
-                const recordDate = DateUtil.fromJsDate(record.checkIn);
-                return recordDate >= startOfMonth && recordDate < endOfMonth;
-            });
-
-            // محاسبه مجموع زمان کار
-            const workMinutes = monthRecords.reduce((total, record) => {
-                const checkIn = DateUtil.fromJsDate(record.checkIn);
-                const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
-
-                // محاسبه زمان حضور (Attendance Duration)
-                const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
-
-                // محاسبه زمان توقف (Stops Duration)
-                const stopsMinutes = record.stops.reduce((stopTotal, stop) => {
-                    const stopStart = DateUtil.fromJsDate(stop.startTime);
-                    const stopEnd = stop.endTime ? DateUtil.fromJsDate(stop.endTime) : stopStart;
-                    return stopTotal + stopEnd.diff(stopStart, 'minutes').minutes;
-                }, 0);
-
-                return total + (attendanceMinutes - stopsMinutes);
-            }, 0);
-
-            return {
-                month: month.monthNumber,
-                workMinutes: workMinutes,
-                overTimeMinutes: Math.max(workMinutes - monthHours, 0),
-                shortTimeMinutes: Math.max(monthHours - workMinutes, 0),
-            };
-        });
-
-        return groupedWorkMinutes;
+        return attendances;
     }
 
     async findLastForCheckoutByUser(userId: number): Promise<Attendance | null> {
