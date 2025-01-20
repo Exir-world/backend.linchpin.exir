@@ -20,6 +20,8 @@ export class DateUtil {
     }
 
     static addMinutes(date: Date, minutes: number, timeZone: string = 'Asia/Tehran'): DateTime {
+        if (!date) return null;
+
         date.setTime(date.getTime() + minutes * 60 * 1000);
         return DateTime.fromJSDate(date).setZone(timeZone);
     }
