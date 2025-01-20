@@ -13,11 +13,13 @@ export class ResponseInterceptor implements NestInterceptor {
   constructor(private readonly i18n: I18nService) { }
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      map((data) => ({
-        statusCode: context.switchToHttp().getResponse().statusCode,
-        message: this.i18n.t(`common.success.${context.switchToHttp().getResponse().statusCode}`),
-        data: data ?? null,
-      })),
+      map((data) => data
+        //   ({
+        //   statusCode: context.switchToHttp().getResponse().statusCode,
+        //   message: this.i18n.t(`common.success.${context.switchToHttp().getResponse().statusCode}`),
+        //   data: data ?? null,
+        // }),
+      ),
       catchError((error) => {
         throw {
           statusCode: error.status || 500,

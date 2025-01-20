@@ -22,6 +22,7 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         const nowTehran = DateUtil.nowUTC2();
 
         const totalDailyMinutes = 8 * 45;
+        const eachTimeMinutes = 45;
 
         let todayAttendances = await this.attendanceRepo.findTodayAttendance(query.userId);
 
@@ -56,7 +57,9 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
             currentStatus,
             lastStartTime: DateUtil.setTimezone(todayAttendances?.at(-1)?.getCheckIn),
             initTime: DateUtil.setTimezone(todayAttendances?.at(0)?.getCheckIn),
-            endTodayTime: DateUtil.setTimezone(endOfDay),
+            endCurrentTime: DateUtil.addMinutes(todayAttendances?.at(-1)?.getCheckIn, eachTimeMinutes),
+            endTodayTime: DateUtil.addMinutes(todayAttendances?.at(0)?.getCheckIn, totalDailyMinutes),
+            // DateUtil.setTimezone(endOfDay),
             currentDuration: this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60
             // totalDailyMinutes: DateUtil.formatMinutesToTime(totalDailyMinutes),
         }
