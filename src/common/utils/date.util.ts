@@ -19,6 +19,11 @@ export class DateUtil {
         return DateTime.utc().setZone(timeZone);
     }
 
+    static addMinutes(date: Date, minutes: number, timeZone: string = 'Asia/Tehran'): DateTime {
+        date.setTime(date.getTime() + minutes * 60 * 1000);
+        return DateTime.fromJSDate(date).setZone(timeZone);
+    }
+
     static setTimezone(date: Date, timeZone: string = 'Asia/Tehran'): DateTime {
         return DateTime.fromJSDate(date).setZone(timeZone);
     }
