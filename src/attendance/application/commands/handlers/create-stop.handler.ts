@@ -1,7 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateStopCommand } from '../create-stop.command';
 import { StopRepository } from '../../ports/stop.repository';
-import { Stop } from 'src/attendance/domain/stop';
 import { AttendanceRepository } from '../../ports/attendance.repository';
 import { BadRequestException } from '@nestjs/common';
 
@@ -12,7 +11,7 @@ export class CreateStopHandler implements ICommandHandler<CreateStopCommand> {
         private readonly attendanceRepository: AttendanceRepository,
     ) { }
 
-    async execute(command: CreateStopCommand): Promise<Stop> {
+    async execute(command: CreateStopCommand): Promise<any> {
         const { userId, reason } = command;
         const attendance = await this.attendanceRepository.findLastByUserId(userId);
         if (!attendance)
@@ -21,6 +20,8 @@ export class CreateStopHandler implements ICommandHandler<CreateStopCommand> {
         if (attendance.checkOut)
             throw new BadRequestException('You are checked out!');
 
-        return await this.stopRepository.createStop(attendance.id, reason);
+        await this.stopRepository.createStop(attendance.id, reason);
+
+        return { message: 'توقف شما با موفقیت ثبت شد' };
     }
 }
