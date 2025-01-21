@@ -46,26 +46,32 @@ export class AttendanceController {
     async mainPageActions(@Request() req, @Body() body: { actionType: string; reason?: string }) {
         switch (body.actionType) {
             case 'check-in':
-                return this.attendanceService.checkIn(
+                await this.attendanceService.checkIn(
                     new CheckInCommand(req.user.id)
                 );
+                break;
             case 'check-out':
-                return this.attendanceService.checkOut(
+                await this.attendanceService.checkOut(
                     new CheckOutCommand(req.user.id)
                 );
-            case 'daily':
-                return this.attendanceService.getDailyAttendanceStatus(
-                    new GetDailyAttendanceStatusQuery(req.user.id)
-                );
+                break;
+
             case 'stop-start':
-                return await this.attendanceService.createStop(
+                await await this.attendanceService.createStop(
                     new CreateStopCommand(req.user.id, body.reason),
                 );
+                break;
             case 'stop-end':
-                return await this.attendanceService.endStop(
+                await await this.attendanceService.endStop(
                     new EndStopCommand(req.user.id),
                 );
+                break;
+            // case 'daily':
         }
+
+        return this.attendanceService.getDailyAttendanceStatus(
+            new GetDailyAttendanceStatusQuery(req.user.id)
+        );
     }
 
     @UseGuards(UserAuthGuard)
