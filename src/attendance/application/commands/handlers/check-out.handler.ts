@@ -11,7 +11,7 @@ export class CheckOutHandler implements ICommandHandler<CheckOutCommand> {
         private readonly stopRepo: StopRepository,
     ) { }
 
-    async execute(command: CheckOutCommand): Promise<void> {
+    async execute(command: CheckOutCommand): Promise<any> {
         const attendance = await this.attendanceRepo.findLastByUserId(command.userId);
         if (!attendance)
             throw new NotFoundException('Attendance not found');
@@ -26,5 +26,7 @@ export class CheckOutHandler implements ICommandHandler<CheckOutCommand> {
 
 
         await this.attendanceRepo.save(attendance);
+
+        return { message: 'خروج شما با موفقیت ثبت شد' }
     }
 }

@@ -23,9 +23,9 @@ export class ResponseInterceptor implements NestInterceptor {
       catchError((error) => {
         throw {
           statusCode: error.status || 500,
-          message: this.i18n.t(`common.exceptions.${error.status || 500}`),
+          message: error?.response?.message,
+          // message: this.i18n.t(`common.exceptions.${error.status || 500}`),
           errors: error?.response?.message,
-          data: null,
         };
       }),
     );

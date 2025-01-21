@@ -1,7 +1,6 @@
 import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AttendanceService } from '../../application/services/attendance.service';
-import { CheckOutDto } from '../dto/check-out.dto';
 import { SubmitWorkReportDto } from '../dto/submit-work-report.dto';
 import { ApproveWorkReportDto } from '../dto/approve-work-report.dto';
 import { CheckInCommand } from 'src/attendance/application/commands/check-in.command';
@@ -11,7 +10,6 @@ import { ApproveWorkReportCommand } from 'src/attendance/application/commands/ap
 import { GetLastAttendanceQuery } from 'src/attendance/application/queries/get-last-attendance.query';
 import { CreateStopDto } from '../dto/create-stop.dto';
 import { CreateStopCommand } from 'src/attendance/application/commands/create-stop.command';
-import { EndStopDto } from '../dto/end-stop.dto';
 import { EndStopCommand } from 'src/attendance/application/commands/end-stop.command';
 import { GetDailyAttendanceStatusQuery } from 'src/attendance/application/queries/get-daily-attendance-status.query';
 import { GetMonthlyReportQuery } from 'src/attendance/application/queries/get-monthly-report.query';
@@ -23,6 +21,52 @@ import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 @Controller('attendance')
 export class AttendanceController {
     constructor(private readonly attendanceService: AttendanceService) { }
+
+    @UseGuards(UserAuthGuard)
+    @Post('main-page')
+    @ApiOperation({ summary: 'اعمال صفحه اصلی' })
+    @ApiResponse({ status: 200 })
+    @HttpCode(HttpStatus.OK)
+    @ApiBody({
+        description: 'Action payload',
+        schema: {
+            type: 'object',
+            properties: {
+                actionType: {
+                    type: 'string',
+                    example: 'check-in',
+                },
+                reason: {
+                    type: 'string',
+                    example: 'string',
+                },
+            },
+        },
+    })
+    async mainPageActions(@Request() req, @Body() body: { actionType: string; reason?: string }) {
+        switch (body.actionType) {
+            case 'check-in':
+                return this.attendanceService.checkIn(
+                    new CheckInCommand(req.user.id)
+                );
+            case 'check-out':
+                return this.attendanceService.checkOut(
+                    new CheckOutCommand(req.user.id)
+                );
+            case 'daily':
+                return this.attendanceService.getDailyAttendanceStatus(
+                    new GetDailyAttendanceStatusQuery(req.user.id)
+                );
+            case 'stop-start':
+                return await this.attendanceService.createStop(
+                    new CreateStopCommand(req.user.id, body.reason),
+                );
+            case 'stop-end':
+                return await this.attendanceService.endStop(
+                    new EndStopCommand(req.user.id),
+                );
+        }
+    }
 
     @UseGuards(UserAuthGuard)
     @Post('check-in')
