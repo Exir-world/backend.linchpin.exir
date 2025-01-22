@@ -53,15 +53,17 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
                 'HH:mm'
             ),
             workDuration: workDuration * 60,
-            stopDuration: this.calculateStopsInMinutes(todayAttendances?.at(-1)),
             currentStatus,
             lastStartTime: DateUtil.setTimezone(todayAttendances?.at(-1)?.getCheckIn),
             initTime: DateUtil.setTimezone(todayAttendances?.at(0)?.getCheckIn),
             endCurrentTime: DateUtil.addMinutes(todayAttendances?.at(-1)?.getCheckIn, eachTimeMinutes),
             endTodayTime: DateUtil.addMinutes(todayAttendances?.at(0)?.getCheckIn, totalDailyMinutes),
             // DateUtil.setTimezone(endOfDay),
-            currentDuration: this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60
-            // totalDailyMinutes: DateUtil.formatMinutesToTime(totalDailyMinutes),
+            stopDuration: todayAttendances?.at(-1).getCheckOut
+                ? 0 : this.calculateStopsInMinutes(todayAttendances?.at(-1)) * 60,
+            currentDuration: todayAttendances?.at(-1).getCheckOut
+                ? 0 : this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60,
+            eachTimeDuration: eachTimeMinutes * 60,
         }
     }
 
@@ -69,13 +71,22 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         let duration = 0;
         for (let i = 0; i < attendances.length; i++) {
             const attendance = attendances[i];
+            console.log(`attendance ${i} :`, attendance.getCheckIn, attendance.getCheckOut);
+
             duration += DateUtil.dateDifferenceInMinutes(
                 attendance.getCheckIn,
                 attendance.getCheckOut || DateUtil.nowUTC()
             );
 
-            const stopDuration = attendance.getStops.reduce((sum, stop) =>
-                sum + DateUtil.dateDifferenceInMinutes(stop.getStartTime, stop.getEndTime || DateUtil.nowUTC()), 0);
+            const stopDuration = attendance.getStops.reduce((sum, stop) => {
+                const startTime = stop.getStartTime;
+                const endTime = stop.getEndTime || DateUtil.nowUTC();
+                const diff = DateUtil.dateDifferenceInMinutes(startTime, endTime);
+
+                console.log(`attendance ${i} Start-Time: ${startTime}, End-Time: ${endTime}, Difference: ${diff}`);
+
+                return sum + diff;
+            }, 0);
 
             duration -= stopDuration;
         }
