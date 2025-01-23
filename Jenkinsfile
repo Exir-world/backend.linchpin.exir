@@ -10,8 +10,8 @@ pipeline {
         IMAGE_NAME = 'backend.linchpin.ex.pro'
         IMAGE_TAG =  "${env.BUILD_NUMBER}" //'latest' // or use ${env.BUILD_NUMBER} for dynamic tagging
         // Telegram configuration
-        TELEGRAM_TOKEN = credentials('telegram_bot_key')
-        TELEGRAM_CHAT_ID = credentials('TELEGRAM_CHANNEL_REPORT_CHAT_ID')
+        TELEGRAM_TOKEN = credentials('exir_telegram_bot_key')
+        TELEGRAM_CHAT_ID = credentials('EXIR_TELEGRAM_CHANNEL_REPORT_CHAT_ID')
     }
     
     stages {
@@ -107,26 +107,26 @@ pipeline {
         // Include additional stages for deployment or further processing as needed
     }
 
-    // post {
-    //     success {
-    //         script {
-    //             // Retrieve the last commit message using git command
-    //             def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+    post {
+        success {
+            script {
+                // Retrieve the last commit message using git command
+                def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                 
-    //             def message = "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.BUILD_NUMBER}\nLast Commit: ${lastCommitMessage}"
-    //             sendTelegramMessage(message)
-    //         }
-    //     }
-    //     failure {
-    //         script {
-    //             // Retrieve the last commit message using git command
-    //             def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                def message = "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.BUILD_NUMBER}\nLast Commit: ${lastCommitMessage}"
+                sendTelegramMessage(message)
+            }
+        }
+        failure {
+            script {
+                // Retrieve the last commit message using git command
+                def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                 
-    //             def message = "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.BUILD_NUMBER}\nLast Commit: ${lastCommitMessage}"
-    //             sendTelegramMessage(message)
-    //         }
-    //     }
-    // }
+                def message = "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.BUILD_NUMBER}\nLast Commit: ${lastCommitMessage}"
+                sendTelegramMessage(message)
+            }
+        }
+    }
 }
 
 
