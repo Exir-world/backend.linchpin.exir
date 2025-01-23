@@ -212,4 +212,13 @@ export class DateUtil {
 
         return `${hours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}`; // HH:mm
     }
+
+    /**
+     * دریافت سال فعلی شمسی
+     * @returns سال فعلی شمسی
+     */
+    static getCurrentJalaliYear(): number {
+        const currentDate = new persianDate();
+        return currentDate.year();
+    }
 }
