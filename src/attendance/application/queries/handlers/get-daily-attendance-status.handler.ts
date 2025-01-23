@@ -59,12 +59,13 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
             endCurrentTime: DateUtil.addMinutes(todayAttendances?.at(-1)?.getCheckIn, eachTimeMinutes),
             endTodayTime: DateUtil.addMinutes(todayAttendances?.at(0)?.getCheckIn, totalDailyMinutes),
             // DateUtil.setTimezone(endOfDay),
-            stopDuration: todayAttendances?.at(-1).getCheckOut
+            stopDuration: todayAttendances?.at(-1)?.getCheckOut
                 ? 0 : this.calculateStopsInMinutes(todayAttendances?.at(-1)) * 60,
-            currentDuration: todayAttendances?.at(-1).getCheckOut
+            currentDuration: todayAttendances?.at(-1)?.getCheckOut
                 ? 0 : this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60,
             eachTimeDuration: eachTimeMinutes * 60,
         }
+
     }
 
     private calculateWorkTimeInMinutes(attendances: Attendance[]): number {

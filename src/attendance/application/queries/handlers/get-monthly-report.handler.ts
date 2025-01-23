@@ -78,11 +78,12 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
             }, 0);
 
             return {
+                date: month.startDate,
                 month: month.monthNumber,
-                workMinutes: Math.floor(workMinutes) * 60,
-                overDuration: Math.floor(Math.max(workMinutes - monthHours, 0)) * 60,
-                lessDuration: Math.floor(Math.max(monthHours - workMinutes, 0)) * 60,
-                leaveDuration: Math.floor(leaveMinutes) * 60,
+                workMinutes: Math.floor(workMinutes),
+                overDuration: Math.floor(Math.max(workMinutes - monthHours, 0)),
+                lessDuration: Math.floor(Math.max(monthHours - workMinutes, 0)),
+                leaveDuration: Math.floor(leaveMinutes),
             };
         }).filter(Boolean);
 
