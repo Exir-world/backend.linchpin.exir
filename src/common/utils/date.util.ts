@@ -22,8 +22,9 @@ export class DateUtil {
     static addMinutes(date: Date, minutes: number, timeZone: string = 'Asia/Tehran'): DateTime {
         if (!date) return null;
 
-        date.setTime(date.getTime() + minutes * 60 * 1000);
-        return DateTime.fromJSDate(date).setZone(timeZone);
+        const newDate = new Date(date.getTime() + minutes * 60 * 1000);
+
+        return DateTime.fromJSDate(newDate).setZone(timeZone);
     }
 
     static setTimezone(date: Date, timeZone: string = 'Asia/Tehran'): DateTime {
