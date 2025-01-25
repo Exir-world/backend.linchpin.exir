@@ -35,7 +35,8 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         if (todayAttendances.length && todayAttendances.at(-1).checkIn && !todayAttendances.at(-1).checkOut)
             currentStatus = 'CHECKED_IN'
 
-        if (todayAttendances.length && todayAttendances.at(-1).stops.length && !todayAttendances.at(-1).stops.at(-1).getEndTime)
+        if (todayAttendances.length && todayAttendances.at(-1).stops.length
+            && !todayAttendances.at(-1).stops.sort((a, b) => a.getStartTime.getTime() - b.getStartTime.getTime()).at(-1).getEndTime)
             currentStatus = 'STOP'
 
         const endOfDay = new Date();
