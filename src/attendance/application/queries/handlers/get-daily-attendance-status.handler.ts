@@ -118,12 +118,20 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         if (!attendance)
             return 0;
 
-        console.log(attendance.checkIn, attendance.checkOut, DateUtil.nowUTC());
-
-
-        return Math.floor(DateUtil.dateDifferenceInMinutes(
+        const currentDuration = Math.floor(DateUtil.dateDifferenceInMinutes(
             attendance.checkIn,
             attendance.checkOut || DateUtil.nowUTC()
         ));
+
+        const stopDuration = attendance.getStops.reduce((sum, stop) => {
+            const startTime = stop.getStartTime;
+            const endTime = stop.getEndTime || DateUtil.nowUTC();
+            const diff = DateUtil.dateDifferenceInMinutes(startTime, endTime);
+
+            return sum + diff;
+        }, 0);
+
+
+        return currentDuration - stopDuration
     }
 }
