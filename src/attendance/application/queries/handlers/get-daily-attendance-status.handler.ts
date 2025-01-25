@@ -118,10 +118,10 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         if (!attendance)
             return 0;
 
-        const currentDuration = Math.floor(DateUtil.dateDifferenceInMinutes(
+        const currentDuration = DateUtil.dateDifferenceInMinutes(
             attendance.checkIn,
             attendance.checkOut || DateUtil.nowUTC()
-        ));
+        );
 
         const stopDuration = attendance.getStops.reduce((sum, stop) => {
             const startTime = stop.getStartTime;
@@ -132,6 +132,6 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         }, 0);
 
 
-        return currentDuration - stopDuration
+        return Math.floor(currentDuration - stopDuration)
     }
 }
