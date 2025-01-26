@@ -20,7 +20,8 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
             where: {
                 checkIn: MoreThanOrEqual(currentStartTime),
                 checkOut: IsNull(),
-            }
+            },
+            relations: ['stops']
         });
 
         return AttendanceMapper.toDomainList(attendances);
@@ -44,9 +45,9 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         return AttendanceMapper.toDomainList(todayAttendances);
     }
 
-    async save(attendance: Attendance): Promise<void> {
-        const entity = AttendanceMapper.toEntity(attendance);
-        await this.attendanceRepo.save(entity);
+    async save(attendances: Attendance[]): Promise<void> {
+        const entities = attendances.map(attendance => AttendanceMapper.toEntity(attendance));
+        await this.attendanceRepo.save(entities);
     }
 
     async findById(id: number): Promise<Attendance | null> {

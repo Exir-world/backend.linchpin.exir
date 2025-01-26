@@ -8,7 +8,7 @@ import { BadRequestException, ForbiddenException } from '@nestjs/common';
 export class CancelRequestHandler implements ICommandHandler<CancelRequestCommand> {
     constructor(private readonly requestRepository: RequestRepository) { }
 
-    async execute(command: CancelRequestCommand): Promise<void> {
+    async execute(command: CancelRequestCommand): Promise<any> {
         const { requestId, userId } = command;
         const request = await this.requestRepository.findOneById(requestId);
 
@@ -27,5 +27,6 @@ export class CancelRequestHandler implements ICommandHandler<CancelRequestComman
         request.cancel();
 
         await this.requestRepository.save(request);
+        return { message: 'درخواست موردنظر با موفقیت لغو شد.' }
     }
 }

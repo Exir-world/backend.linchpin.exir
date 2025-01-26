@@ -25,7 +25,7 @@ import { GetMonthlyReportHandler } from './application/queries/handlers/get-mont
 import { AttendanceSharedRepositoryImpl } from './infrastructure/repositories/attendance-shared.repository';
 import { LeaveModule } from 'src/leave/leave.module';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CheckOutCheckingHandler } from './application/commands/handlers/check-out-checking.hanlder';
+import { CheckOutCheckingHandler } from './application/commands/handlers/check-out-checking.handler';
 
 @Module({
     imports: [

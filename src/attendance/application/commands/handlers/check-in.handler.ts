@@ -21,7 +21,7 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
         }
 
         const attendance = new Attendance(0, command.userId);
-        await this.attendanceRepo.save(attendance);
+        await this.attendanceRepo.save([attendance]);
 
         return { message: 'ورود شما با موفقیت ثبت شد' }
     }
