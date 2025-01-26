@@ -11,12 +11,20 @@ export class DateUtil {
      * دریافت زمان فعلی به صورت UTC
      */
 
-    static nowUTC(): DateTime {
-        return DateTime.utc();
+    static nowUTC(): Date {
+        return DateTime.utc().toJSDate();
     }
 
-    static nowUTC2(timeZone: string = 'Asia/Tehran'): DateTime {
-        return DateTime.utc().setZone(timeZone);
+    static nowUTC2(timeZone: string = 'Asia/Tehran'): Date {
+        return DateTime.utc().setZone(timeZone).toJSDate();
+    }
+
+    static checkOutChecking(checkOutTimes: { hour: number; minutes: number; }[]): boolean {
+        const tehranNow = this.nowUTC2();
+        const hour = tehranNow.getHours();
+        const minute = tehranNow.getMinutes();
+
+        return checkOutTimes.findIndex(time => time.hour == hour && time.minutes == minute) != -1;
     }
 
     static addMinutes(date: Date, minutes: number, timeZone: string = 'Asia/Tehran'): DateTime {
@@ -27,24 +35,24 @@ export class DateUtil {
         return DateTime.fromJSDate(newDate).setZone(timeZone);
     }
 
-    static setTimezone(date: Date, timeZone: string = 'Asia/Tehran'): DateTime {
-        return DateTime.fromJSDate(date).setZone(timeZone);
+    static setTimezone(date: Date, timeZone: string = 'Asia/Tehran'): Date {
+        return DateTime.fromJSDate(date).setZone(timeZone).toJSDate();;
     }
 
     /**
      * دریافت ابتدای روز برای یک منطقه زمانی
      * @param timeZone - منطقه زمانی (مثلاً 'Asia/Tehran')
      */
-    static startOfDay(timeZone: string = 'Asia/Tehran'): DateTime {
-        return DateTime.utc().setZone(timeZone).startOf('day');
+    static startOfDay(timeZone: string = 'Asia/Tehran'): Date {
+        return DateTime.utc().setZone(timeZone).startOf('day').toJSDate();;
     }
 
     /**
      * دریافت انتهای روز برای یک منطقه زمانی (آغاز روز بعد)
      * @param timeZone - منطقه زمانی (مثلاً 'Asia/Tehran')
      */
-    static endOfDay(timeZone: string = 'Asia/Tehran'): DateTime {
-        return DateTime.utc().setZone(timeZone).endOf('day');
+    static endOfDay(timeZone: string = 'Asia/Tehran'): Date {
+        return DateTime.utc().setZone(timeZone).endOf('day').toJSDate();
     }
 
     /**
@@ -61,7 +69,7 @@ export class DateUtil {
      * دریافت ابتدای ماه شمسی جاری به‌صورت UTC
      * @returns تاریخ UTC به‌صورت ISO
      */
-    static getStartOfCurrentJalaliMonth(timeZone: string = 'Asia/Tehran'): DateTime {
+    static getStartOfCurrentJalaliMonth(timeZone: string = 'Asia/Tehran'): Date {
         // دریافت تاریخ شمسی جاری
         const currentDate = new persianDate();
 
@@ -72,7 +80,7 @@ export class DateUtil {
         const gregorianDate = startOfMonth.toDate();
 
         // تبدیل به UTC
-        return gregorianDate.setZone(timeZone);
+        return gregorianDate.setZone(timeZone).toJSDate();
     }
 
     static dateDifferenceInMinutes(firstDate: any, secondDate: any) {
@@ -83,6 +91,14 @@ export class DateUtil {
     static dateDifferenceInDays(firstDate: any, secondDate: any) {
         const diffInMs = Math.abs(new Date(secondDate).getTime() - new Date(firstDate).getTime());
         return diffInMs / (1000 * 60 * 60 * 24);
+    }
+
+    static startOfCurrentTime(timeZone: string = 'Asia/Tehran'): Date {
+        const current = DateTime.utc().setZone(timeZone).toJSDate();
+        current.setMinutes(0);
+        current.setSeconds(0);
+        current.setMilliseconds(0);
+        return current;
     }
 
     /**

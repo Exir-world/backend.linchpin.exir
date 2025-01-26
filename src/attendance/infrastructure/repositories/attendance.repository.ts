@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AttendanceRepository } from '../../application/ports/attendance.repository';
 import { AttendanceEntity } from '../entities/attendance.entity';
 import { AttendanceMapper } from '../mappers/attendance.mapper';
-import { Between, IsNull, Repository } from 'typeorm';
+import { Between, IsNull, MoreThanOrEqual, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Attendance } from 'src/attendance/domain/attendance';
 import { DateUtil } from 'src/common/utils/date.util';
@@ -13,6 +13,18 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         @InjectRepository(AttendanceEntity)
         private readonly attendanceRepo: Repository<AttendanceEntity>,
     ) { }
+
+    async findCheckedInAttendances(): Promise<Attendance[]> {
+        const currentStartTime = DateUtil.startOfCurrentTime();
+        const attendances = await this.attendanceRepo.find({
+            where: {
+                checkIn: MoreThanOrEqual(currentStartTime),
+                checkOut: IsNull(),
+            }
+        });
+
+        return AttendanceMapper.toDomainList(attendances);
+    }
 
     async findTodayAttendance(userId: number): Promise<Attendance[]> {
         const startOfToday = DateUtil.startOfDay();

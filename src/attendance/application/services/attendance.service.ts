@@ -9,6 +9,10 @@ import { CreateStopCommand } from '../commands/create-stop.command';
 import { EndStopCommand } from '../commands/end-stop.command';
 import { GetDailyAttendanceStatusQuery } from '../queries/get-daily-attendance-status.query';
 import { GetMonthlyReportQuery } from '../queries/get-monthly-report.query';
+import { Cron } from '@nestjs/schedule';
+import { CheckOutCheckingCommand } from '../commands/check-out-checking.command';
+import { DateUtil } from 'src/common/utils/date.util';
+import { CHECK_OUT_TIMES_TEHRAN } from '../constants/check-out-times.constant';
 
 @Injectable()
 export class AttendanceService {
@@ -79,5 +83,15 @@ export class AttendanceService {
 
     async getMonthlyReport(query: GetMonthlyReportQuery) {
         return this.queryBus.execute(query);
+    }
+
+    // @Cron('0 0,15,30,45 * * * *')
+    @Cron('0 */2 * * * *')
+    async checkOutChecking() {
+        console.log('*** Check ***');
+        const isEndTime = DateUtil.checkOutChecking(CHECK_OUT_TIMES_TEHRAN);
+
+
+        // return this.commandBus.execute(new CheckOutCheckingCommand());
     }
 }
