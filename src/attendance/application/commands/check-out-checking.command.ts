@@ -1,1 +1,5 @@
-export class CheckOutCheckingCommand { }
+export class CheckOutCheckingCommand {
+    constructor(
+        public readonly startTime: Date,
+    ) { }
+}

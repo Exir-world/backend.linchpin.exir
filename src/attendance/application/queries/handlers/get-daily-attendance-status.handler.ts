@@ -11,7 +11,7 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
     constructor(
         private readonly attendanceRepo: AttendanceRepository,
         @Inject('IUserSharedRepository')
-        private readonly userSharedRepository: IUserSharedRepository
+        private readonly userSharedRepository: IUserSharedRepository,
     ) { }
 
     async execute(query: GetDailyAttendanceStatusQuery): Promise<any> {
@@ -19,10 +19,10 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         if (!user)
             throw new NotFoundException('User notfound!');
 
-        const nowTehran = DateUtil.nowUTC2();
+        const nowTehran = DateUtil.nowWithTimezone();
 
-        const totalDailyMinutes = 8 * 45;
-        const eachTimeMinutes = 45;
+        const totalDailyMinutes = query.totalDuration;
+        const eachTimeMinutes = query.currentDuration;
 
         let todayAttendances = await this.attendanceRepo.findTodayAttendance(query.userId);
 
@@ -38,11 +38,6 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         if (todayAttendances.length && todayAttendances.at(-1).stops.length
             && !todayAttendances.at(-1).stops.sort((a, b) => a.getStartTime.getTime() - b.getStartTime.getTime()).at(-1).getEndTime)
             currentStatus = 'STOP'
-
-        const endOfDay = new Date();
-        endOfDay.setUTCHours(14);
-        endOfDay.setUTCMinutes(30);
-        endOfDay.setUTCSeconds(0);
 
         return {
             nowDatetime: nowTehran,
@@ -87,8 +82,6 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
                 const startTime = stop.getStartTime;
                 const endTime = stop.getEndTime || DateUtil.nowUTC();
                 const diff = DateUtil.dateDifferenceInMinutes(startTime, endTime);
-
-                console.log(`attendance ${i} Start-Time: ${startTime}, End-Time: ${endTime}, Difference: ${diff}`);
 
                 return sum + diff;
             }, 0);

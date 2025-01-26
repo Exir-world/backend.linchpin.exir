@@ -10,8 +10,8 @@ export class CheckOutCheckingHandler implements ICommandHandler<CheckOutChecking
         private readonly stopRepo: StopRepository,
     ) { }
 
-    async execute(_: CheckOutCheckingCommand): Promise<any> {
-        const attendances = await this.attendanceRepo.findCheckedInAttendances();
+    async execute(command: CheckOutCheckingCommand): Promise<any> {
+        const attendances = await this.attendanceRepo.findCheckedInAttendances(command.startTime);
 
         for (let i = 0; i < attendances.length; i++) {
             attendances[i].setCheckOut();
@@ -19,9 +19,6 @@ export class CheckOutCheckingHandler implements ICommandHandler<CheckOutChecking
                 if (!attendances[i].stops.at(-1).getEndTime)
                     await this.stopRepo.endStop(attendances[i].userId);
         }
-
-        console.log(attendances);
-
 
         await this.attendanceRepo.save(attendances);
 

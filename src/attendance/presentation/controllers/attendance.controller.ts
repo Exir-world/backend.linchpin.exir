@@ -70,9 +70,7 @@ export class AttendanceController {
             // case 'daily':
         }
 
-        return this.attendanceService.getDailyAttendanceStatus(
-            new GetDailyAttendanceStatusQuery(req.user.id)
-        );
+        return this.attendanceService.getDailyAttendanceStatus(req.user.id);
     }
 
     @UseGuards(UserAuthGuard)
@@ -159,7 +157,7 @@ export class AttendanceController {
     @ApiOperation({ summary: 'دریافت وضعیت روزانه حضور و غیاب کاربر' })
     @ApiResponse({ status: 200, description: 'حضور و غیاب با موفقیت دریافت شد.' })
     async getDailyAttendanceStatus(@Request() req) {
-        return this.attendanceService.getDailyAttendanceStatus(new GetDailyAttendanceStatusQuery(req.user.id));
+        return this.attendanceService.getDailyAttendanceStatus(req.user.id);
     }
 
     @UseGuards(UserAuthGuard)
@@ -172,10 +170,9 @@ export class AttendanceController {
         );
     }
 
-    // @UseGuards(UserAuthGuard)
-    // @ApiOperation({})
-    // @Post('auto-check-out')
-    // async autoCheckout(@Request() req) {
-    //     return await this.attendanceService.checkOutChecking();
-    // }
+    @ApiOperation({})
+    @Post('auto-check-out')
+    async autoCheckout(@Request() req) {
+        return await this.attendanceService.checkOutChecking();
+    }
 }

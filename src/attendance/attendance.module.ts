@@ -26,6 +26,7 @@ import { AttendanceSharedRepositoryImpl } from './infrastructure/repositories/at
 import { LeaveModule } from 'src/leave/leave.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CheckOutCheckingHandler } from './application/commands/handlers/check-out-checking.handler';
+import { OrganizationModule } from 'src/organization/organization.module';
 
 @Module({
     imports: [
@@ -37,6 +38,7 @@ import { CheckOutCheckingHandler } from './application/commands/handlers/check-o
         CqrsModule,
         AuthModule,
         LeaveModule,
+        OrganizationModule,
         ScheduleModule.forRoot()
     ],
     controllers: [

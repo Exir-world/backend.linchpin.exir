@@ -15,16 +15,21 @@ export class DateUtil {
         return DateTime.utc().toJSDate();
     }
 
-    static nowUTC2(timeZone: string = 'Asia/Tehran'): Date {
+    static nowWithTimezone(timeZone: string = 'Asia/Tehran'): Date {
         return DateTime.utc().setZone(timeZone).toJSDate();
     }
 
-    static checkOutChecking(checkOutTimes: { hour: number; minutes: number; }[]): boolean {
-        const tehranNow = this.nowUTC2();
+    static checkOutChecking(checkOutTimes: { hour: number; minutes: number; }): boolean {
+        const tehranNow = this.nowWithTimezone();
         const hour = tehranNow.getHours();
         const minute = tehranNow.getMinutes();
 
-        return checkOutTimes.findIndex(time => time.hour == hour && time.minutes == minute) != -1;
+        return checkOutTimes.hour == hour && checkOutTimes.minutes == minute;
+    }
+
+    static convertTimeToUTC(timeString: string, zone: string = 'Asia/Tehran'): Date {
+        const dateTime = DateTime.fromFormat(timeString, 'HH:mm', { zone });
+        return dateTime.toUTC().toJSDate();
     }
 
     static addMinutes(date: Date, minutes: number, timeZone: string = 'Asia/Tehran'): DateTime {
@@ -93,13 +98,13 @@ export class DateUtil {
         return diffInMs / (1000 * 60 * 60 * 24);
     }
 
-    static startOfCurrentTime(timeZone: string = 'Asia/Tehran'): Date {
-        const current = DateTime.utc().setZone(timeZone).toJSDate();
-        current.setMinutes(0);
-        current.setSeconds(0);
-        current.setMilliseconds(0);
-        return current;
-    }
+    // static startOfCurrentTime(timeZone: string = 'Asia/Tehran'): Date {
+    //     const current = DateTime.utc().setZone(timeZone).toJSDate();
+    //     current.setMinutes(0);
+    //     current.setSeconds(0);
+    //     current.setMilliseconds(0);
+    //     return current;
+    // }
 
     /**
    * دریافت تاریخ شروع یک ماه مشخص قبل از ماه فعلی
@@ -238,4 +243,26 @@ export class DateUtil {
         const currentDate = new persianDate();
         return currentDate.year();
     }
+
+    static parseTime(timeString: string, zone = "Asia/Tehran"): string {
+        const parsedTime = DateTime.fromFormat(timeString, "HH:mm:ssZZ").setZone(zone).toFormat("HH:mm");
+        return parsedTime
+    }
+
+    static nowTime(zone = "Asia/Tehran"): string {
+        const parsedTime = DateTime.utc().setZone(zone).toFormat("HH:mm");
+        return parsedTime
+    }
+
+    static getTimeDifference(startTime: string, endTime: string): number {
+        const format = "HH:mm";
+        const start = DateTime.fromFormat(startTime, format);
+        const end = DateTime.fromFormat(endTime, format);
+
+        let diffInMinutes = end.diff(start, "minutes").minutes;
+        // if (diffInMinutes < 0) diffInMinutes += 24 * 60;
+
+        return Math.abs(diffInMinutes);
+    }
+
 }
