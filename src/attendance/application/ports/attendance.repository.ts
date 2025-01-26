@@ -6,5 +6,5 @@ export abstract class AttendanceRepository {
     abstract findLastByUserId(userId: number): Promise<Attendance | null>;
     abstract findTodayAttendance(userId: number): Promise<Attendance[]>;
     abstract filterByUserAndRange(userId: number, startTime: Date, endTime: Date);
-    abstract findCheckedInAttendances(): Promise<Attendance[]>;
+    abstract findCheckedInAttendances(startTime: Date): Promise<Attendance[]>;
 }

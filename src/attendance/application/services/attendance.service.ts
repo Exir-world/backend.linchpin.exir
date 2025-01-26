@@ -13,12 +13,14 @@ import { Cron } from '@nestjs/schedule';
 import { CheckOutCheckingCommand } from '../commands/check-out-checking.command';
 import { DateUtil } from 'src/common/utils/date.util';
 import { CHECK_OUT_TIMES_TEHRAN } from '../constants/check-out-times.constant';
+import { OrganizationSharedPort } from 'src/organization/application/ports/organization-shared.port';
 
 @Injectable()
 export class AttendanceService {
     constructor(
         private readonly commandBus: CommandBus,
         private readonly queryBus: QueryBus,
+        @Inject('OrganizationSharedPort') private readonly organizationService: OrganizationSharedPort
     ) { }
 
     /**
@@ -77,8 +79,15 @@ export class AttendanceService {
         return this.commandBus.execute(command);
     }
 
-    async getDailyAttendanceStatus(query: GetDailyAttendanceStatusQuery) {
-        return this.queryBus.execute(query);
+    async getDailyAttendanceStatus(userId: number) {
+        const durations = await this.organizationService.getTimeDurationByOrgId(1);
+        return this.queryBus.execute(
+            new GetDailyAttendanceStatusQuery(
+                userId,
+                durations?.totalDuration,
+                durations?.currentDuration,
+            )
+        );
     }
 
     async getMonthlyReport(query: GetMonthlyReportQuery) {
@@ -88,10 +97,18 @@ export class AttendanceService {
     @Cron('0 0,15,30,45 * * * *')
     // @Cron('0 */3 * * * *')
     async checkOutChecking() {
-        console.log('*** Check ***');
-        const isEndTime = DateUtil.checkOutChecking(CHECK_OUT_TIMES_TEHRAN);
-        if (isEndTime)
-            return this.commandBus.execute(new CheckOutCheckingCommand());
+        console.log('*** Check Attendances For Auto Check-Out ***');
+        const time = await this.organizationService.getTimeDurationByOrgId(1);
+        const isEndTime =
+            time && time.isWorkTime &&
+            DateUtil.checkOutChecking({
+                hour: Number(time.currentEndTime.split(':')[0]),
+                minutes: Number(time.currentEndTime.split(':')[1]),
+            });
 
+        if (isEndTime) {
+            const startOfCurrentTime = DateUtil.convertTimeToUTC(time.currentStartTime);
+            return this.commandBus.execute(new CheckOutCheckingCommand(startOfCurrentTime));
+        }
     }
 }

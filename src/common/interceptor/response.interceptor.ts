@@ -22,7 +22,6 @@ export class ResponseInterceptor implements NestInterceptor {
       ),
       catchError((error) => {
         console.log(error);
-
         throw {
           statusCode: error.status || 500,
           message: error?.response?.message,

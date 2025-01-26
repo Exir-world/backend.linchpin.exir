@@ -10,6 +10,7 @@ import { LeaveModule } from './leave/leave.module';
 import { PayrollModule } from './payroll/payroll.module';
 import { SettingsModule } from './settings/settings.module';
 import { RequestsModule } from './requests/requests.module';
+import { OrganizationModule } from './organization/organization.module';
 import * as path from 'path';
 
 @Module({
@@ -58,6 +59,7 @@ import * as path from 'path';
     PayrollModule,
     SettingsModule,
     RequestsModule,
+    OrganizationModule,
   ],
   providers: [ResponseInterceptor],
 })
