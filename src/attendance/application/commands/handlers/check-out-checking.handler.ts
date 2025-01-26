@@ -20,6 +20,9 @@ export class CheckOutCheckingHandler implements ICommandHandler<CheckOutChecking
                     await this.stopRepo.endStop(attendances[i].userId);
         }
 
+        console.log(attendances);
+
+
         await this.attendanceRepo.save(attendances);
 
         return { message: 'خروج شما با موفقیت ثبت شد' }

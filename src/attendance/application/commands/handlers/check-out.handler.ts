@@ -25,7 +25,7 @@ export class CheckOutHandler implements ICommandHandler<CheckOutCommand> {
                 await this.stopRepo.endStop(command.userId);
 
 
-        await this.attendanceRepo.save(attendance);
+        await this.attendanceRepo.save([attendance]);
 
         return { message: 'خروج شما با موفقیت ثبت شد' }
     }

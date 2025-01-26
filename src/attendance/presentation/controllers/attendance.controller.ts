@@ -15,6 +15,7 @@ import { GetDailyAttendanceStatusQuery } from 'src/attendance/application/querie
 import { GetMonthlyReportQuery } from 'src/attendance/application/queries/get-monthly-report.query';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { CheckOutCheckingCommand } from 'src/attendance/application/commands/check-out-checking.command';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -170,4 +171,11 @@ export class AttendanceController {
             new GetMonthlyReportQuery(req.user.id, month)
         );
     }
+
+    // @UseGuards(UserAuthGuard)
+    // @ApiOperation({})
+    // @Post('auto-check-out')
+    // async autoCheckout(@Request() req) {
+    //     return await this.attendanceService.checkOutChecking();
+    // }
 }

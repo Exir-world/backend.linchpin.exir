@@ -85,13 +85,13 @@ export class AttendanceService {
         return this.queryBus.execute(query);
     }
 
-    // @Cron('0 0,15,30,45 * * * *')
-    @Cron('0 */2 * * * *')
+    @Cron('0 0,15,30,45 * * * *')
+    // @Cron('0 */3 * * * *')
     async checkOutChecking() {
         console.log('*** Check ***');
         const isEndTime = DateUtil.checkOutChecking(CHECK_OUT_TIMES_TEHRAN);
+        if (isEndTime)
+            return this.commandBus.execute(new CheckOutCheckingCommand());
 
-
-        // return this.commandBus.execute(new CheckOutCheckingCommand());
     }
 }

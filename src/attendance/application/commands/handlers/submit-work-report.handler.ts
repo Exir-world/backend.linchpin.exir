@@ -21,7 +21,7 @@ export class SubmitWorkReportHandler implements ICommandHandler<SubmitWorkReport
             const workReport = new WorkReport(0, command.reportText, attendance);
             attendance.attachWorkReport(workReport);
 
-            await this.attendanceRepo.save(attendance);
+            await this.attendanceRepo.save([attendance]);
             await this.workReportRepo.save(workReport);
         } catch (error) {
             console.error('Error in CheckInHandler:', error);
