@@ -44,9 +44,6 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         endOfDay.setUTCMinutes(30);
         endOfDay.setUTCSeconds(0);
 
-        console.log(todayAttendances, todayAttendances?.at(-1), todayAttendances?.at(-1).checkIn);
-
-
         return {
             nowDatetime: nowTehran,
             user,

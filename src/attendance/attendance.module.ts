@@ -24,6 +24,8 @@ import { GetDailyAttendanceStatusHandler } from './application/queries/handlers/
 import { GetMonthlyReportHandler } from './application/queries/handlers/get-monthly-report.handler';
 import { AttendanceSharedRepositoryImpl } from './infrastructure/repositories/attendance-shared.repository';
 import { LeaveModule } from 'src/leave/leave.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CheckOutCheckingHandler } from './application/commands/handlers/check-out-checking.hanlder';
 
 @Module({
     imports: [
@@ -35,6 +37,7 @@ import { LeaveModule } from 'src/leave/leave.module';
         CqrsModule,
         AuthModule,
         LeaveModule,
+        ScheduleModule.forRoot()
     ],
     controllers: [
         AttendanceController,
@@ -80,6 +83,7 @@ import { LeaveModule } from 'src/leave/leave.module';
         SubmitWorkReportHandler,
         CreateStopHandler,
         EndStopHandler,
+        CheckOutCheckingHandler,
 
         // Query Handlers
         GetLastAttendanceHandler,
