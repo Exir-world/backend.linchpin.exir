@@ -15,7 +15,7 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
     ) { }
 
     async execute(query: GetMonthlyReportQuery): Promise<any> {
-        const dayHours = 45 * 8;
+        const dayHours = query.totalDuration;
         const monthHours = dayHours * 24;
         const monthStarts = DateUtil.getStartOfPreviousMonths(query.monthAgo);
 

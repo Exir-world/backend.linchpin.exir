@@ -12,7 +12,6 @@ import { GetMonthlyReportQuery } from '../queries/get-monthly-report.query';
 import { Cron } from '@nestjs/schedule';
 import { CheckOutCheckingCommand } from '../commands/check-out-checking.command';
 import { DateUtil } from 'src/common/utils/date.util';
-import { CHECK_OUT_TIMES_TEHRAN } from '../constants/check-out-times.constant';
 import { OrganizationSharedPort } from 'src/organization/application/ports/organization-shared.port';
 
 @Injectable()
@@ -27,8 +26,11 @@ export class AttendanceService {
      * ثبت ورود
      * @param command CheckInCommand
      */
-    async checkIn(command: CheckInCommand): Promise<void> {
-        return this.commandBus.execute(command);
+    async checkIn(userId: number): Promise<void> {
+        const times = await this.organizationService.getTimesByOrgId(1);
+        const startOfDay = DateUtil.convertTimeToUTC(DateUtil.parseTime(times.at(0).getStartTime));
+
+        return this.commandBus.execute(new CheckInCommand(userId, startOfDay));
     }
 
     /**
@@ -90,8 +92,15 @@ export class AttendanceService {
         );
     }
 
-    async getMonthlyReport(query: GetMonthlyReportQuery) {
-        return this.queryBus.execute(query);
+    async getMonthlyReport(userId: number, monthAgo: number) {
+        const durations = await this.organizationService.getTimeDurationByOrgId(1);
+        return this.queryBus.execute(
+            new GetMonthlyReportQuery(
+                userId, monthAgo,
+                durations?.totalDuration,
+                durations?.currentDuration,
+            )
+        );
     }
 
     @Cron('0 0,15,30,45 * * * *')
@@ -99,6 +108,7 @@ export class AttendanceService {
     async checkOutChecking() {
         console.log('*** Check Attendances For Auto Check-Out ***');
         const time = await this.organizationService.getTimeDurationByOrgId(1);
+
         const isEndTime =
             time && time.isWorkTime &&
             DateUtil.checkOutChecking({

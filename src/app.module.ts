@@ -11,6 +11,8 @@ import { PayrollModule } from './payroll/payroll.module';
 import { SettingsModule } from './settings/settings.module';
 import { RequestsModule } from './requests/requests.module';
 import { OrganizationModule } from './organization/organization.module';
+import { UserCriterionModule } from './user-criterion/user-criterion.module';
+import { TasksModule } from './tasks/tasks.module';
 import * as path from 'path';
 
 @Module({
@@ -60,6 +62,8 @@ import * as path from 'path';
     SettingsModule,
     RequestsModule,
     OrganizationModule,
+    UserCriterionModule,
+    TasksModule,
   ],
   providers: [ResponseInterceptor],
 })
