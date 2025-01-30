@@ -4,5 +4,7 @@ export class GetMonthlyReportQuery {
     constructor(
         public readonly userId: number,
         public readonly monthAgo: number,
+        public readonly totalDuration: number,
+        public readonly currentDuration: number,
     ) { }
 }

@@ -19,9 +19,9 @@ export class SubmitWorkReportHandler implements ICommandHandler<SubmitWorkReport
                 throw new NotFoundException('Attendance not found');
 
             const workReport = new WorkReport(0, command.reportText, attendance);
-            attendance.attachWorkReport(workReport);
+            // attendance.attachWorkReport(workReport);
 
-            await this.attendanceRepo.save([attendance]);
+            // await this.attendanceRepo.save([attendance]);
             await this.workReportRepo.save(workReport);
         } catch (error) {
             console.error('Error in CheckInHandler:', error);

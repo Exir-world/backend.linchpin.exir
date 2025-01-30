@@ -32,16 +32,16 @@ export class DateUtil {
         return dateTime.toUTC().toJSDate();
     }
 
-    static addMinutes(date: Date, minutes: number, timeZone: string = 'Asia/Tehran'): DateTime {
+    static addMinutes(date: Date, minutes: number, timeZone: string = 'Asia/Tehran'): Date {
         if (!date) return null;
 
         const newDate = new Date(date.getTime() + minutes * 60 * 1000);
 
-        return DateTime.fromJSDate(newDate).setZone(timeZone);
+        return DateTime.fromJSDate(newDate).setZone(timeZone).toJSDate();;
     }
 
     static setTimezone(date: Date, timeZone: string = 'Asia/Tehran'): Date {
-        return DateTime.fromJSDate(date).setZone(timeZone).toJSDate();;
+        return DateTime.fromJSDate(date).setZone(timeZone).toJSDate();
     }
 
     /**

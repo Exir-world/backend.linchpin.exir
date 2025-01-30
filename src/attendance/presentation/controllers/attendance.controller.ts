@@ -47,9 +47,7 @@ export class AttendanceController {
     async mainPageActions(@Request() req, @Body() body: { actionType: string; reason?: string }) {
         switch (body.actionType) {
             case 'check-in':
-                await this.attendanceService.checkIn(
-                    new CheckInCommand(req.user.id)
-                );
+                await this.attendanceService.checkIn(req.user.id);
                 break;
             case 'check-out':
                 await this.attendanceService.checkOut(
@@ -79,9 +77,7 @@ export class AttendanceController {
     @ApiResponse({ status: 200, description: 'ورود با موفقیت ثبت شد.' })
     @HttpCode(HttpStatus.OK)
     async checkIn(@Request() req) {
-        return this.attendanceService.checkIn(
-            new CheckInCommand(req.user.id)
-        );
+        return this.attendanceService.checkIn(req.user.id);
     }
 
     @UseGuards(UserAuthGuard)
@@ -165,9 +161,7 @@ export class AttendanceController {
     @ApiOperation({ summary: 'دریافت گزارش عملکرد کاربر' })
     @ApiResponse({ status: 200, description: 'با موفقیت دریافت شد.' })
     async getMonthlyReport(@Request() req, @Param('month') month: number) {
-        return this.attendanceService.getMonthlyReport(
-            new GetMonthlyReportQuery(req.user.id, month)
-        );
+        return this.attendanceService.getMonthlyReport(req.user.id, month);
     }
 
     @ApiOperation({})
