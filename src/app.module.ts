@@ -13,6 +13,7 @@ import { RequestsModule } from './requests/requests.module';
 import { OrganizationModule } from './organization/organization.module';
 import { UserCriterionModule } from './user-criterion/user-criterion.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ShiftsModule } from './shifts/shifts.module';
 import * as path from 'path';
 
 @Module({
@@ -64,6 +65,7 @@ import * as path from 'path';
     OrganizationModule,
     UserCriterionModule,
     TasksModule,
+    ShiftsModule,
   ],
   providers: [ResponseInterceptor],
 })
