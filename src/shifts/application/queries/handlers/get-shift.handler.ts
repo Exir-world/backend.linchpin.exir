@@ -1,22 +1,22 @@
 import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { GetShiftsByOrganizationQuery } from "../get-shifts-by-organization.query";
 import { ShiftEntity } from "src/shifts/infrastructure/entities/shift.entity";
 import { ShiftMapper } from "src/shifts/infrastructure/mappers/shift.mapper";
+import { GetShiftQuery } from "../get-shift.query";
 
-@QueryHandler(GetShiftsByOrganizationQuery)
-export class GetShiftsByOrganizationHandler implements IQueryHandler<GetShiftsByOrganizationQuery> {
+@QueryHandler(GetShiftQuery)
+export class GetShiftHandler implements IQueryHandler<GetShiftQuery> {
     constructor(
         @InjectRepository(ShiftEntity)
         private readonly shiftRepository: Repository<ShiftEntity>
     ) { }
 
-    async execute(query: GetShiftsByOrganizationQuery): Promise<any> {
-        const { organizationId } = query;
+    async execute(query: GetShiftQuery): Promise<any> {
+        const { id } = query;
 
         const shifts = await this.shiftRepository.find({
-            where: { organizationId },
+            where: { id },
             relations: ["shiftTimes"]
         });
 

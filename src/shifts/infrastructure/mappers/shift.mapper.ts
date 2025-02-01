@@ -4,8 +4,6 @@ import { ShiftTimeMapper } from "./shift-time.mapper";
 
 export class ShiftMapper {
     static toDomain(entity: ShiftEntity): Shift {
-        console.log(entity);
-
         return new Shift(entity.id, entity.organizationId, entity.title, entity.shiftTimes.map(time => ShiftTimeMapper.toDomain(time)));
     }
 
