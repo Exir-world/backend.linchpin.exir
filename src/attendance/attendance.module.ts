@@ -27,6 +27,8 @@ import { LeaveModule } from 'src/leave/leave.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CheckOutCheckingHandler } from './application/commands/handlers/check-out-checking.handler';
 import { OrganizationModule } from 'src/organization/organization.module';
+import { ShiftsModule } from 'src/shifts/shifts.module';
+import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-employment-settings.module';
 
 @Module({
     imports: [
@@ -39,6 +41,8 @@ import { OrganizationModule } from 'src/organization/organization.module';
         AuthModule,
         LeaveModule,
         OrganizationModule,
+        ShiftsModule,
+        UserEmploymentSettingsModule,
         ScheduleModule.forRoot()
     ],
     controllers: [

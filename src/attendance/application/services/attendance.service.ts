@@ -13,13 +13,21 @@ import { Cron } from '@nestjs/schedule';
 import { CheckOutCheckingCommand } from '../commands/check-out-checking.command';
 import { DateUtil } from 'src/common/utils/date.util';
 import { OrganizationSharedPort } from 'src/organization/application/ports/organization-shared.port';
+import { UserEmploymentSettingsSharedPort } from 'src/user-employment-settings/application/ports/user-employment-settings-shared.port';
+import { ShiftsSharedPort } from 'src/shifts/application/ports/shifts-shared.port';
+import { ShiftTimeTypeEnum } from 'src/shifts/domain/enums/shift-time-type.enum';
 
 @Injectable()
 export class AttendanceService {
     constructor(
         private readonly commandBus: CommandBus,
         private readonly queryBus: QueryBus,
-        @Inject('OrganizationSharedPort') private readonly organizationService: OrganizationSharedPort
+        @Inject('OrganizationSharedPort')
+        private readonly organizationService: OrganizationSharedPort,
+        @Inject('UserEmploymentSettingsSharedPort')
+        private readonly userEmploymentSettingsSharedPort: UserEmploymentSettingsSharedPort,
+        @Inject('ShiftsSharedPort')
+        private readonly shiftsSharedPort: ShiftsSharedPort,
     ) { }
 
     /**
@@ -82,12 +90,41 @@ export class AttendanceService {
     }
 
     async getDailyAttendanceStatus(userId: number) {
-        const durations = await this.organizationService.getTimeDurationByOrgId(1);
+        const nowTime = DateUtil.nowTime();
+
+        const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
+        const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+
+        // current
+        let currentOrgTime = shifts.shiftTimes
+            .find(time => time.type == ShiftTimeTypeEnum.WORK && time.startTime <= nowTime && time.endTime > nowTime);
+
+        // next
+        if (!currentOrgTime)
+            currentOrgTime = shifts.shiftTimes
+                .find(time => time.type == ShiftTimeTypeEnum.WORK && time.startTime > nowTime);
+
+        // last
+        if (!currentOrgTime)
+            currentOrgTime = shifts.shiftTimes
+                .find(time => time.type == ShiftTimeTypeEnum.WORK && time.endTime < nowTime);
+
+        console.log(currentOrgTime, nowTime);
+
+
+        const currentDuration = !currentOrgTime ? null : DateUtil.getTimeDifference(currentOrgTime.endTime, currentOrgTime.startTime);
+        console.log(currentDuration);
+
+        const totalMinutes = shifts.shiftTimes.filter(time => time.type == ShiftTimeTypeEnum.WORK)
+            .reduce((acc, time) => {
+                return acc + DateUtil.getTimeDifference(time.endTime, time.startTime);
+            }, 0);
+
         return this.queryBus.execute(
             new GetDailyAttendanceStatusQuery(
                 userId,
-                durations?.totalDuration,
-                durations?.currentDuration,
+                totalMinutes,
+                currentDuration,
             )
         );
     }

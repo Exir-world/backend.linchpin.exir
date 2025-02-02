@@ -13,10 +13,10 @@ export class GetShiftsHandler implements IQueryHandler<GetShiftsQuery> {
     ) { }
 
     async execute(_: GetShiftsQuery): Promise<any> {
-        const shift = await this.shiftRepository.findOne({
+        const shifts = await this.shiftRepository.find({
             relations: ["shiftTimes"]
         });
 
-        return ShiftMapper.toDomain(shift);
+        return shifts.map(shift => ShiftMapper.toDomain(shift));
     }
 }

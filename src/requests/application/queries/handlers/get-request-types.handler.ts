@@ -11,7 +11,7 @@ export class GetRequestTypesHandler implements IQueryHandler<GetRequestTypesQuer
             { requestId: RequestType.DAILY_LEAVE, title: 'مرخصی استحقاقی' },
             { requestId: RequestType.HOURLY_LEAVE, title: 'مرخصی ساعتی' },
             { requestId: RequestType.SICK_LEAVE, title: 'مرخصی استعلاجی' },
-            { requestId: RequestType.OVERTIME, title: 'اضافه کار' },
+            // { requestId: RequestType.OVERTIME, title: 'اضافه کار' },
         ]
     }
 }

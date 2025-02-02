@@ -6,7 +6,10 @@ import { SalaryFormula } from "../domain/value-objects/salary-formula";
 export class PayrollService {
     constructor(
         @Inject('IUserSharedRepository')
-        private readonly userSharedRepository: any
+        private readonly userSharedRepository: any,
+        // @Inject('UserEmploymentSettingsSharedPort')
+        // private readonly userSharedRepository: UserEmploymentSettingsSharedPort,
+
     ) { }
 
     async calculatePayroll(startDate: Date, endDate: Date): Promise<PayrollUser[]> {

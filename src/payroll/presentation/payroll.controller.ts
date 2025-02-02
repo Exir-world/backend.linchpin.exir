@@ -13,6 +13,7 @@ export class PayrollController {
     @ApiResponse({ status: 200, description: 'لیست حقوق کاربران بازگردانده شد.' })
     @Get('calculate')
     async calculatePayroll(
+        // @Param('organizationId') organizationId: number,
         @Query('startDate') startDate: string,
         @Query('endDate') endDate: string,
     ): Promise<PayrollUser[]> {

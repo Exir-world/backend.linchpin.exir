@@ -8,6 +8,7 @@ import { CreateShiftHandler } from './application/commands/handlers/create-shift
 import { GetShiftsByOrganizationHandler } from './application/queries/handlers/get-shifts-by-organization.handler';
 import { GetShiftHandler } from './application/queries/handlers/get-shift.handler';
 import { GetShiftsHandler } from './application/queries/handlers/get-shifts.handler';
+import { ShiftsService } from './application/services/shifts.service';
 
 @Module({
     imports: [
@@ -23,6 +24,12 @@ import { GetShiftsHandler } from './application/queries/handlers/get-shifts.hand
         GetShiftsByOrganizationHandler,
         GetShiftHandler,
         GetShiftsHandler,
+
+        {
+            provide: 'ShiftsSharedPort',
+            useClass: ShiftsService,
+        },
     ],
+    exports: ['ShiftsSharedPort']
 })
 export class ShiftsModule { }

@@ -63,19 +63,17 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
                 return total + (attendanceMinutes - stopsMinutes);
             }, 0);
 
-            const leaveMinutes = leavesMonthRecords.reduce((leaveTotal, leave) => {
+            const leavesDuration = { days: 0, minutes: 0 };
+            for (let i = 0; i < leavesMonthRecords.length; i++) {
+                const leave = leavesMonthRecords[i];
                 switch (leave.type) {
                     case LeaveTypeEnum.DAILY:
                     case LeaveTypeEnum.SICK:
-                        const days = DateUtil.dateDifferenceInDays(leave.startTime, leave.endTime);
-                        return days * dayHours
+                        leavesDuration.days += DateUtil.dateDifferenceInDays(leave.startTime, leave.endTime);
                     case LeaveTypeEnum.HOURLY:
-                        return DateUtil.dateDifferenceInMinutes(leave.startTime, leave.endTime);
+                        leavesDuration.minutes += DateUtil.dateDifferenceInMinutes(leave.startTime, leave.endTime);
                 }
-                // const leaveStart = DateUtil.fromJsDate(leave.startTime);
-                // const leaveEnd = leave.endTime ? DateUtil.fromJsDate(leave.endTime) : leaveStart;
-                // return leaveTotal + leaveEnd.diff(leaveStart, 'minutes').minutes;
-            }, 0);
+            }
 
             return {
                 date: month.startDate,
@@ -83,7 +81,7 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
                 workMinutes: Math.floor(workMinutes),
                 overDuration: Math.floor(Math.max(workMinutes - monthHours, 0)),
                 lessDuration: Math.floor(Math.max(monthHours - workMinutes, 0)),
-                leaveDuration: Math.floor(leaveMinutes),
+                leaveDuration: leavesDuration.days * 24 * 60 + leavesDuration.minutes,
             };
         }).filter(Boolean);
 
