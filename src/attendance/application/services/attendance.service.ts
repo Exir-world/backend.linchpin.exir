@@ -38,7 +38,10 @@ export class AttendanceService {
         const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
         const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
 
-        const startOfDay = DateUtil.convertTimeToUTC(DateUtil.parseTime(shifts.shiftTimes.at(0).startTime));
+        console.log(shifts, shifts.shiftTimes);
+
+
+        const startOfDay = DateUtil.convertTimeToUTC(shifts.shiftTimes.at(0).startTime);
 
         return this.commandBus.execute(new CheckInCommand(userId, startOfDay));
     }

@@ -28,7 +28,7 @@ export class DateUtil {
     }
 
     static convertTimeToUTC(timeString: string, zone: string = 'Asia/Tehran'): Date {
-        const dateTime = DateTime.fromFormat(timeString, 'HH:mm', { zone });
+        const dateTime = DateTime.fromFormat(timeString, 'HH:mm:ss', { zone });
         return dateTime.toUTC().toJSDate();
     }
 
@@ -245,7 +245,7 @@ export class DateUtil {
     }
 
     static parseTime(timeString: string, zone = "Asia/Tehran"): string {
-        const parsedTime = DateTime.fromFormat(timeString, "HH:mm:ssZZ").setZone(zone).toFormat("HH:mm:ss");
+        const parsedTime = DateTime.fromFormat(timeString, "HH:mm:ss").setZone(zone).toFormat("HH:mm:ss");
         return parsedTime
     }
 

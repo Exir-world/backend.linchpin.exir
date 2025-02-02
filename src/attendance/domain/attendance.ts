@@ -3,8 +3,8 @@ import { Stop } from "./stop";
 import { WorkReport } from "./work-report";
 
 export class Attendance {
-    public readonly id: number;
-    public readonly userId: number;
+    public id: number;
+    public userId: number;
     public checkIn: Date;
     public checkOut?: Date;
     public workReport?: WorkReport;

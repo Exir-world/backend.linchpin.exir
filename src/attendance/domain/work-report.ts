@@ -1,7 +1,7 @@
 import { Attendance } from "./attendance";
 
 export class WorkReport {
-    public readonly id: number;
+    public id: number;
     public workReport: string;
     public accepted: boolean;
     public comment?: string;

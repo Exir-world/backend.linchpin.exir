@@ -39,6 +39,9 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
             && !todayAttendances.at(-1).stops.sort((a, b) => a.getStartTime.getTime() - b.getStartTime.getTime()).at(-1).getEndTime)
             currentStatus = 'STOP'
 
+        console.log(todayAttendances?.at(-1));
+
+
         return {
             nowDatetime: nowTehran,
             user,
@@ -64,6 +67,7 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
                     ? 0 : this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60
             ),
             eachTimeDuration: eachTimeMinutes * 60,
+            submitWorkReport: (todayAttendances?.at(-1)?.getCheckOut && !todayAttendances?.at(-1)?.workReport?.workReport) || false,
         }
 
     }
