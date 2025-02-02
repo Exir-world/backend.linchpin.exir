@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AttendanceRepository } from '../../application/ports/attendance.repository';
 import { AttendanceEntity } from '../entities/attendance.entity';
 import { AttendanceMapper } from '../mappers/attendance.mapper';
-import { Between, IsNull, MoreThanOrEqual, Repository } from 'typeorm';
+import { Between, In, IsNull, MoreThanOrEqual, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Attendance } from 'src/attendance/domain/attendance';
 import { DateUtil } from 'src/common/utils/date.util';
@@ -52,6 +52,11 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
     async findById(id: number): Promise<Attendance | null> {
         const entity = await this.attendanceRepo.findOne({ where: { id }, relations: ['stops'] });
         return entity ? AttendanceMapper.toDomain(entity) : null;
+    }
+
+    async findByUserIds(ids: number[]): Promise<Attendance[]> {
+        const entity = await this.attendanceRepo.find({ where: { userId: In(ids) }, relations: ['stops'], order: { checkIn: 'ASC' } });
+        return AttendanceMapper.toDomainList(entity);
     }
 
     async findLastByUserId(userId: number): Promise<Attendance | null> {

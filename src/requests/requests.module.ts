@@ -54,5 +54,8 @@ import { GetRequestTypesHandler } from './application/queries/handlers/get-reque
         GetAllRequestsHandler,
         GetRequestTypesHandler,
     ],
+    exports: [
+        'IAttendanceSharedRepository'
+    ]
 })
 export class RequestsModule { }

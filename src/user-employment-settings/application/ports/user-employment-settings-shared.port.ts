@@ -2,4 +2,5 @@ import { UserEmploymentSettings } from "src/user-employment-settings/domain/user
 
 export interface UserEmploymentSettingsSharedPort {
     getSettingsByUserId(userId: number): Promise<UserEmploymentSettings>;
+    getSettingsByUsersId(userIds: number[]): Promise<UserEmploymentSettings[]>;
 }

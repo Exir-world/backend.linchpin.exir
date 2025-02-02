@@ -1,11 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AttendanceEntity } from '../entities/attendance.entity';
-import { AttendanceMapper } from '../mappers/attendance.mapper';
-import { Between, IsNull, LessThan, Repository } from 'typeorm';
+import { Between, In, IsNull, LessThan, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Attendance } from 'src/attendance/domain/attendance';
-import { DateUtil } from 'src/common/utils/date.util';
 import { AttendanceSharedRepository } from 'src/attendance/application/ports/attendance-shared.repository';
+import { Attendance } from 'src/attendance/domain/attendance';
+import { AttendanceMapper } from '../mappers/attendance.mapper';
 
 @Injectable()
 export class AttendanceSharedRepositoryImpl implements AttendanceSharedRepository {
@@ -33,5 +32,27 @@ export class AttendanceSharedRepositoryImpl implements AttendanceSharedRepositor
         lastAttendance.checkOut = time;
 
         await this.attendanceRepo.save(lastAttendance);
+    }
+
+    async findByUserIds(ids: number[], start: Date, end: Date): Promise<any> {
+        const entity = await this.attendanceRepo.find({
+            where: { userId: In(ids), checkIn: Between(start, end) },
+            relations: ['stops'],
+            order: { checkIn: 'ASC' },
+        });
+
+        const users = AttendanceMapper.toDomainList(entity)
+
+        const grouped = users.reduce((acc, record) => {
+            let userGroup = acc.find(g => g.userId === record.userId);
+            if (!userGroup) {
+                userGroup = { userId: record.userId, attendances: [] };
+                acc.push(userGroup);
+            }
+            userGroup.attendances.push(record);
+            return acc;
+        }, []);
+
+        return grouped;
     }
 }

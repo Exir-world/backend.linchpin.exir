@@ -1,3 +1,5 @@
+import { Attendance } from "src/attendance/domain/attendance";
+
 export interface AttendanceSharedRepository {
     manualCheckIn(
         userId: number,
@@ -8,4 +10,6 @@ export interface AttendanceSharedRepository {
         userId: number,
         time: Date,
     ): Promise<void>;
+
+    findByUserIds(ids: number[], start: Date, end: Date): Promise<any[]>;
 }
