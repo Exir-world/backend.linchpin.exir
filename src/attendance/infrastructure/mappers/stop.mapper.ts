@@ -26,11 +26,11 @@ export class StopMapper {
     static toEntity(dto: Stop): Partial<StopEntity> {
         const entity = new StopEntity();
         entity.id = 0;
-        entity.startTime = DateUtil.setTimezone(new Date(dto.getStartTime));
+        entity.startTime = dto.getStartTime;
         if (dto.getReason)
             entity.reason = dto.getReason;
         if (dto.getEndTime) {
-            entity.endTime = DateUtil.setTimezone(new Date(dto.getEndTime));
+            entity.endTime = dto.getEndTime;
         }
         return entity;
     }

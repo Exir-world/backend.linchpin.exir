@@ -11,16 +11,19 @@ export class CheckOutCheckingHandler implements ICommandHandler<CheckOutChecking
     ) { }
 
     async execute(command: CheckOutCheckingCommand): Promise<any> {
-        const attendances = await this.attendanceRepo.findCheckedInAttendances(command.startTime);
-
+        const attendances = await this.attendanceRepo.findCheckedInAttendances(command.userIds);
+        const stops = [];
         for (let i = 0; i < attendances.length; i++) {
             attendances[i].setCheckOut();
             if (attendances[i].stops.length)
-                if (!attendances[i].stops.at(-1).getEndTime)
-                    await this.stopRepo.endStop(attendances[i].userId);
+                if (!attendances[i].stops.at(-1).getEndTime) {
+                    attendances[i].stops.at(-1).endStop();
+                    stops.push(attendances[i].stops.at(-1));
+                }
         }
 
         await this.attendanceRepo.save(attendances);
+        await this.stopRepo.save(stops);
 
         return { message: 'خروج شما با موفقیت ثبت شد' }
     }

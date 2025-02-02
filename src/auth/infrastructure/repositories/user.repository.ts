@@ -24,6 +24,7 @@ export class UserRepositoryImpl extends UserRepository {
 
         return new User(
             userEntity.name,
+            userEntity.lastname,
             userEntity.phoneNumber,
             userEntity.password,
             RoleMapper.toDomain(userEntity.role),

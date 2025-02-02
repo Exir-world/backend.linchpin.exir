@@ -5,6 +5,5 @@ export class GetMonthlyReportQuery {
         public readonly userId: number,
         public readonly monthAgo: number,
         public readonly totalDuration: number,
-        public readonly currentDuration: number,
     ) { }
 }

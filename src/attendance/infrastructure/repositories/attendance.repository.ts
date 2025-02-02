@@ -14,10 +14,10 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         private readonly attendanceRepo: Repository<AttendanceEntity>,
     ) { }
 
-    async findCheckedInAttendances(startTime: Date): Promise<Attendance[]> {
+    async findCheckedInAttendances(userIds: number[]): Promise<Attendance[]> {
         const attendances = await this.attendanceRepo.find({
             where: {
-                checkIn: MoreThanOrEqual(startTime),
+                userId: In(userIds),
                 checkOut: IsNull(),
             },
             relations: ['stops']

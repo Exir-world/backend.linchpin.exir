@@ -4,6 +4,7 @@ import { ShiftsSharedPort } from '../ports/shifts-shared.port';
 import { Shift } from 'src/shifts/domain/shift.domain';
 import { GetShiftQuery } from '../queries/get-shift.query';
 import { GetShiftsQuery } from '../queries/get-shifts.query';
+import { GetShiftsByIdQuery } from '../queries/get-shifts-by-id.query';
 
 @Injectable()
 export class ShiftsService implements ShiftsSharedPort {
@@ -17,5 +18,9 @@ export class ShiftsService implements ShiftsSharedPort {
 
     getAllShifts(): Promise<Shift[]> {
         return this.queryBus.execute(new GetShiftsQuery());
+    }
+
+    getShifts(ids: number[]): Promise<Shift[]> {
+        return this.queryBus.execute(new GetShiftsByIdQuery(ids));
     }
 }

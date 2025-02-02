@@ -4,7 +4,7 @@ import { ShiftTimeMapper } from "./shift-time.mapper";
 
 export class ShiftMapper {
     static toDomain(entity: ShiftEntity): Shift {
-        return new Shift(entity.id, entity.organizationId, entity.title, entity.shiftTimes.map(time => ShiftTimeMapper.toDomain(time)));
+        return new Shift(entity.id, entity.organizationId, entity.title, entity.shiftTimes?.map(time => ShiftTimeMapper.toDomain(time)));
     }
 
     static toEntity(domain: Shift): ShiftEntity {
