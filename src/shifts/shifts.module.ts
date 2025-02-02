@@ -9,6 +9,7 @@ import { GetShiftsByOrganizationHandler } from './application/queries/handlers/g
 import { GetShiftHandler } from './application/queries/handlers/get-shift.handler';
 import { GetShiftsHandler } from './application/queries/handlers/get-shifts.handler';
 import { ShiftsService } from './application/services/shifts.service';
+import { GetShiftsByIdHandler } from './application/queries/handlers/get-shifts-by-id.handler';
 
 @Module({
     imports: [
@@ -24,6 +25,7 @@ import { ShiftsService } from './application/services/shifts.service';
         GetShiftsByOrganizationHandler,
         GetShiftHandler,
         GetShiftsHandler,
+        GetShiftsByIdHandler,
 
         {
             provide: 'ShiftsSharedPort',

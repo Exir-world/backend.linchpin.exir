@@ -43,4 +43,9 @@ export class StopRepositoryImpl implements StopRepository {
         const updatedStop = await this.stopRepository.save(stop);
         return StopMapper.toDomain(updatedStop);
     }
+
+    async save(stops: Stop[]) {
+        const entities = stops.map(stop => StopMapper.toEntity(stop));
+        await this.stopRepository.save(entities);
+    }
 }

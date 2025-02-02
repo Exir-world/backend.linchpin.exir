@@ -9,15 +9,6 @@ export class OrganizationController {
         private readonly organizationService: OrganizationService,
     ) { }
 
-    @Get(':organiztionId/times')
-    @ApiOperation({ summary: 'Get times by organization ID' })
-    @ApiParam({ name: 'organiztionId', required: true, description: 'Organization ID' })
-    @ApiResponse({ status: 200, description: 'Successful response' })
-    @ApiResponse({ status: 404, description: 'Organization not found' })
-    getTimes(@Param('organiztionId') organiztionId: number): any {
-        return this.organizationService.getTimesByOrgId(organiztionId);
-    }
-
     @Get(':organiztionId/creteria')
     @ApiOperation({ summary: 'Get times by organization ID' })
     @ApiParam({ name: 'organiztionId', required: true, description: 'Organization ID' })

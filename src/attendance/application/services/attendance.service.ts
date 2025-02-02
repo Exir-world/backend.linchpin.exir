@@ -35,8 +35,10 @@ export class AttendanceService {
      * @param command CheckInCommand
      */
     async checkIn(userId: number): Promise<void> {
-        const times = await this.organizationService.getTimesByOrgId(1);
-        const startOfDay = DateUtil.convertTimeToUTC(DateUtil.parseTime(times.at(0).getStartTime));
+        const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
+        const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+
+        const startOfDay = DateUtil.convertTimeToUTC(DateUtil.parseTime(shifts.shiftTimes.at(0).startTime));
 
         return this.commandBus.execute(new CheckInCommand(userId, startOfDay));
     }
@@ -109,11 +111,8 @@ export class AttendanceService {
             currentOrgTime = shifts.shiftTimes
                 .find(time => time.type == ShiftTimeTypeEnum.WORK && time.endTime < nowTime);
 
-        console.log(currentOrgTime, nowTime);
-
 
         const currentDuration = !currentOrgTime ? null : DateUtil.getTimeDifference(currentOrgTime.endTime, currentOrgTime.startTime);
-        console.log(currentDuration);
 
         const totalMinutes = shifts.shiftTimes.filter(time => time.type == ShiftTimeTypeEnum.WORK)
             .reduce((acc, time) => {
@@ -130,12 +129,18 @@ export class AttendanceService {
     }
 
     async getMonthlyReport(userId: number, monthAgo: number) {
-        const durations = await this.organizationService.getTimeDurationByOrgId(1);
+        const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
+        const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+
+        const totalMinutes = shifts.shiftTimes.filter(time => time.type == ShiftTimeTypeEnum.WORK)
+            .reduce((acc, time) => {
+                return acc + DateUtil.getTimeDifference(time.endTime, time.startTime);
+            }, 0);
+
         return this.queryBus.execute(
             new GetMonthlyReportQuery(
                 userId, monthAgo,
-                durations?.totalDuration,
-                durations?.currentDuration,
+                totalMinutes,
             )
         );
     }
@@ -144,18 +149,38 @@ export class AttendanceService {
     // @Cron('0 */3 * * * *')
     async checkOutChecking() {
         console.log('*** Check Attendances For Auto Check-Out ***');
-        const time = await this.organizationService.getTimeDurationByOrgId(1);
+        const settings = await this.userEmploymentSettingsSharedPort.getSettingsForAll();
+        const shifts = await this.shiftsSharedPort.getShifts(settings.map(s => s.shiftId));
 
-        const isEndTime =
-            time && time.isWorkTime &&
-            DateUtil.checkOutChecking({
-                hour: Number(time.currentEndTime.split(':')[0]),
-                minutes: Number(time.currentEndTime.split(':')[1]),
-            });
+        const shiftIds =
+            shifts.filter(shift =>
+                shift.shiftTimes.filter(time =>
+                    time &&
+                    time.type == ShiftTimeTypeEnum.WORK &&
+                    DateUtil.checkOutChecking({
+                        hour: Number(time.endTime.split(':')[0]),
+                        minutes: Number(time.endTime.split(':')[1]),
+                    })
+                ).length
+            )
+                .map(shift => shift.id);
 
-        if (isEndTime) {
-            const startOfCurrentTime = DateUtil.convertTimeToUTC(time.currentStartTime);
-            return this.commandBus.execute(new CheckOutCheckingCommand(startOfCurrentTime));
-        }
+        const userIds = settings.filter(s => shiftIds.includes(s.shiftId)).map(s => s.userId);
+
+        return this.commandBus.execute(new CheckOutCheckingCommand(userIds));
+
+        // const time = await this.organizationService.getTimeDurationByOrgId(1);
+
+        // const isEndTime =
+        //     time && time.isWorkTime &&
+        //     DateUtil.checkOutChecking({
+        //         hour: Number(time.currentEndTime.split(':')[0]),
+        //         minutes: Number(time.currentEndTime.split(':')[1]),
+        //     });
+
+        // if (isEndTime) {
+        //     const startOfCurrentTime = DateUtil.convertTimeToUTC(time.currentStartTime);
+        //     return this.commandBus.execute(new CheckOutCheckingCommand(startOfCurrentTime));
+        // }
     }
 }
