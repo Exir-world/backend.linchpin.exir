@@ -12,6 +12,15 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
         private readonly userRepository: Repository<UserEntity>,
     ) { }
 
+    async getUsersByOrgId(orgId: number): Promise<UserDto[]> {
+        const users = await this.userRepository.find();
+
+        return users.map(user => ({
+            id: user.id,
+            name: user.name,
+        }));
+    }
+
     async getAllUsers(): Promise<UserDto[]> {
         const users = await this.userRepository.find();
         return users.map(user => ({

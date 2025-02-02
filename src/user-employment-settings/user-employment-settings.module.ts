@@ -6,6 +6,7 @@ import { UserEmploymentSettingsController } from './presentation/controllers/use
 import { CreateUserEmploymentSettingsHandler } from './application/commands/handlers/create-user-employment-settings.handler';
 import { GetUserEmploymentSettingsHandler } from './application/queries/handlers/get-user-employment-settings.handler';
 import { UserEmploymentSettingsService } from './application/services/user-employment-settings.service';
+import { GetUsersEmploymentSettingsHandler } from './application/queries/handlers/get-users-employment-settings.handler';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { UserEmploymentSettingsService } from './application/services/user-emplo
         CreateUserEmploymentSettingsHandler,
 
         GetUserEmploymentSettingsHandler,
+        GetUsersEmploymentSettingsHandler,
 
         {
             provide: 'UserEmploymentSettingsSharedPort',
