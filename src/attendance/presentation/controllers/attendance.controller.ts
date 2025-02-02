@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AttendanceService } from '../../application/services/attendance.service';
 import { SubmitWorkReportDto } from '../dto/submit-work-report.dto';
@@ -41,31 +41,29 @@ export class AttendanceController {
                     type: 'string',
                     example: 'string',
                 },
+                workReport: {
+                    type: 'string',
+                    example: 'string',
+                },
             },
         },
     })
-    async mainPageActions(@Request() req, @Body() body: { actionType: string; reason?: string }) {
+    async mainPageActions(@Request() req, @Body() body: { actionType: string; workReport?: string; reason?: string }) {
         switch (body.actionType) {
             case 'check-in':
                 await this.attendanceService.checkIn(req.user.id);
                 break;
             case 'check-out':
-                await this.attendanceService.checkOut(
-                    new CheckOutCommand(req.user.id)
-                );
+                if (!body.workReport) throw new BadRequestException('Submit your work report!');
+                await this.attendanceService.checkOut(new CheckOutCommand(req.user.id));
+                await this.attendanceService.submitWorkReport(new SubmitWorkReportCommand(body.workReport, req.user.id));
                 break;
-
             case 'stop-start':
-                await await this.attendanceService.createStop(
-                    new CreateStopCommand(req.user.id, body.reason),
-                );
+                await await this.attendanceService.createStop(new CreateStopCommand(req.user.id, body.reason));
                 break;
             case 'stop-end':
-                await await this.attendanceService.endStop(
-                    new EndStopCommand(req.user.id),
-                );
+                await await this.attendanceService.endStop(new EndStopCommand(req.user.id));
                 break;
-            // case 'daily':
         }
 
         return this.attendanceService.getDailyAttendanceStatus(req.user.id);
@@ -86,9 +84,7 @@ export class AttendanceController {
     @ApiResponse({ status: 200, description: 'خروج با موفقیت ثبت شد.' })
     @HttpCode(HttpStatus.OK)
     async checkOut(@Request() req) {
-        return this.attendanceService.checkOut(
-            new CheckOutCommand(req.user.id)
-        );
+        return this.attendanceService.checkOut(new CheckOutCommand(req.user.id));
     }
 
     @UseGuards(UserAuthGuard)
@@ -99,7 +95,6 @@ export class AttendanceController {
     async submitWorkReport(@Request() req, @Body() dto: SubmitWorkReportDto) {
         return this.attendanceService.submitWorkReport(
             new SubmitWorkReportCommand(
-                dto.attendanceId,
                 dto.reportText,
                 req.user.id
             )

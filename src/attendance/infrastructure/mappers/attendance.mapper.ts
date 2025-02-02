@@ -1,6 +1,7 @@
 import { Attendance } from 'src/attendance/domain/attendance';
 import { AttendanceEntity } from '../entities/attendance.entity';
 import { StopMapper } from './stop.mapper';
+import { WorkReportMapper } from './work-report.mapper';
 
 export class AttendanceMapper {
     static toDomain(entity: AttendanceEntity): Attendance {
@@ -8,6 +9,8 @@ export class AttendanceMapper {
         attendance.checkIn = entity.checkIn;
         attendance.checkOut = entity.checkOut;
         attendance.stops = StopMapper.toDomainList(entity.stops);
+        if (entity.workReport)
+            attendance.workReport = WorkReportMapper.toDomain(entity.workReport);
 
         // جلوگیری از حلقه بازگشتی
         // if (entity.workReport) {

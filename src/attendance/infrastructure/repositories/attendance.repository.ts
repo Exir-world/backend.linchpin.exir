@@ -35,7 +35,7 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
                 userId,
                 checkIn: Between(startOfToday, endOfToday)
             },
-            relations: ['stops'],
+            relations: ['stops', 'workReport'],
             order: {
                 checkIn: 'ASC'
             }
@@ -44,9 +44,10 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         return AttendanceMapper.toDomainList(todayAttendances);
     }
 
-    async save(attendances: Attendance[]): Promise<void> {
+    async save(attendances: Attendance[]): Promise<Attendance[]> {
         const entities = attendances.map(attendance => AttendanceMapper.toEntity(attendance));
-        await this.attendanceRepo.save(entities);
+        const newEntities = await this.attendanceRepo.save(entities);
+        return AttendanceMapper.toDomainList(newEntities);
     }
 
     async findById(id: number): Promise<Attendance | null> {
@@ -63,7 +64,7 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         const entity = await this.attendanceRepo.findOne({
             where: { userId },
             order: { checkIn: 'DESC' },
-            relations: ['stops']
+            relations: ['stops', 'workReport']
         });
         return entity ? AttendanceMapper.toDomain(entity) : null;
     }

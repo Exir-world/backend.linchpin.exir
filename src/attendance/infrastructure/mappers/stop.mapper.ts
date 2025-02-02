@@ -41,6 +41,6 @@ export class StopMapper {
      * @returns Array<Stop>
      */
     static toDomainList(stops: StopEntity[]): Stop[] {
-        return stops.map(stop => this.toDomain(stop));
+        return stops?.map(stop => this.toDomain(stop));
     }
 }

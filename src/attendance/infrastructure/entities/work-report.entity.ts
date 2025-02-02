@@ -10,7 +10,7 @@ export class WorkReportEntity {
     @JoinColumn({ name: 'attendance_id' }) // Explicitly add a foreign key column
     attendance: AttendanceEntity;
 
-    @Column({ type: 'text' })
+    @Column({ type: 'text', nullable: true })
     workReport: string; // متن گزارش کار
 
     @Column({ type: 'boolean', default: false })
