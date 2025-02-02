@@ -95,7 +95,7 @@ export class DateUtil {
 
     static dateDifferenceInDays(firstDate: any, secondDate: any) {
         const diffInMs = Math.abs(new Date(secondDate).getTime() - new Date(firstDate).getTime());
-        return diffInMs / (1000 * 60 * 60 * 24);
+        return Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
     }
 
     // static startOfCurrentTime(timeZone: string = 'Asia/Tehran'): Date {
@@ -245,17 +245,17 @@ export class DateUtil {
     }
 
     static parseTime(timeString: string, zone = "Asia/Tehran"): string {
-        const parsedTime = DateTime.fromFormat(timeString, "HH:mm:ssZZ").setZone(zone).toFormat("HH:mm");
+        const parsedTime = DateTime.fromFormat(timeString, "HH:mm:ssZZ").setZone(zone).toFormat("HH:mm:ss");
         return parsedTime
     }
 
     static nowTime(zone = "Asia/Tehran"): string {
-        const parsedTime = DateTime.utc().setZone(zone).toFormat("HH:mm");
+        const parsedTime = DateTime.utc().setZone(zone).toFormat("HH:mm:ss");
         return parsedTime
     }
 
     static getTimeDifference(startTime: string, endTime: string): number {
-        const format = "HH:mm";
+        const format = "HH:mm:ss";
         const start = DateTime.fromFormat(startTime, format);
         const end = DateTime.fromFormat(endTime, format);
 
