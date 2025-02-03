@@ -6,6 +6,7 @@ import { Tokens } from '../../interfaces/token.interface';
 import { UserSessionRepository } from '../../ports/user-session.repository';
 import { UserRepository } from '../../ports/user.repository';
 import { ConfigService } from '@nestjs/config';
+import { calculateJwtExpiresAt } from '../../utils/ms.util';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {
@@ -15,6 +16,9 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
     ) { }
+
+    jwtSecret = this.configService.get('JWT_SECRET');
+    jwtExpires = this.configService.get('JWT_EXPIRES') || '30d';
 
     async execute(command: LoginCommand): Promise<Tokens> {
         const { phoneNumber, password } = command;
@@ -32,8 +36,8 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         // Generate tokens
         const payload = { id: user.id, role: user.role.name };
         const accessToken = this.jwtService.sign(payload, {
-            expiresIn: '30d',
-            secret: this.configService.get('JWT_SECRET')
+            expiresIn: this.jwtExpires,
+            secret: this.jwtSecret,
         });
         const refreshToken = this.jwtService.sign(payload, {
             expiresIn: '7d',
@@ -43,6 +47,8 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         // Save refresh token in session
         await this.sessionRepository.saveSession(user.id, refreshToken);
 
-        return { accessToken, refreshToken };
+        const expires = calculateJwtExpiresAt(this.jwtExpires);
+
+        return { accessToken, expires };
     }
 }
