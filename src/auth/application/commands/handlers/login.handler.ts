@@ -20,6 +20,9 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     jwtSecret = this.configService.get('JWT_SECRET');
     jwtExpires = this.configService.get('JWT_EXPIRES') || '30d';
 
+    refreshSecret = this.configService.get('REFRESH_SECRET');
+    refreshExpires = this.configService.get('REFRESH_EXPIRES') || '90d';
+
     async execute(command: LoginCommand): Promise<Tokens> {
         const { phoneNumber, password } = command;
 
@@ -39,16 +42,18 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
             expiresIn: this.jwtExpires,
             secret: this.jwtSecret,
         });
-        const refreshToken = this.jwtService.sign(payload, {
-            expiresIn: '7d',
-            secret: this.configService.get('REFRESH_SECRET')
-        });
 
-        // Save refresh token in session
-        await this.sessionRepository.saveSession(user.id, refreshToken);
+        const refreshToken = this.jwtService.sign(payload, {
+            expiresIn: this.refreshExpires,
+            secret: this.refreshSecret,
+        });
 
         const expires = calculateJwtExpiresAt(this.jwtExpires);
 
-        return { accessToken, expires };
+        // Save refresh token in session
+        await this.sessionRepository.saveSession(user.id, refreshToken, expires);
+
+
+        return { accessToken, refreshToken, expires };
     }
 }

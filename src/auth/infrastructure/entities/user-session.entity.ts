@@ -9,6 +9,12 @@ export class UserSessionEntity {
     @Column({ type: 'varchar', length: 500 })
     refreshToken: string;
 
+    @Column()
+    jwtExpires: number;
+
     @ManyToOne(() => UserEntity, { nullable: false })
     user: UserEntity;
+
+    @Column({ default: true })
+    isActive: boolean;
 }
