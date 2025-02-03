@@ -4,6 +4,8 @@ import { AuthService } from 'src/auth/application/services/auth.service';
 import { LoginDto } from '../dto/login.dto';
 import { Tokens } from 'src/auth/application/interfaces/token.interface';
 import { LoginCommand } from 'src/auth/application/commands/login.command';
+import { RefreshDto } from '../dto/refresh-token.dto';
+import { RefreshTokenCommand } from 'src/auth/application/commands/refresh-token.command';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -19,6 +21,15 @@ export class AuthController {
                 loginDto.phoneNumber,
                 loginDto.password
             )
+        );
+    }
+
+    @Post('refresh')
+    @HttpCode(HttpStatus.OK)
+    @ApiResponse({ status: 200 })
+    async refresh(@Body() refreshDto: RefreshDto): Promise<Tokens> {
+        return this.authService.refreshToken(
+            new RefreshTokenCommand(refreshDto.refreshToken)
         );
     }
 }

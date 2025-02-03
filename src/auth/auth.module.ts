@@ -36,6 +36,7 @@ import { GetAllUsersHandler } from './application/queries/handlers/get-all-users
 import { LoginHandler } from './application/commands/handlers/login.handler';
 import { JwtService } from '@nestjs/jwt';
 import { UserSharedRepositoryImpl } from './infrastructure/repositories/user-shared.repository';
+import { RefreshTokenHandler } from './application/commands/handlers/refresh-token.handler';
 
 @Module({
     imports: [
@@ -94,6 +95,7 @@ import { UserSharedRepositoryImpl } from './infrastructure/repositories/user-sha
         UpdateUserHandler,
         DeleteUserHandler,
         LoginHandler,
+        RefreshTokenHandler,
 
         // Query Handlers
         GetUserByIdHandler,

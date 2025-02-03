@@ -9,7 +9,7 @@ export class UserSessionEntity {
     @Column({ type: 'varchar', length: 500 })
     refreshToken: string;
 
-    @Column()
+    @Column({ type: "bigint" })
     jwtExpires: number;
 
     @ManyToOne(() => UserEntity, { nullable: false })
