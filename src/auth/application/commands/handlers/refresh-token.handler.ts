@@ -1,15 +1,15 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginCommand } from '../login.command';
 import { Tokens } from '../../interfaces/token.interface';
 import { UserSessionRepository } from '../../ports/user-session.repository';
 import { UserRepository } from '../../ports/user.repository';
 import { ConfigService } from '@nestjs/config';
 import { calculateJwtExpiresAt } from '../../utils/ms.util';
+import { RefreshTokenCommand } from '../refresh-token.command';
 
-@CommandHandler(LoginCommand)
-export class LoginHandler implements ICommandHandler<LoginCommand> {
+@CommandHandler(RefreshTokenCommand)
+export class RefreshTokenHandler implements ICommandHandler<RefreshTokenCommand> {
     constructor(
         private readonly userRepository: UserRepository,
         private readonly sessionRepository: UserSessionRepository,
@@ -23,21 +23,14 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     refreshSecret = this.configService.get('REFRESH_SECRET');
     refreshExpires = this.configService.get('REFRESH_EXPIRES') || '90d';
 
-    async execute(command: LoginCommand): Promise<Tokens> {
-        const { phoneNumber, password } = command;
+    async execute(command: RefreshTokenCommand): Promise<Tokens> {
 
-        if (!phoneNumber || !password) {
-            throw new BadRequestException('phoneNumber and password are required');
-        }
-
-        // Verify user credentials
-        const user = await this.userRepository.findByPhoneNumber(phoneNumber);
-        if (!user || user.password !== password) {
-            throw new BadRequestException('Invalid phone number or password');
-        }
+        const session = await this.sessionRepository.getSessionWithRefresh(command.refreshToken);
+        if (!session)
+            throw new UnauthorizedException();
 
         // Generate tokens
-        const payload = { id: user.id, role: user.role.name };
+        const payload = { id: session.user.id, role: session.user.role.name };
         const accessToken = this.jwtService.sign(payload, {
             expiresIn: this.jwtExpires,
             secret: this.jwtSecret,
@@ -51,8 +44,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         const expires = calculateJwtExpiresAt(this.jwtExpires);
 
         // Save refresh token in session
-        await this.sessionRepository.saveSession(user.id, refreshToken, expires);
-
+        await this.sessionRepository.saveSession(session.user.id, refreshToken, expires);
 
         return { accessToken, refreshToken, expires };
     }

@@ -11,10 +11,20 @@ export class UserSessionRepositoryImpl implements UserSessionRepository {
         private readonly sessionRepository: Repository<UserSessionEntity>,
     ) { }
 
-    async saveSession(userId: number, refreshToken: string): Promise<void> {
+    async getSessionWithRefresh(refreshToken: string): Promise<UserSessionEntity> {
+        return this.sessionRepository.findOne({
+            where: { refreshToken, isActive: true },
+            relations: ['user', 'user.role'],
+        });
+    }
+
+    async saveSession(userId: number, refreshToken: string, expires: number): Promise<void> {
+        await this.sessionRepository.update({ user: { id: userId } }, { isActive: false });
+
         const session = new UserSessionEntity();
         session.refreshToken = refreshToken;
         session.user = { id: userId } as any; // Simplified for brevity
+        session.jwtExpires = expires;
         await this.sessionRepository.save(session);
     }
 }
