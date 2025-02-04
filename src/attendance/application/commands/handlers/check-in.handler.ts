@@ -26,8 +26,6 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
                 throw new BadRequestException('First submit prevoius time work report!')
         }
 
-
-
         const attendance = new Attendance(0, command.userId);
         const newAttendance = await this.attendanceRepo.save([attendance]);
 
