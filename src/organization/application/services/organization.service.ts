@@ -3,6 +3,7 @@ import { QueryBus } from '@nestjs/cqrs';
 import { OrganizationSharedPort } from '../ports/organization-shared.port';
 import { DateUtil } from 'src/common/utils/date.util';
 import { GetCreteriaByOrgIdQuery } from '../queries/get-creteria-by-org-id.query';
+import { GetTeamsByOrgIdQuery } from '../queries/get-teams-by-org-id.query';
 
 @Injectable()
 export class OrganizationService implements OrganizationSharedPort {
@@ -12,5 +13,9 @@ export class OrganizationService implements OrganizationSharedPort {
 
     async getCreteriaByOrgId(orgId: number): Promise<any> {
         return this.queryBus.execute(new GetCreteriaByOrgIdQuery(orgId));
+    }
+
+    async getTeamsByOrgId(orgId: number): Promise<any> {
+        return this.queryBus.execute(new GetTeamsByOrgIdQuery(orgId));
     }
 }

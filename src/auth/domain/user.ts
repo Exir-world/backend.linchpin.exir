@@ -3,6 +3,7 @@ import { Role } from './role';
 
 export class User {
     constructor(
+        public teamId: number,
         public name: string,
         public lastname: string,
         public phoneNumber: string,
@@ -13,9 +14,9 @@ export class User {
         if (!name || name.trim() === '') {
             throw new Error('User name cannot be empty.');
         }
-        if (!lastname || lastname.trim() === '') {
-            throw new Error('User lastname cannot be empty.');
-        }
+        // if (!lastname || lastname.trim() === '') {
+        //     throw new Error('User lastname cannot be empty.');
+        // }
         if (!phoneNumber || !/^(\+\d{1,3}[- ]?)?\d{10}$/.test(phoneNumber)) {
             throw new Error('Invalid phone number.');
         }

@@ -8,6 +8,11 @@ export class GetUserRequestsHandler implements IQueryHandler<GetUserRequestsQuer
     constructor(private readonly requestRepository: RequestRepository) { }
 
     async execute(query: GetUserRequestsQuery): Promise<RequestDomain[]> {
-        return await this.requestRepository.findByUserId(query.userId);
+        return await this.requestRepository.filterByTimeRangeAndStatus(
+            query.userId,
+            query.status,
+            query.startTime,
+            query.endTime,
+        );
     }
 }

@@ -20,6 +20,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
         }
 
         const user = new User(
+            command.teamId,
             command.name,
             command.lastname,
             command.phoneNumber,

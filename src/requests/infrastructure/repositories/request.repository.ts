@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Between, Repository } from 'typeorm';
+import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RequestEntity } from '../entities/request.entity';
 import { RequestMapper } from '../mappers/request.mapper';
@@ -32,6 +32,30 @@ export class RequestRepositoryImpl implements RequestRepository {
 
     async findByStatus(status: RequestStatus): Promise<RequestDomain[]> {
         const entities = await this.ormRepository.find({ where: { status }, order: { createdAt: 'DESC' } });
+        return entities.map(RequestMapper.toDomain);
+    }
+
+    async filterByTimeRangeAndStatus(userId: number, status: RequestStatus, startTime: Date, endTime: Date): Promise<RequestDomain[]> {
+        const where: any = { userId };
+        if (status)
+            where.status = status;
+
+        if (startTime)
+            if (endTime)
+                where.createdAt = Between(startTime, endTime);
+            else
+                where.createdAt = MoreThanOrEqual(startTime);
+        else if (endTime)
+            where.createdAt = LessThanOrEqual(endTime);
+
+        console.log(where);
+
+
+
+        const entities = await this.ormRepository.find({
+            where,
+            order: { createdAt: 'DESC' },
+        });
         return entities.map(RequestMapper.toDomain);
     }
 }

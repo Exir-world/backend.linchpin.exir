@@ -15,7 +15,6 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
 
     async execute(command: CheckInCommand): Promise<any> {
         const lastAttendance = await this.attendanceRepo.findLastByUserId(command.userId);
-        console.log(command.startOfDay, lastAttendance.workReport);
 
         if (lastAttendance) {
             if (lastAttendance.getCheckIn > command.startOfDay && !lastAttendance.getCheckOut)

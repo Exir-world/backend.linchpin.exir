@@ -17,4 +17,13 @@ export class OrganizationController {
     getCreteria(@Param('organiztionId') organiztionId: number): any {
         return this.organizationService.getCreteriaByOrgId(organiztionId);
     }
+
+    @Get(':organiztionId/teams')
+    @ApiOperation({ summary: 'Get teams by organization ID' })
+    @ApiParam({ name: 'organiztionId', required: true, description: 'Organization ID' })
+    @ApiResponse({ status: 200, description: 'Successful response' })
+    @ApiResponse({ status: 404, description: 'Organization not found' })
+    getTeams(@Param('organiztionId') organiztionId: number): any {
+        return this.organizationService.getTeamsByOrgId(organiztionId);
+    }
 }
