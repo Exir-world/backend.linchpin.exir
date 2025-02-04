@@ -7,10 +7,12 @@ import { OrganizationService } from './application/services/organization.service
 import { OrganizationCriterionEntity } from './infrastructure/entities/organization-criterion.entity';
 import { OrganizationController } from './presentation/controllers/organization.controller';
 import { GetCriteriaByOrgIdHandler } from './application/queries/handlers/get-creteria-by-org-id.handler';
+import { GetTeamsByOrgIdHandler } from './application/queries/handlers/get-teams-by-org-id.handler';
+import { TeamEntity } from './infrastructure/entities/team.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([OrganizationEntity, OrganizationCriterionEntity]),
+        TypeOrmModule.forFeature([OrganizationEntity, OrganizationCriterionEntity, TeamEntity]),
         CqrsModule,
         AuthModule,
     ],
@@ -40,6 +42,7 @@ import { GetCriteriaByOrgIdHandler } from './application/queries/handlers/get-cr
 
         // Query Handlers
         GetCriteriaByOrgIdHandler,
+        GetTeamsByOrgIdHandler,
     ],
     exports: ['OrganizationSharedPort']
 })

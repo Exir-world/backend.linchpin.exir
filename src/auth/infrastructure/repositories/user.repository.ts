@@ -23,6 +23,7 @@ export class UserRepositoryImpl extends UserRepository {
         }
 
         return new User(
+            userEntity.teamId,
             userEntity.name,
             userEntity.lastname,
             userEntity.phoneNumber,

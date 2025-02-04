@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { BadRequestException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Tokens } from '../../interfaces/token.interface';
 import { UserSessionRepository } from '../../ports/user-session.repository';
@@ -27,7 +27,7 @@ export class RefreshTokenHandler implements ICommandHandler<RefreshTokenCommand>
 
         const session = await this.sessionRepository.getSessionWithRefresh(command.refreshToken);
         if (!session)
-            throw new UnauthorizedException();
+            throw new BadRequestException();
 
         // Generate tokens
         const payload = { id: session.user.id, role: session.user.role.name };

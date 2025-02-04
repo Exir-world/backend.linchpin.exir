@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt } from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber } from 'class-validator';
 
 export class CreateUserDto {
+    @ApiProperty({ example: 1, description: 'شناسه تیم' })
+    @IsNumber()
+    @IsNotEmpty()
+    teamId: number;
+
     @ApiProperty({ example: 'John', description: 'نام کاربر' })
     @IsString({ message: 'نام باید یک رشته باشد' })
     @IsNotEmpty({ message: 'نام نمی‌تواند خالی باشد' })

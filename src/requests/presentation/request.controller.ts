@@ -12,6 +12,7 @@ import { CancelRequestCommand } from '../application/commands/cancel-request.com
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { GetRequestTypesQuery } from '../application/queries/get-request-types.query';
+import { GetRequestsUserDto } from './dto/get-requests-user.dto';
 
 @ApiBearerAuth()
 @ApiTags('Requests') // نام بخش در Swagger
@@ -62,8 +63,13 @@ export class RequestController {
     @ApiOperation({ summary: 'دریافت درخواست‌های کاربر' })
     @ApiResponse({ status: 200, description: 'لیست درخواست‌های کاربر' })
     @Get('user')
-    async getUserRequests(@Request() req) {
-        const query = new GetUserRequestsQuery(req.user.id);
+    async getUserRequests(@Request() req, @Query() dto: GetRequestsUserDto) {
+        const query = new GetUserRequestsQuery(
+            req.user.id,
+            dto.status,
+            dto.startTime,
+            dto.endTime,
+        );
         return await this.requestService.getUserRequests(query);
     }
 

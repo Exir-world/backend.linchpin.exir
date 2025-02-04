@@ -1,5 +1,6 @@
 export class CreateUserCommand {
     constructor(
+        public readonly teamId: number,
         public readonly name: string,
         public readonly lastname: string,
         public readonly phoneNumber: string,
