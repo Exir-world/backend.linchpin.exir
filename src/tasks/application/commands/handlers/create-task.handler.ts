@@ -27,7 +27,7 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
     ) { }
 
     async execute(command: CreateTaskCommand): Promise<TaskEntity> {
-        const { title, description, priorityId, date, userId, tagIds, subtasks, attachments } = command;
+        const { title, description, priorityId, date, userId, tagIds, subtasks, attachments, createdBy } = command;
 
         // یافتن Priority
         const priority = await this.priorityRepository.findOne({ where: { id: priorityId } });
@@ -42,7 +42,7 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
         task.priority = priority;
         task.date = new Date(date);
         task.userId = userId;
-        task.createdBy = userId || 1; // مقدار پیش‌فرض
+        task.createdBy = createdBy;
 
         const savedTask = await this.taskRepository.save(task);
 
