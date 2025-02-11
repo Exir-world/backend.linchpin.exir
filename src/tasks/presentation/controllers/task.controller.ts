@@ -8,6 +8,7 @@ import { GetTasksByUserQuery } from "src/tasks/application/queries/get-tasks-by-
 import { GetTasksByCreatorQuery } from "src/tasks/application/queries/get-tasks-by-creator.query";
 import { GetTaskByIdQuery } from "src/tasks/application/queries/get-task-by-id.query";
 import { UserAuthGuard } from "src/auth/application/guards/user-auth.guard";
+import { GetTasksQuery } from "src/tasks/application/queries/get-tasks.query";
 
 @ApiBearerAuth()
 @ApiTags("Tasks")
@@ -34,6 +35,24 @@ export class TaskController {
             createTaskDto.subtasks,
             createTaskDto.attachments
         ));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Get()
+    @ApiOperation({ summary: "Get tasks" })
+    @ApiResponse({ status: 200, description: "List of tasks created by the user", type: [Task] })
+    @ApiQuery({ name: "startDate", required: false, description: "Filter tasks from this date (format: YYYY-MM-DD)" })
+    @ApiQuery({ name: "endDate", required: false, description: "Filter tasks until this date (format: YYYY-MM-DD)" })
+    @ApiQuery({ name: "priorityId", required: false, description: "Filter tasks by priority ID" })
+    @ApiQuery({ name: "userId", required: false, description: "Filter tasks by user ID" })
+    async getTasks(
+        @Request() req,
+        @Query("startDate") startDate?: string,
+        @Query("endDate") endDate?: string,
+        @Query("priorityId") priorityId?: number,
+        @Query("userId") userId?: number,
+    ) {
+        return this.queryBus.execute(new GetTasksQuery(req.user.id, startDate, endDate, priorityId, userId));
     }
 
     @UseGuards(UserAuthGuard)

@@ -19,6 +19,7 @@ import { GetTasksByUserHandler } from './application/queries/handlers/get-tasks-
 import { GetTasksByCreatorHandler } from './application/queries/handlers/get-tasks-by-creator.handler';
 import { GetTaskByIdHandler } from './application/queries/handlers/get-task-by-id.handler';
 import { AuthModule } from 'src/auth/auth.module';
+import { GetTasksHandler } from './application/queries/handlers/get-tasks.handler';
 
 @Module({
     imports: [
@@ -47,7 +48,8 @@ import { AuthModule } from 'src/auth/auth.module';
         GetAllPrioritiesHandler,
         GetTasksByUserHandler,
         GetTasksByCreatorHandler,
-        GetTaskByIdHandler
+        GetTaskByIdHandler,
+        GetTasksHandler
     ]
 })
 export class TasksModule { }
