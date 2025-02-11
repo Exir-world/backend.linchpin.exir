@@ -25,6 +25,7 @@ export class UserRepositoryImpl extends UserRepository {
         return new User(
             userEntity.teamId,
             userEntity.name,
+            userEntity.profileImage,
             userEntity.lastname,
             userEntity.phoneNumber,
             userEntity.password,

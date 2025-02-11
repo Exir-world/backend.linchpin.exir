@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { Body, Controller, Get, Param, Post, Query } from "@nestjs/common";
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from "@nestjs/swagger";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { Task } from "src/tasks/domain/task.domain";
 import { CreateTaskDto } from "../dto/create-task.dto";
@@ -35,15 +35,34 @@ export class TaskController {
     @Get("user/:userId")
     @ApiOperation({ summary: "Get tasks assigned to a user" })
     @ApiResponse({ status: 200, description: "List of tasks assigned to user", type: [Task] })
-    async getTasksByUser(@Param("userId") userId: number) {
-        return this.queryBus.execute(new GetTasksByUserQuery(userId));
+    @ApiQuery({ name: "startDate", required: false, description: "Filter tasks from this date (format: YYYY-MM-DD)" })
+    @ApiQuery({ name: "endDate", required: false, description: "Filter tasks until this date (format: YYYY-MM-DD)" })
+    @ApiQuery({ name: "priorityId", required: false, description: "Filter tasks by priority ID" })
+    async getTasksByUser(
+        @Param("userId") userId: number,
+        @Query("startDate") startDate?: string,
+        @Query("endDate") endDate?: string,
+        @Query("priorityId") priorityId?: number
+    ) {
+        return this.queryBus.execute(new GetTasksByUserQuery(userId, startDate, endDate, priorityId));
     }
+
 
     @Get("creator/:createdBy")
     @ApiOperation({ summary: "Get tasks created by a user" })
     @ApiResponse({ status: 200, description: "List of tasks created by the user", type: [Task] })
-    async getTasksByCreator(@Param("createdBy") createdBy: number) {
-        return this.queryBus.execute(new GetTasksByCreatorQuery(createdBy));
+    @ApiQuery({ name: "startDate", required: false, description: "Filter tasks from this date (format: YYYY-MM-DD)" })
+    @ApiQuery({ name: "endDate", required: false, description: "Filter tasks until this date (format: YYYY-MM-DD)" })
+    @ApiQuery({ name: "priorityId", required: false, description: "Filter tasks by priority ID" })
+    @ApiQuery({ name: "userId", required: false, description: "Filter tasks by user ID" })
+    async getTasksByCreator(
+        @Param("createdBy") createdBy: number,
+        @Query("startDate") startDate?: string,
+        @Query("endDate") endDate?: string,
+        @Query("priorityId") priorityId?: number,
+        @Query("userId") userId?: number,
+    ) {
+        return this.queryBus.execute(new GetTasksByCreatorQuery(createdBy, startDate, endDate, priorityId, userId));
     }
 
     @Get(":taskId")

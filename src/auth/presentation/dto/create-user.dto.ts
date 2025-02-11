@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateUserDto {
     @ApiProperty({ example: 1, description: 'شناسه تیم' })
@@ -12,6 +12,11 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'نام نمی‌تواند خالی باشد' })
     @MaxLength(50, { message: 'نام نمی‌تواند بیشتر از 50 کاراکتر باشد' })
     name: string;
+
+    @ApiPropertyOptional({ example: '', description: 'تصویر کاربر' })
+    @IsString()
+    @IsOptional()
+    profileImage: string;
 
     @ApiProperty({ example: 'Doe', description: 'نام خادنوادگی کاربر' })
     @IsString({ message: 'نام باید یک رشته باشد' })

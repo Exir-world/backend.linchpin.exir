@@ -18,6 +18,7 @@ import { TaskController } from './presentation/controllers/task.controller';
 import { GetTasksByUserHandler } from './application/queries/handlers/get-tasks-by-user.handler';
 import { GetTasksByCreatorHandler } from './application/queries/handlers/get-tasks-by-creator.handler';
 import { GetTaskByIdHandler } from './application/queries/handlers/get-task-by-id.handler';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
     imports: [
@@ -29,7 +30,8 @@ import { GetTaskByIdHandler } from './application/queries/handlers/get-task-by-i
             TagEntity,
             TaskTagEntity,
             TaskEntity,
-        ])
+        ]),
+        AuthModule,
     ],
     controllers: [
         TagController,
