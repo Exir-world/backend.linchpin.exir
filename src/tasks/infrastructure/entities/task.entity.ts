@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, OneToMany, JoinColumn } from 'typeorm';
 import { PriorityEntity } from './priority.entity';
 import { TaskTagEntity } from './task-tag.entity';
 import { SubtaskEntity } from './sub-task.entity';
@@ -40,5 +40,6 @@ export class TaskEntity {
     attachments: AttachmentEntity[];
 
     @OneToMany(() => TaskTagEntity, (taskTag) => taskTag.task)
+    @JoinColumn()
     taskTags: TaskTagEntity[];
 }

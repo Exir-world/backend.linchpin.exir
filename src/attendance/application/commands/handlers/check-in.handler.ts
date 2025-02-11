@@ -29,9 +29,6 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
         const attendance = new Attendance(0, command.userId);
         const newAttendance = await this.attendanceRepo.save([attendance]);
 
-        console.log(newAttendance);
-
-
         const workReport = new WorkReport(0, null, newAttendance[0])
 
         await this.workReportRepo.save(workReport);

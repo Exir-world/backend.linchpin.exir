@@ -5,6 +5,7 @@ export class User {
     constructor(
         public teamId: number,
         public name: string,
+        public profileImage: string,
         public lastname: string,
         public phoneNumber: string,
         public password: string,
