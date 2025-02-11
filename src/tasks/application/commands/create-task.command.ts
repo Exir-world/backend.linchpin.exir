@@ -18,6 +18,7 @@ export class CreateTaskCommand implements ICommand {
         public readonly description: string,
         public readonly priorityId: number,
         public readonly date: string,
+        public readonly createdBy: number,
         public readonly userId?: number,
         public readonly tagIds?: number[],
         public readonly subtasks?: SubtaskInput[],
