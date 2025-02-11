@@ -9,6 +9,10 @@ import { GetTasksByCreatorQuery } from "src/tasks/application/queries/get-tasks-
 import { GetTaskByIdQuery } from "src/tasks/application/queries/get-task-by-id.query";
 import { UserAuthGuard } from "src/auth/application/guards/user-auth.guard";
 import { GetTasksQuery } from "src/tasks/application/queries/get-tasks.query";
+import { ApproveTaskByCreatorDto } from "../dto/approve-task-by-creator.dto";
+import { ApproveTaskByCreatorCommand } from "src/tasks/application/commands/approve-task-by-creator.command";
+import { DoneSubtaskDto } from "../dto/done-sub-task.dto";
+import { DoneSubTaskCommand } from "src/tasks/application/commands/done-sub-task.command";
 
 @ApiBearerAuth()
 @ApiTags("Tasks")
@@ -34,6 +38,28 @@ export class TaskController {
             createTaskDto.tagIds,
             createTaskDto.subtasks,
             createTaskDto.attachments
+        ));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Post('approve')
+    @ApiOperation({ summary: "Approve a task by creator" })
+    async approveTask(@Request() req, @Body() dto: ApproveTaskByCreatorDto) {
+        return this.commandBus.execute(new ApproveTaskByCreatorCommand(
+            req.user.id, // createdBy
+            dto.taskId,
+            dto.comment,
+        ));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Post('subtask/done')
+    @ApiOperation({ summary: "Approve a task by creator" })
+    async doneSubtask(@Request() req, @Body() dto: DoneSubtaskDto) {
+        return this.commandBus.execute(new DoneSubTaskCommand(
+            req.user.id, // createdBy
+            dto.subtaskId,
+            dto.done,
         ));
     }
 

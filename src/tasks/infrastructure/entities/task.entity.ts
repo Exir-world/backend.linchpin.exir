@@ -30,6 +30,12 @@ export class TaskEntity {
     @Column()
     createdBy: number;
 
+    @Column({ default: false })
+    creatorApprove: boolean;
+
+    @Column({ nullable: true })
+    creatorComment: string;
+
     @CreateDateColumn()
     createdAt: Date;
 
