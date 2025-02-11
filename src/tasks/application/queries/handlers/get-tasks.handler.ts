@@ -55,9 +55,8 @@ export class GetTasksHandler implements IQueryHandler<GetTasksQuery> {
                     id: task.id,
                     title: task.title,
                     date: task.date,
-                    user: users.find(us => us.id == task.userId) || { id: task.userId },
-                    createdBy: task.createdBy,
                     priority: task.priority,
+                    done: task.creatorApprove || false,
                     taskTags: task.taskTags.map(taskTag => ({
                         id: taskTag.id,
                         title: taskTag.tag.title,
@@ -70,8 +69,8 @@ export class GetTasksHandler implements IQueryHandler<GetTasksQuery> {
                     title: task.title,
                     date: task.date,
                     user: users.find(us => us.id == task.userId) || { id: task.userId },
-                    createdBy: task.createdBy,
                     priority: task.priority,
+                    done: task.creatorApprove || false,
                     taskTags: task.taskTags.map(taskTag => ({
                         id: taskTag.id,
                         title: taskTag.tag.title,

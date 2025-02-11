@@ -20,6 +20,8 @@ import { GetTasksByCreatorHandler } from './application/queries/handlers/get-tas
 import { GetTaskByIdHandler } from './application/queries/handlers/get-task-by-id.handler';
 import { AuthModule } from 'src/auth/auth.module';
 import { GetTasksHandler } from './application/queries/handlers/get-tasks.handler';
+import { ApproveTaskByCreatorHandler } from './application/commands/handlers/approve-task-by-creator.handler';
+import { DoneSubTaskHandler } from './application/commands/handlers/done-sub-task.handler';
 
 @Module({
     imports: [
@@ -43,6 +45,8 @@ import { GetTasksHandler } from './application/queries/handlers/get-tasks.handle
         CreateTagHandler,
         CreatePriorityHandler,
         CreateTaskHandler,
+        ApproveTaskByCreatorHandler,
+        DoneSubTaskHandler,
 
         GetAllTagsHandler,
         GetAllPrioritiesHandler,

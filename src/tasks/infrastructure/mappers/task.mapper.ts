@@ -12,10 +12,12 @@ export class TaskMapper {
             entity.title,
             entity.description,
             PriorityMapper.toDomain(entity.priority),
-            entity.estimatedDuration,
             entity.date,
             entity.userId,
             entity.createdBy,
+            entity.creatorApprove,
+            entity.creatorComment,
+            entity.estimatedDuration,
             entity.createdAt,
             entity.taskTags ? entity.taskTags.map((taskTag) => TagMapper.toDomain(taskTag.tag)) : [],
             entity.subTasks ? entity.subTasks.map((subtask) => SubtaskMapper.toDomain(subtask)) : [],
@@ -34,6 +36,8 @@ export class TaskMapper {
         entity.userId = domain.userId;
         entity.createdBy = domain.createdBy;
         entity.createdAt = domain.createdAt;
+        entity.creatorApprove = domain.creatorApprove;
+        entity.creatorComment = domain.creatorComment;
 
         // تنظیم لیست `taskTags` به صورت `TaskTagEntity`
         // if (domain.tags) {
