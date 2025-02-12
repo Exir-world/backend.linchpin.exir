@@ -13,6 +13,12 @@ import { ApproveTaskByCreatorDto } from "../dto/approve-task-by-creator.dto";
 import { ApproveTaskByCreatorCommand } from "src/tasks/application/commands/approve-task-by-creator.command";
 import { DoneSubtaskDto } from "../dto/done-sub-task.dto";
 import { DoneSubTaskCommand } from "src/tasks/application/commands/done-sub-task.command";
+import { UpdateTaskDto } from "../dto/update-task.dto";
+import { UpdateTaskCommand } from "src/tasks/application/commands/update-task.command";
+import { UpdateAttachmentsDto } from "../dto/update-attachments.dto";
+import { UpdateAttachmentsCommand } from "src/tasks/application/commands/update-attachments.command";
+import { UpdateSubtasksDto } from "../dto/update-subtasks.dto";
+import { UpdateSubtasksCommand } from "src/tasks/application/commands/update-subtasks.command";
 
 @ApiBearerAuth()
 @ApiTags("Tasks")
@@ -122,5 +128,29 @@ export class TaskController {
     @ApiResponse({ status: 200, description: "Task details with priority, tags, subtasks, and attachments", type: Task })
     async getTaskById(@Request() req, @Param("taskId") taskId: number) {
         return this.queryBus.execute(new GetTaskByIdQuery(taskId, req.user.id));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Post('update-task')
+    @ApiOperation({ summary: 'Update task details' })
+    async updateTask(@Request() req, @Body() dto: UpdateTaskDto) {
+        await this.commandBus.execute(new UpdateTaskCommand(dto.taskId, req.user.id, dto.title, dto.description, dto.priorityId, dto.date, dto.userId, dto.taskTags));
+        return this.queryBus.execute(new GetTaskByIdQuery(dto.taskId, req.user.id));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Post('update-attachments')
+    @ApiOperation({ summary: 'Update task attachments' })
+    async updateAttachments(@Request() req, @Body() dto: UpdateAttachmentsDto) {
+        await this.commandBus.execute(new UpdateAttachmentsCommand(dto.taskId, req.user.id, dto.attachments));
+        return this.queryBus.execute(new GetTaskByIdQuery(dto.taskId, req.user.id));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Post('update-subtasks')
+    @ApiOperation({ summary: 'Update task subtasks' })
+    async updateSubtasks(@Request() req, @Body() dto: UpdateSubtasksDto) {
+        await this.commandBus.execute(new UpdateSubtasksCommand(dto.taskId, req.user.id, dto.subtasks));
+        return this.queryBus.execute(new GetTaskByIdQuery(dto.taskId, req.user.id));
     }
 }
