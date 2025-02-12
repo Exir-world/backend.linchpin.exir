@@ -22,6 +22,9 @@ import { AuthModule } from 'src/auth/auth.module';
 import { GetTasksHandler } from './application/queries/handlers/get-tasks.handler';
 import { ApproveTaskByCreatorHandler } from './application/commands/handlers/approve-task-by-creator.handler';
 import { DoneSubTaskHandler } from './application/commands/handlers/done-sub-task.handler';
+import { UpdateTaskHandler } from './application/commands/handlers/update-task.handler';
+import { UpdateSubtasksHandler } from './application/commands/handlers/update-subtasks.handler';
+import { UpdateAttachmentsHandler } from './application/commands/handlers/update-attachments.handler';
 
 @Module({
     imports: [
@@ -47,6 +50,9 @@ import { DoneSubTaskHandler } from './application/commands/handlers/done-sub-tas
         CreateTaskHandler,
         ApproveTaskByCreatorHandler,
         DoneSubTaskHandler,
+        UpdateTaskHandler,
+        UpdateSubtasksHandler,
+        UpdateAttachmentsHandler,
 
         GetAllTagsHandler,
         GetAllPrioritiesHandler,
