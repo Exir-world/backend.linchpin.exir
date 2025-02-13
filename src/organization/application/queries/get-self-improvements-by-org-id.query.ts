@@ -1,5 +1,5 @@
 import { IQuery } from '@nestjs/cqrs';
 
-export class GetCreteriaByOrgIdQuery implements IQuery {
+export class GetSelfImprovementsByOrgIdQuery implements IQuery {
     constructor(public readonly orgId: number) { }
 }

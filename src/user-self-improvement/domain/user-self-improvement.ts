@@ -1,15 +1,15 @@
-export class UserCriterion {
+export class UserSelfImprovement {
     private _id: number;
     private _userId: number;
-    private _criterionId: number;
-    private _userScore: boolean;
+    private _improvementId: number;
+    private _userScore: number;
     private _date: Date;
-    private _supervisorScore: boolean | null;
+    private _supervisorScore: number | null;
 
-    constructor(userId: number, criterionId: number, userScore: boolean, date: Date, supervisorScore?: boolean | null, id?: number) {
+    constructor(userId: number, improvementId: number, userScore: number, date: Date, supervisorScore?: number | null, id?: number) {
         this._id = id ?? 0;
         this._userId = userId;
-        this._criterionId = criterionId;
+        this._improvementId = improvementId;
         this._userScore = userScore;
         this._date = date;
         this._supervisorScore = supervisorScore ?? null;
@@ -23,15 +23,15 @@ export class UserCriterion {
         return this._userId;
     }
 
-    get criterionId(): number {
-        return this._criterionId;
+    get improvementId(): number {
+        return this._improvementId;
     }
 
-    get userScore(): boolean {
+    get userScore(): number {
         return this._userScore;
     }
 
-    get supervisorScore(): boolean | null {
+    get supervisorScore(): number | null {
         return this._supervisorScore;
     }
 
@@ -39,11 +39,11 @@ export class UserCriterion {
         return this._date;
     }
 
-    set userScore(score: boolean) {
+    set userScore(score: number) {
         this._userScore = score;
     }
 
-    set supervisorScore(score: boolean | null) {
+    set supervisorScore(score: number | null) {
         this._supervisorScore = score;
     }
 

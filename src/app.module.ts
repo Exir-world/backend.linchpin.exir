@@ -11,11 +11,11 @@ import { PayrollModule } from './payroll/payroll.module';
 import { SettingsModule } from './settings/settings.module';
 import { RequestsModule } from './requests/requests.module';
 import { OrganizationModule } from './organization/organization.module';
-import { UserCriterionModule } from './user-criterion/user-criterion.module';
 import { TasksModule } from './tasks/tasks.module';
 import { ShiftsModule } from './shifts/shifts.module';
 import { UserEmploymentSettingsModule } from './user-employment-settings/user-employment-settings.module';
 import * as path from 'path';
+import { UserSelfImprovementModule } from './user-self-improvement/user-self-improvement.module';
 
 @Module({
   imports: [
@@ -64,7 +64,7 @@ import * as path from 'path';
     SettingsModule,
     RequestsModule,
     OrganizationModule,
-    UserCriterionModule,
+    UserSelfImprovementModule,
     TasksModule,
     ShiftsModule,
     UserEmploymentSettingsModule,
