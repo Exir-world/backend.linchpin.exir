@@ -16,23 +16,21 @@ export class UserSelfImprovementController {
         private readonly queryBus: QueryBus
     ) { }
 
-    // @UseGuards(UserAuthGuard)
+    @UseGuards(UserAuthGuard)
     @Post()
     @ApiOperation({ summary: 'Create multiple user self-improvement evaluations' })
     @ApiResponse({ status: 201, description: 'User self-improvement evaluations created successfully' })
     @ApiResponse({ status: 400, description: 'Validation failed' })
     async create(@Body() body: CreateUserSelfImprovementDto, @Request() req) {
-        // const userId = req.user.id; // Extract user ID from JWT
-        const userId = 1
+        const userId = req.user.id; // Extract user ID from JWT
         return this.commandBus.execute(new CreateUserSelfImprovementCommand(userId, body.items));
     }
 
-    // @UseGuards(UserAuthGuard)
+    @UseGuards(UserAuthGuard)
     @Get()
     @ApiOperation({ summary: 'Get multiple user self-improvement evaluations' })
     async get(@Request() req) {
-        // const userId = req.user.id; // Extract user ID from JWT
-        const userId = 1
+        const userId = req.user.id; // Extract user ID from JWT
         return this.queryBus.execute(new GetUserSelfImprovementsByOrgIdQuery(userId));
     }
 }
