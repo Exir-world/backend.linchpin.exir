@@ -4,15 +4,17 @@ import { OrganizationEntity } from './infrastructure/entities/organization.entit
 import { CqrsModule } from '@nestjs/cqrs';
 import { AuthModule } from 'src/auth/auth.module';
 import { OrganizationService } from './application/services/organization.service';
-import { OrganizationCriterionEntity } from './infrastructure/entities/organization-criterion.entity';
 import { OrganizationController } from './presentation/controllers/organization.controller';
-import { GetCriteriaByOrgIdHandler } from './application/queries/handlers/get-creteria-by-org-id.handler';
 import { GetTeamsByOrgIdHandler } from './application/queries/handlers/get-teams-by-org-id.handler';
 import { TeamEntity } from './infrastructure/entities/team.entity';
+import { SelfImprovementEntity } from './infrastructure/entities/self-improvement.entity';
+import { SelfImprovementItemEntity } from './infrastructure/entities/self-improvement-item.entity';
+import { CreateSelfImprovementHandler } from './application/commands/handlers/create-self-improvement.handler';
+import { GetSelfImprovementByOrgIdHandler } from './application/queries/handlers/get-self-improvements-by-org-id.handler';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([OrganizationEntity, OrganizationCriterionEntity, TeamEntity]),
+        TypeOrmModule.forFeature([OrganizationEntity, TeamEntity, SelfImprovementEntity, SelfImprovementItemEntity]),
         CqrsModule,
         AuthModule,
     ],
@@ -39,9 +41,10 @@ import { TeamEntity } from './infrastructure/entities/team.entity';
 
 
         // Command Handlers
+        CreateSelfImprovementHandler,
 
         // Query Handlers
-        GetCriteriaByOrgIdHandler,
+        GetSelfImprovementByOrgIdHandler,
         GetTeamsByOrgIdHandler,
     ],
     exports: ['OrganizationSharedPort']

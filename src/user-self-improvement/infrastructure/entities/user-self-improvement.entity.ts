@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('user_criterions')
-export class UserCriterionEntity {
+@Entity('user-self-improvement')
+export class UserSelfImprovementEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -9,13 +9,13 @@ export class UserCriterionEntity {
     userId: number;
 
     @Column()
-    criterionId: number;
+    improvementId: number;
 
-    @Column({ default: false })
-    userScore: boolean;
+    @Column()
+    userScore: number;
 
     @Column({ nullable: true })
-    supervisorScore: boolean | null;
+    supervisorScore: number | null;
 
     @Column()
     date: Date;
