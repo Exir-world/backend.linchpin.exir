@@ -11,6 +11,9 @@ export class TeamEntity {
     @Column()
     title: string;
 
+    @Column({ default: '#1E73E3' })
+    color: string;
+
     @Column({ nullable: true })
     description: string;
 }

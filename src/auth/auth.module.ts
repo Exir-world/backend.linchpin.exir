@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { RoleController } from './presentation/controllers/role.controller';
 import { RoleService } from './application/services/role.service';
@@ -37,6 +37,8 @@ import { LoginHandler } from './application/commands/handlers/login.handler';
 import { JwtService } from '@nestjs/jwt';
 import { UserSharedRepositoryImpl } from './infrastructure/repositories/user-shared.repository';
 import { RefreshTokenHandler } from './application/commands/handlers/refresh-token.handler';
+import { OrganizationModule } from 'src/organization/organization.module';
+import { GetAllUsersWithTeamHandler } from './application/queries/handlers/get-all-users-with-team.handler';
 
 @Module({
     imports: [
@@ -46,7 +48,8 @@ import { RefreshTokenHandler } from './application/commands/handlers/refresh-tok
             UserEntity,
             UserSessionEntity
         ]),
-        CqrsModule
+        CqrsModule,
+        forwardRef(() => OrganizationModule),
     ],
     controllers: [
         RoleController,
@@ -103,6 +106,7 @@ import { RefreshTokenHandler } from './application/commands/handlers/refresh-tok
         GetRolesHandler,
         GetRoleDetailsHandler,
         GetAllPermissionsHandler,
+        GetAllUsersWithTeamHandler,
 
         // Others
         JwtStrategy,
