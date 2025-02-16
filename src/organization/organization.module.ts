@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrganizationEntity } from './infrastructure/entities/organization.entity';
 import { CqrsModule } from '@nestjs/cqrs';
@@ -16,7 +16,7 @@ import { GetSelfImprovementByOrgIdHandler } from './application/queries/handlers
     imports: [
         TypeOrmModule.forFeature([OrganizationEntity, TeamEntity, SelfImprovementEntity, SelfImprovementItemEntity]),
         CqrsModule,
-        AuthModule,
+        forwardRef(() => AuthModule),
     ],
     controllers: [OrganizationController],
     providers: [

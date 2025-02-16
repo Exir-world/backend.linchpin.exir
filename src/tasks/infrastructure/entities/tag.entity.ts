@@ -13,6 +13,9 @@ export class TagEntity {
     color: string;
 
     @Column()
+    textColor: string;
+
+    @Column()
     icon: string;
 
     @OneToMany(() => TaskTagEntity, (taskTag) => taskTag.tag)

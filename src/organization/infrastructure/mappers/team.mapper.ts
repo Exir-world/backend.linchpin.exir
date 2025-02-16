@@ -7,6 +7,7 @@ export class TeamMapper {
             entity.id,
             entity.organizationId,
             entity.title,
+            entity.color,
             entity.description,
         );
     }
@@ -16,6 +17,7 @@ export class TeamMapper {
         entity.id = domain.getId;
         entity.organizationId = domain.getOrganizationId;
         entity.title = domain.getTitle;
+        entity.color = domain.getColor;
         entity.description = domain.getDescription;
 
         return entity;

@@ -9,6 +9,7 @@ import { GetUserByIdQuery } from 'src/auth/application/queries/get-user-by-id.qu
 import { GetAllUsersQuery } from 'src/auth/application/queries/get-all-users.query';
 import { UpdateUserCommand } from 'src/auth/application/commands/update-user.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
+import { GetAllUsersWithTeamQuery } from 'src/auth/application/queries/get-all-users-with-team.query';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -35,6 +36,13 @@ export class UserController {
     @ApiResponse({ status: 200, description: 'لیست کاربران بازگردانده شد.' })
     async getAllUsers() {
         return await this.queryBus.execute(new GetAllUsersQuery()); // Placeholder
+    }
+
+    @Get('with-team')
+    @ApiOperation({ summary: 'دریافت لیست کاربران' })
+    @ApiResponse({ status: 200, description: 'لیست کاربران بازگردانده شد.' })
+    async getAllUsersWithTeam() {
+        return await this.queryBus.execute(new GetAllUsersWithTeamQuery()); // Placeholder
     }
 
     @Get(':id')
