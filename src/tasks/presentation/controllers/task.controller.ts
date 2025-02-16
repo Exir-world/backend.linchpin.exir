@@ -34,7 +34,7 @@ export class TaskController {
     @ApiOperation({ summary: "Create a new task" })
     @ApiResponse({ status: 201, description: "The created task", type: Task })
     async createTask(@Request() req, @Body() createTaskDto: CreateTaskDto) {
-        return this.commandBus.execute(new CreateTaskCommand(
+        const id = await this.commandBus.execute(new CreateTaskCommand(
             createTaskDto.title,
             createTaskDto.description,
             createTaskDto.priorityId,
@@ -45,28 +45,32 @@ export class TaskController {
             createTaskDto.subtasks,
             createTaskDto.attachments
         ));
+
+        return this.queryBus.execute(new GetTaskByIdQuery(id, req.user.id));
     }
 
     @UseGuards(UserAuthGuard)
     @Post('approve')
     @ApiOperation({ summary: "Approve a task by creator" })
     async approveTask(@Request() req, @Body() dto: ApproveTaskByCreatorDto) {
-        return this.commandBus.execute(new ApproveTaskByCreatorCommand(
+        await this.commandBus.execute(new ApproveTaskByCreatorCommand(
             req.user.id, // createdBy
             dto.taskId,
             dto.comment,
         ));
+        return this.queryBus.execute(new GetTaskByIdQuery(dto.taskId, req.user.id));
     }
 
     @UseGuards(UserAuthGuard)
     @Post('subtask/done')
     @ApiOperation({ summary: "Approve a task by creator" })
     async doneSubtask(@Request() req, @Body() dto: DoneSubtaskDto) {
-        return this.commandBus.execute(new DoneSubTaskCommand(
+        const res = await this.commandBus.execute(new DoneSubTaskCommand(
             req.user.id, // createdBy
             dto.subtaskId,
             dto.done,
         ));
+        return this.queryBus.execute(new GetTaskByIdQuery(res.taskId, req.user.id));
     }
 
     @UseGuards(UserAuthGuard)

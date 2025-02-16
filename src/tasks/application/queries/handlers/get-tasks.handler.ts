@@ -60,7 +60,9 @@ export class GetTasksHandler implements IQueryHandler<GetTasksQuery> {
                     taskTags: task.taskTags.map(taskTag => ({
                         id: taskTag.id,
                         title: taskTag.tag.title,
-                        color: taskTag.tag.color
+                        color: taskTag.tag.color,
+                        textColor: taskTag.tag.textColor,
+                        icon: taskTag.tag.icon,
                     }))
                 })),
             otherTasks: tasks.filter(task => task.createdBy == userId)
@@ -74,8 +76,11 @@ export class GetTasksHandler implements IQueryHandler<GetTasksQuery> {
                     taskTags: task.taskTags.map(taskTag => ({
                         id: taskTag.id,
                         title: taskTag.tag.title,
-                        color: taskTag.tag.color
+                        color: taskTag.tag.color,
+                        textColor: taskTag.tag.textColor,
+                        icon: taskTag.tag.icon,
                     }))
+
                 })),
         }
     }

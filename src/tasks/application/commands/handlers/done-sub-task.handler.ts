@@ -26,6 +26,6 @@ export class DoneSubTaskHandler implements ICommandHandler<DoneSubTaskCommand> {
 
         await this.subtaskRepository.save(subtask);
 
-        return { message: 'عملیات با موفقیت انجام شد' }
+        return { taskId: subtask.task.id, message: 'عملیات با موفقیت انجام شد' }
     }
 }

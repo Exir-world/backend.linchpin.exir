@@ -34,7 +34,9 @@ export class GetTaskByIdHandler implements IQueryHandler<GetTaskByIdQuery> {
             taskTags: task.taskTags.map(taskTag => ({
                 id: taskTag.id,
                 title: taskTag.tag.title,
-                color: taskTag.tag.color
+                color: taskTag.tag.color,
+                textColor: taskTag.tag.textColor,
+                icon: taskTag.tag.icon,
             }))
         }
     }
