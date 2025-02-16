@@ -11,4 +11,9 @@ export class CreateTagDto {
     @IsString()
     @IsNotEmpty()
     color: string;
+
+    @ApiProperty({ example: "https://token.ex.pro/cdn/linchpin/tag_content_icon.svg", description: "The icon of the tag" })
+    @IsString()
+    @IsNotEmpty()
+    icon: string;
 }

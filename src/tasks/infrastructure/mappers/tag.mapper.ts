@@ -3,7 +3,7 @@ import { TagEntity } from "../entities/tag.entity";
 
 export class TagMapper {
     static toDomain(entity: TagEntity): Tag {
-        return new Tag(entity.id, entity.title, entity.color);
+        return new Tag(entity.id, entity.title, entity.color, entity.icon);
     }
 
     static toEntity(domain: Tag): TagEntity {
@@ -11,6 +11,7 @@ export class TagMapper {
         entity.id = domain.id;
         entity.title = domain.title;
         entity.color = domain.color;
+        entity.icon = domain.icon;
         return entity;
     }
 }

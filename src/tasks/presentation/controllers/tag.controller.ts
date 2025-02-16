@@ -15,7 +15,7 @@ export class TagController {
     @ApiOperation({ summary: "Create a new tag" })
     @ApiResponse({ status: 201, description: "The created tag", type: Tag })
     async createTag(@Body() createTagDto: CreateTagDto) {
-        return this.commandBus.execute(new CreateTagCommand(createTagDto.title, createTagDto.color));
+        return this.commandBus.execute(new CreateTagCommand(createTagDto.title, createTagDto.color, createTagDto.icon));
     }
 
     @Get()

@@ -12,10 +12,11 @@ export class CreateTagHandler implements ICommandHandler<CreateTagCommand> {
     ) { }
 
     async execute(command: CreateTagCommand): Promise<TagEntity> {
-        const { title, color } = command;
+        const { title, color, icon } = command;
         const tag = new TagEntity();
         tag.title = title;
         tag.color = color;
+        tag.icon = icon;
 
         return await this.tagRepository.save(tag);
     }
