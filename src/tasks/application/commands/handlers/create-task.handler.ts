@@ -26,7 +26,7 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
         private readonly attachmentRepository: Repository<AttachmentEntity>
     ) { }
 
-    async execute(command: CreateTaskCommand): Promise<TaskEntity> {
+    async execute(command: CreateTaskCommand): Promise<number> {
         const { title, description, priorityId, date, userId, tagIds, subtasks, attachments, createdBy } = command;
 
         // یافتن Priority
@@ -81,6 +81,6 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
             }
         }
 
-        return savedTask;
+        return savedTask.id;
     }
 }
