@@ -8,6 +8,7 @@ export class UserSelfImprovementMapper {
             entity.improvementId,
             entity.userScore,
             entity.date,
+            entity.description,
             entity.supervisorScore,
             entity.id,
         );
@@ -20,6 +21,7 @@ export class UserSelfImprovementMapper {
         entity.improvementId = domain.improvementId;
         entity.userScore = domain.userScore;
         entity.date = domain.date;
+        entity.description = domain.description;
         entity.supervisorScore = domain.supervisorScore;
         return entity;
     }

@@ -19,4 +19,7 @@ export class UserSelfImprovementEntity {
 
     @Column()
     date: Date;
+
+    @Column({ nullable: true })
+    description: string;
 }

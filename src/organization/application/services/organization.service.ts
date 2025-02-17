@@ -20,7 +20,7 @@ export class OrganizationService implements OrganizationSharedPort {
         return this.queryBus.execute(new GetTeamsByOrgIdQuery(orgId));
     }
 
-    async createSelfImprovement(dto: { organizationId: number, title: string, description?: string, items: { title: string; score: number }[] }) {
+    async createSelfImprovement(dto: { organizationId: number, title: string, description?: string, items: { title: string; score: number; image: string; color: string }[] }) {
         return this.commandBus.execute(new CreateSelfImprovementCommand(
             dto.organizationId,
             dto.title,
