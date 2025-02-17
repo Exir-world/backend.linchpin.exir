@@ -31,7 +31,8 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
                 date: Between(startOfDay, endOfDay),
             },
         });
-        return imps[0].items.map(item => ({
+
+        const userItems = imps[0].items.map(item => ({
             id: item.id,
             title: item.title,
             image: item.image,
@@ -39,5 +40,11 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
             date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
             done: (userImps.find(userImp => userImp.improvementId === item.id)?.userScore || 0) == 13,
         }))
+
+        return {
+            score: 1300,
+            scoreIcon: 'https://token.ex.pro/cdn/self-improvement/si_gem.png',
+            userItems,
+        }
     }
 }
