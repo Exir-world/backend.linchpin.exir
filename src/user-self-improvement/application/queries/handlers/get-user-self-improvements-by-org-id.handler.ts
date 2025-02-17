@@ -39,7 +39,7 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
             color: item.color,
             date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
             done: (userImps.find(userImp => userImp.improvementId === item.id)?.userScore || 0) == 13,
-        }))
+        })).sort((a, b) => a.id - b.id);
 
         return {
             score: 1300,
