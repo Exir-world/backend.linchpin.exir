@@ -12,6 +12,16 @@ class CreateSelfImprovementItemDto {
     @IsNumber()
     @Min(0)
     score: number;
+
+    @ApiProperty({ example: "https://...", description: "Image of the improvement item" })
+    @IsString()
+    @IsNotEmpty()
+    image: string;
+
+    @ApiProperty({ example: "#000000", description: "Color of the improvement item" })
+    @IsString()
+    @IsNotEmpty()
+    color: string;
 }
 
 export class CreateSelfImprovementDto {

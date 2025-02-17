@@ -1,10 +1,8 @@
 export class CreateUserSelfImprovementCommand {
     constructor(
-        public readonly userId: number,
-        public readonly items: {
-            improvementId: number;
-            userScore: number;
-            date: Date;
-        }[],
+        public userId: number,
+        public improvementId: number,
+        public userScore: number,
+        public description: string,
     ) { }
 }

@@ -13,21 +13,19 @@ export class CreateUserSelfImprovementHandler implements ICommandHandler<CreateU
         private readonly userSelfImprovementRepository: Repository<UserSelfImprovementEntity>,
     ) { }
 
-    async execute(command: CreateUserSelfImprovementCommand): Promise<UserSelfImprovement[]> {
-        const { userId, items } = command;
+    async execute(command: CreateUserSelfImprovementCommand): Promise<UserSelfImprovement> {
+        const { userId, improvementId, description, userScore } = command;
 
-        const userSelfImprovement = items.map(({ improvementId, userScore, date }) => {
-            const entity = new UserSelfImprovementEntity();
-            entity.userId = userId;
-            entity.improvementId = improvementId;
-            entity.userScore = userScore;
-            entity.date = date;
-            entity.supervisorScore = null; // Default value
-            return entity;
-        });
+        const entity = new UserSelfImprovementEntity();
+        entity.userId = userId;
+        entity.improvementId = improvementId;
+        entity.userScore = userScore;
+        entity.description = description;
+        entity.date = new Date();
+        entity.supervisorScore = null;
 
-        const savedItems = await this.userSelfImprovementRepository.save(userSelfImprovement);
+        const savedItems = await this.userSelfImprovementRepository.save(entity);
 
-        return UserSelfImprovementMapper.toDomainList(savedItems);
+        return UserSelfImprovementMapper.toDomain(savedItems);
     }
 }

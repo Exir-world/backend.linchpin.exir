@@ -12,6 +12,12 @@ export class SelfImprovementItemEntity {
     @Column({ type: 'int', default: 0 })
     score: number;
 
+    @Column({ default: '' })
+    image: string;
+
+    @Column({ default: '' })
+    color: string;
+
     @ManyToOne(() => SelfImprovementEntity, (selfImprovement) => selfImprovement.id, { onDelete: 'CASCADE' })
     selfImprovement: SelfImprovementEntity;
 }

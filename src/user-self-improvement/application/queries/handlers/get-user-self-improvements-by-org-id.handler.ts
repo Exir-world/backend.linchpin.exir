@@ -32,7 +32,10 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
             },
         });
         return imps[0].items.map(item => ({
+            id: item.id,
             title: item.title,
+            image: item.image,
+            color: item.color,
             date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
             done: (userImps.find(userImp => userImp.improvementId === item.id)?.userScore || 0) == 13,
         }))
