@@ -1,0 +1,81 @@
+-- INSERT into task (title, description, "date", "userId", "createdBy", "priorityId")
+-- VALUES 
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 2, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 3, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 4, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 5, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 6, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 7, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 8, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 9, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 10, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 11, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 12, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 13, 1, 1),
+-- ('تسک تست', 'توضیحات تست', '2025-02-18'::date, 14, 1, 1)
+
+
+-- INSERT into attachment ("fileType", "fileName", "fileSize", "link", "taskId")
+-- VALUES 
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 8),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 9),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 10),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 11),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 12),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 13),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 14),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 15),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 16),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 17),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 18),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 19),
+-- ('PDF', 'PDF.pdf', 2048576, 'http://dl.parsbook.com/server3/uploads/donyaye-momken.pdf', 20)
+
+
+
+-- INSERT into task_tag ("tagId", "taskId")
+-- VALUES 
+-- (1, 8),
+-- (1, 9),
+-- (1, 10),
+-- (1, 11),
+-- (1, 12),
+-- (1, 13),
+-- (1, 14),
+-- (1, 15),
+-- (1, 16),
+-- (1, 17),
+-- (1, 18),
+-- (1, 19),
+-- (1, 20)
+
+-- INSERT into sub_task ("title", "taskId")
+-- VALUES 
+-- ('ساب تسک 1', 8),
+-- ('ساب تسک 1', 9),
+-- ('ساب تسک 1', 10),
+-- ('ساب تسک 1', 11),
+-- ('ساب تسک 1', 12),
+-- ('ساب تسک 1', 13),
+-- ('ساب تسک 1', 14),
+-- ('ساب تسک 1', 15),
+-- ('ساب تسک 1', 16),
+-- ('ساب تسک 1', 17),
+-- ('ساب تسک 1', 18),
+-- ('ساب تسک 1', 19),
+-- ('ساب تسک 1', 20),
+-- 
+-- ('ساب تسک 2', 8),
+-- ('ساب تسک 2', 9),
+-- ('ساب تسک 2', 10),
+-- ('ساب تسک 2', 11),
+-- ('ساب تسک 2', 12),
+-- ('ساب تسک 2', 13),
+-- ('ساب تسک 2', 14),
+-- ('ساب تسک 2', 15),
+-- ('ساب تسک 2', 16),
+-- ('ساب تسک 2', 17),
+-- ('ساب تسک 2', 18),
+-- ('ساب تسک 2', 19),
+-- ('ساب تسک 2', 20)
+

@@ -16,6 +16,7 @@ import { ShiftsModule } from './shifts/shifts.module';
 import { UserEmploymentSettingsModule } from './user-employment-settings/user-employment-settings.module';
 import * as path from 'path';
 import { UserSelfImprovementModule } from './user-self-improvement/user-self-improvement.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { UserSelfImprovementModule } from './user-self-improvement/user-self-imp
     TasksModule,
     ShiftsModule,
     UserEmploymentSettingsModule,
+    NotificationsModule,
   ],
   providers: [ResponseInterceptor],
 })
