@@ -11,6 +11,6 @@ export class MarkAsReadHandler implements ICommandHandler<MarkAsReadCommand> {
     ) { }
 
     async execute(command: MarkAsReadCommand): Promise<void> {
-        await this.notificationRepository.markAsRead(command.ids);
+        await this.notificationRepository.markAsRead(command.userId, command.ids);
     }
 }

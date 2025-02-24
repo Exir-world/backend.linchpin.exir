@@ -25,12 +25,12 @@ export class NotificationRepositoryAdapter implements INotificationRepository {
         await this.repository.save(entity);
     }
 
-    async findByUserId(userId: number, page: number, limit: number): Promise<{ notifications: Notification[]; total: number }> {
+    async findByUserId(userId: number/*, page: number, limit: number*/): Promise<{ notifications: Notification[]; total: number }> {
         const [entities, total] = await this.repository.findAndCount({
             where: { userId },
             order: { createdAt: 'DESC' },
-            take: limit,
-            skip: (page - 1) * limit,
+            // take: limit,
+            // skip: (page - 1) * limit,
         });
 
         const notifications = entities.map((entity) =>
@@ -40,7 +40,7 @@ export class NotificationRepositoryAdapter implements INotificationRepository {
         return { notifications, total };
     }
 
-    async markAsRead(ids: number[]): Promise<void> {
-        await this.repository.update({ id: In(ids) }, { read: true });
+    async markAsRead(userId: number, ids: number[]): Promise<void> {
+        await this.repository.update({ userId, id: In(ids) }, { read: true });
     }
 }
