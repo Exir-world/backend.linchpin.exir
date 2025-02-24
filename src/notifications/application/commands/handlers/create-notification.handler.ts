@@ -8,7 +8,7 @@ import { Inject } from '@nestjs/common';
 export class CreateNotificationHandler implements ICommandHandler<CreateNotificationCommand> {
     constructor(@Inject(INotificationRepository) private readonly notificationRepository: INotificationRepository) { }
 
-    async execute(command: CreateNotificationCommand): Promise<void> {
+    async execute(command: CreateNotificationCommand): Promise<any> {
         const notification = new Notification(
             null, // ID auto-generated
             command.userId,
@@ -20,5 +20,7 @@ export class CreateNotificationHandler implements ICommandHandler<CreateNotifica
         );
 
         await this.notificationRepository.create(notification);
+
+        return { message: 'Notification created successfully' };
     }
 }

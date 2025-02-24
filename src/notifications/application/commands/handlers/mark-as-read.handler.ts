@@ -10,7 +10,8 @@ export class MarkAsReadHandler implements ICommandHandler<MarkAsReadCommand> {
         private readonly notificationRepository: INotificationRepository
     ) { }
 
-    async execute(command: MarkAsReadCommand): Promise<void> {
+    async execute(command: MarkAsReadCommand): Promise<any> {
         await this.notificationRepository.markAsRead(command.userId, command.ids);
+        return { message: 'Notifications marked as read successfully' };
     }
 }
