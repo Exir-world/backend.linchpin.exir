@@ -56,6 +56,16 @@ export class AttendanceService {
      * @param command CheckOutCommand
      */
     async checkOut(command: CheckOutCommand): Promise<void> {
+        const { userId, lat, lng } = command;
+        if (!command.lat || !command.lng) throw new BadRequestException('Turn on gps!');
+
+        const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
+        const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+        const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
+
+        const locationChcek = isWithinRadius(command.lat, command.lng, location.lat, location.lng, location.radius);
+        if (!locationChcek)
+            throw new BadRequestException('Location Out of range!');
         return this.commandBus.execute(command);
     }
 
