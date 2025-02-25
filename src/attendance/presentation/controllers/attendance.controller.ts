@@ -17,6 +17,7 @@ import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { CheckOutCheckingCommand } from 'src/attendance/application/commands/check-out-checking.command';
 import { CheckInDto } from '../dto/check-in.dto';
+import { CheckOutDto } from '../dto/check-out.dto';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -58,14 +59,14 @@ export class AttendanceController {
         },
     })
     async mainPageActions(@Request() req, @Body() body: { actionType: string; workReport?: string; reason?: string, lat: number, lng: number }) {
+        const { lat, lng } = body;
         switch (body.actionType) {
             case 'check-in':
-                const { lat, lng } = body;
                 await this.attendanceService.checkIn(req.user.id, lat, lng);
                 break;
             case 'check-out':
                 if (!body.workReport) throw new BadRequestException('Submit your work report!');
-                await this.attendanceService.checkOut(new CheckOutCommand(req.user.id));
+                await this.attendanceService.checkOut(new CheckOutCommand(req.user.id, lat, lng));
                 await this.attendanceService.submitWorkReport(new SubmitWorkReportCommand(body.workReport, req.user.id));
                 break;
             case 'stop-start':
@@ -94,8 +95,9 @@ export class AttendanceController {
     @ApiOperation({ summary: 'ثبت خروج کاربر' })
     @ApiResponse({ status: 200, description: 'خروج با موفقیت ثبت شد.' })
     @HttpCode(HttpStatus.OK)
-    async checkOut(@Request() req) {
-        return this.attendanceService.checkOut(new CheckOutCommand(req.user.id));
+    async checkOut(@Request() req, @Body() dto: CheckOutDto) {
+        const { lat, lng } = dto;
+        return this.attendanceService.checkOut(new CheckOutCommand(req.user.id, lat, lng));
     }
 
     @UseGuards(UserAuthGuard)

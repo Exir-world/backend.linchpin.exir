@@ -8,10 +8,10 @@ export class LocationEntity {
     @Column({ type: "int" })
     organizationId: number;
 
-    @Column({ type: "decimal", precision: 10, scale: 7 })
+    @Column({ type: "decimal" })
     lat: number;
 
-    @Column({ type: "decimal", precision: 10, scale: 7 })
+    @Column({ type: "decimal" })
     lng: number;
 
     @Column({ type: "int" })
