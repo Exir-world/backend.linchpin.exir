@@ -35,4 +35,13 @@ export class OrganizationController {
     getTeams(@Param('organiztionId') organiztionId: number): any {
         return this.organizationService.getTeamsByOrgId(organiztionId);
     }
+
+    @Get(':organiztionId/location')
+    @ApiOperation({ summary: 'Get location by organization ID' })
+    @ApiParam({ name: 'organiztionId', required: true, description: 'Organization ID' })
+    @ApiResponse({ status: 200, description: 'Successful response' })
+    @ApiResponse({ status: 404, description: 'Organization not found' })
+    getLocation(@Param('organiztionId') organiztionId: number): any {
+        return this.organizationService.getLocationByOrgId(organiztionId);
+    }
 }

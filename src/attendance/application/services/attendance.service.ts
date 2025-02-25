@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CheckInCommand } from '../commands/check-in.command';
 import { CheckOutCommand } from '../commands/check-out.command';
@@ -16,6 +16,7 @@ import { OrganizationSharedPort } from 'src/organization/application/ports/organ
 import { UserEmploymentSettingsSharedPort } from 'src/user-employment-settings/application/ports/user-employment-settings-shared.port';
 import { ShiftsSharedPort } from 'src/shifts/application/ports/shifts-shared.port';
 import { ShiftTimeTypeEnum } from 'src/shifts/domain/enums/shift-time-type.enum';
+import { isWithinRadius } from '../utils/location.util';
 
 @Injectable()
 export class AttendanceService {
@@ -34,12 +35,16 @@ export class AttendanceService {
      * ثبت ورود
      * @param command CheckInCommand
      */
-    async checkIn(userId: number): Promise<void> {
+    async checkIn(userId: number, lat: number, lng: number): Promise<void> {
+        if (!lat || !lng) throw new BadRequestException('Turn on gps!');
+
         const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
         const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+        const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
 
-        console.log(shifts, shifts.shiftTimes);
-
+        const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
+        if (!locationChcek)
+            throw new BadRequestException('Location Out of range!');
 
         const startOfDay = DateUtil.convertTimeToUTC(shifts.shiftTimes.at(0).startTime);
 

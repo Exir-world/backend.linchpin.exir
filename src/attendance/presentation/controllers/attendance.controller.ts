@@ -16,6 +16,7 @@ import { GetMonthlyReportQuery } from 'src/attendance/application/queries/get-mo
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { CheckOutCheckingCommand } from 'src/attendance/application/commands/check-out-checking.command';
+import { CheckInDto } from '../dto/check-in.dto';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -45,13 +46,22 @@ export class AttendanceController {
                     type: 'string',
                     example: 'string',
                 },
+                lat: {
+                    type: 'number',
+                    example: 36.3636,
+                },
+                lng: {
+                    type: 'number',
+                    example: 59.5959,
+                },
             },
         },
     })
-    async mainPageActions(@Request() req, @Body() body: { actionType: string; workReport?: string; reason?: string }) {
+    async mainPageActions(@Request() req, @Body() body: { actionType: string; workReport?: string; reason?: string, lat: number, lng: number }) {
         switch (body.actionType) {
             case 'check-in':
-                await this.attendanceService.checkIn(req.user.id);
+                const { lat, lng } = body;
+                await this.attendanceService.checkIn(req.user.id, lat, lng);
                 break;
             case 'check-out':
                 if (!body.workReport) throw new BadRequestException('Submit your work report!');
@@ -74,8 +84,9 @@ export class AttendanceController {
     @ApiOperation({ summary: 'ثبت ورود کاربر' })
     @ApiResponse({ status: 200, description: 'ورود با موفقیت ثبت شد.' })
     @HttpCode(HttpStatus.OK)
-    async checkIn(@Request() req) {
-        return this.attendanceService.checkIn(req.user.id);
+    async checkIn(@Request() req, @Body() dto: CheckInDto) {
+        const { lat, lng } = dto;
+        return this.attendanceService.checkIn(req.user.id, lat, lng);
     }
 
     @UseGuards(UserAuthGuard)

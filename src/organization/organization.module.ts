@@ -11,10 +11,12 @@ import { SelfImprovementEntity } from './infrastructure/entities/self-improvemen
 import { SelfImprovementItemEntity } from './infrastructure/entities/self-improvement-item.entity';
 import { CreateSelfImprovementHandler } from './application/commands/handlers/create-self-improvement.handler';
 import { GetSelfImprovementByOrgIdHandler } from './application/queries/handlers/get-self-improvements-by-org-id.handler';
+import { GetLocationByOrgIdHandler } from './application/queries/handlers/get-location-by-org-id.handler';
+import { LocationEntity } from './infrastructure/entities/location.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([OrganizationEntity, TeamEntity, SelfImprovementEntity, SelfImprovementItemEntity]),
+        TypeOrmModule.forFeature([OrganizationEntity, TeamEntity, SelfImprovementEntity, SelfImprovementItemEntity, LocationEntity]),
         CqrsModule,
         forwardRef(() => AuthModule),
     ],
@@ -46,6 +48,7 @@ import { GetSelfImprovementByOrgIdHandler } from './application/queries/handlers
         // Query Handlers
         GetSelfImprovementByOrgIdHandler,
         GetTeamsByOrgIdHandler,
+        GetLocationByOrgIdHandler,
     ],
     exports: ['OrganizationSharedPort']
 })
