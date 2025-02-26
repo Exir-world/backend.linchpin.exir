@@ -21,6 +21,7 @@ export class UserEmploymentSettingsController {
             dto.userId,
             dto.shiftId,
             dto.salaryCoef,
+            dto.needLocation,
         ));
     }
 

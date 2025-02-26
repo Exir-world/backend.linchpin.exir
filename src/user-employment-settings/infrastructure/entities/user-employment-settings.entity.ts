@@ -13,4 +13,7 @@ export class UserEmploymentSettingsEntity {
 
     @Column({ type: "decimal", precision: 5, scale: 2 })
     salaryCoef: number;
+
+    @Column({ default: true })
+    needLocation: boolean;
 }

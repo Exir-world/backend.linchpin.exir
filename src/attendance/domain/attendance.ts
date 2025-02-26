@@ -7,6 +7,8 @@ export class Attendance {
     public userId: number;
     public checkIn: Date;
     public checkOut?: Date;
+    public lat?: number;
+    public lng?: number;
     public workReport?: WorkReport;
     public stops: Stop[] = [];
 
@@ -21,6 +23,11 @@ export class Attendance {
             throw new Error('User has already checked out.');
         }
         this.checkOut = DateUtil.nowUTC();
+    }
+
+    public setLocation(lat?: number, lng?: number): void {
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public attachWorkReport(workReport: WorkReport): void {
@@ -62,6 +69,14 @@ export class Attendance {
 
     public get getCheckOut(): Date | undefined {
         return this.checkOut;
+    }
+
+    public get getLat(): number | undefined {
+        return this.lat;
+    }
+
+    public get getLng(): number | undefined {
+        return this.lng;
     }
 
     public get getWorkReport(): WorkReport | undefined {

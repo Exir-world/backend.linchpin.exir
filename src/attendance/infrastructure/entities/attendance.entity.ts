@@ -16,6 +16,12 @@ export class AttendanceEntity {
     @Column({ type: 'timestamptz', nullable: true })
     checkOut: Date; // زمان خروج
 
+    @Column({ type: 'decimal', nullable: true })
+    lat: number;
+
+    @Column({ type: 'decimal', nullable: true })
+    lng: number;
+
     @OneToOne(() => WorkReportEntity, (workReport) => workReport.attendance, { cascade: true })
     workReport: WorkReportEntity; // ارتباط با گزارش کار
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreateUserEmploymentSettingsDto {
     @ApiProperty({ example: 1, description: "User ID" })
@@ -16,4 +16,9 @@ export class CreateUserEmploymentSettingsDto {
     @IsNumber()
     @IsNotEmpty()
     salaryCoef: number;
+
+    @ApiProperty({ example: true, description: "User need be in location for attendance" })
+    @IsBoolean()
+    @IsNotEmpty()
+    needLocation: boolean;
 }
