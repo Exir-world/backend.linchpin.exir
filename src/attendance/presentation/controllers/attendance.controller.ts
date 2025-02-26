@@ -172,9 +172,9 @@ export class AttendanceController {
         return this.attendanceService.getMonthlyReport(req.user.id, month);
     }
 
-    @ApiOperation({})
-    @Post('auto-check-out')
-    async autoCheckout(@Request() req) {
-        return await this.attendanceService.checkOutChecking();
-    }
+    // @ApiOperation({})
+    // @Post('auto-check-out')
+    // async autoCheckout(@Request() req) {
+    //     return await this.attendanceService.checkOutChecking();
+    // }
 }
