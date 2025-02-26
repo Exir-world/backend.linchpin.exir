@@ -36,19 +36,22 @@ export class AttendanceService {
      * @param command CheckInCommand
      */
     async checkIn(userId: number, lat: number, lng: number): Promise<void> {
-        if (!lat || !lng) throw new BadRequestException('Turn on gps!');
-
         const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
         const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
-        const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
 
-        const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
-        if (!locationChcek)
-            throw new BadRequestException('Location Out of range!');
+        if (settings.needLocation) {
+            if (!lat || !lng) throw new BadRequestException('Turn on gps!');
+
+            const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
+
+            const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
+            if (!locationChcek)
+                throw new BadRequestException('Location Out of range!');
+        }
 
         const startOfDay = DateUtil.convertTimeToUTC(shifts.shiftTimes.at(0).startTime);
 
-        return this.commandBus.execute(new CheckInCommand(userId, startOfDay));
+        return this.commandBus.execute(new CheckInCommand(userId, startOfDay, lat, lng));
     }
 
     /**
@@ -57,15 +60,20 @@ export class AttendanceService {
      */
     async checkOut(command: CheckOutCommand): Promise<void> {
         const { userId, lat, lng } = command;
-        if (!command.lat || !command.lng) throw new BadRequestException('Turn on gps!');
 
         const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
         const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
-        const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
 
-        const locationChcek = isWithinRadius(command.lat, command.lng, location.lat, location.lng, location.radius);
-        if (!locationChcek)
-            throw new BadRequestException('Location Out of range!');
+        if (settings.needLocation) {
+            if (!command.lat || !command.lng) throw new BadRequestException('Turn on gps!');
+
+            const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
+
+            const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
+            if (!locationChcek)
+                throw new BadRequestException('Location Out of range!');
+        }
+
         return this.commandBus.execute(command);
     }
 

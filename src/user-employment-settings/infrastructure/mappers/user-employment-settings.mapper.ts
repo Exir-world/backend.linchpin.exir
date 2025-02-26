@@ -3,7 +3,7 @@ import { UserEmploymentSettingsEntity } from "../entities/user-employment-settin
 
 export class UserEmploymentSettingsMapper {
     static toDomain(entity: UserEmploymentSettingsEntity): UserEmploymentSettings {
-        return new UserEmploymentSettings(entity.id, entity.userId, entity.shiftId, entity.salaryCoef);
+        return new UserEmploymentSettings(entity.id, entity.userId, entity.shiftId, entity.salaryCoef, entity.needLocation);
     }
 
     static toEntity(domain: UserEmploymentSettings): UserEmploymentSettingsEntity {
@@ -12,6 +12,7 @@ export class UserEmploymentSettingsMapper {
         entity.userId = domain.userId;
         entity.shiftId = domain.shiftId;
         entity.salaryCoef = domain.salaryCoef;
+        entity.needLocation = domain.needLocation;
         return entity;
     }
 }

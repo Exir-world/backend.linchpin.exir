@@ -8,6 +8,8 @@ export class AttendanceMapper {
         const attendance = new Attendance(entity.id, entity.userId);
         attendance.checkIn = entity.checkIn;
         attendance.checkOut = entity.checkOut;
+        attendance.lat = entity.lat;
+        attendance.lng = entity.lng;
         attendance.stops = StopMapper.toDomainList(entity.stops);
         if (entity.workReport)
             attendance.workReport = WorkReportMapper.toDomain(entity.workReport);
@@ -32,6 +34,8 @@ export class AttendanceMapper {
         entity.userId = domain.getUserId;
         entity.checkIn = domain.getCheckIn;
         entity.checkOut = domain.getCheckOut;
+        entity.lat = domain.getLat;
+        entity.lng = domain.getLng;
 
         // جلوگیری از حلقه بازگشتی
         // if (domain.getWorkReport) {

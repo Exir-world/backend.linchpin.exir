@@ -8,7 +8,6 @@ import { AcceptLanguageResolver, HeaderResolver, I18nModule, QueryResolver } fro
 import { AttendanceModule } from './attendance/attendance.module';
 import { LeaveModule } from './leave/leave.module';
 import { PayrollModule } from './payroll/payroll.module';
-import { SettingsModule } from './settings/settings.module';
 import { RequestsModule } from './requests/requests.module';
 import { OrganizationModule } from './organization/organization.module';
 import { TasksModule } from './tasks/tasks.module';
@@ -62,7 +61,6 @@ import { NotificationsModule } from './notifications/notifications.module';
     AttendanceModule,
     LeaveModule,
     PayrollModule,
-    SettingsModule,
     RequestsModule,
     OrganizationModule,
     UserSelfImprovementModule,

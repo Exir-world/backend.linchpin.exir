@@ -27,6 +27,8 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
         }
 
         const attendance = new Attendance(0, command.userId);
+        attendance.setLocation(command.lat, command.lng);
+
         const newAttendance = await this.attendanceRepo.save([attendance]);
 
         const workReport = new WorkReport(0, null, newAttendance[0])
