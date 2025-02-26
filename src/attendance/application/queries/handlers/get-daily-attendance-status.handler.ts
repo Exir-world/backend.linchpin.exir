@@ -45,7 +45,7 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         return {
             nowDatetime: nowTehran,
             user,
-            remainingDuration: Math.floor((totalDailyMinutes - workDuration) * 60),
+            remainingDuration: Math.max(Math.floor((totalDailyMinutes - workDuration) * 60), 0),
             todayStartTime: DateUtil.formatDateToTehran(todayAttendances?.at(0)?.getCheckIn?.toISOString(), 'HH:mm'),
             lastEndTime: DateUtil.formatDateToTehran(
                 todayAttendances?.at(-1)?.getCheckOut?.toISOString() || todayAttendances?.at(-2)?.getCheckOut?.toISOString(),
@@ -55,7 +55,8 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
             currentStatus,
             lastStartTime: DateUtil.setTimezone(todayAttendances?.at(-1)?.getCheckIn),
             initTime: DateUtil.setTimezone(todayAttendances?.at(0)?.getCheckIn),
-            endCurrentTime: DateUtil.addMinutes(todayAttendances?.at(-1)?.getCheckIn, eachTimeMinutes),
+            endCurrentTime: DateUtil.addMinutes(todayAttendances?.at(0)?.getCheckIn, totalDailyMinutes),
+            // endCurrentTime: DateUtil.addMinutes(todayAttendances?.at(-1)?.getCheckIn, eachTimeMinutes),
             endTodayTime: DateUtil.addMinutes(todayAttendances?.at(0)?.getCheckIn, totalDailyMinutes),
             // DateUtil.setTimezone(endOfDay),
             stopDuration: Math.floor(
