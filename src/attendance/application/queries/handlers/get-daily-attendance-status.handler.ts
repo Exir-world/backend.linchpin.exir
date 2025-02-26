@@ -63,10 +63,11 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
                 (!todayAttendances.length || todayAttendances?.at(-1)?.getCheckOut)
                     ? 0 : this.calculateStopsInMinutes(todayAttendances?.at(-1)) * 60
             ),
-            currentDuration: Math.floor(
-                (!todayAttendances.length || todayAttendances?.at(-1)?.getCheckOut)
-                    ? 0 : this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60
-            ),
+            currentDuration: Math.floor(workDuration * 60),
+            // currentDuration: Math.floor(
+            //     (!todayAttendances.length || todayAttendances?.at(-1)?.getCheckOut)
+            //         ? 0 : this.calculateCurrentTimeWorkInMinutes(todayAttendances?.at(-1)) * 60
+            // ),
             eachTimeDuration: eachTimeMinutes * 60,
             submitWorkReport: (todayAttendances?.at(-1)?.getCheckOut && !todayAttendances?.at(-1)?.workReport?.workReport) || false,
         }
