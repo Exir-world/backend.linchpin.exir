@@ -171,7 +171,7 @@ export class AttendanceService {
         );
     }
 
-    @Cron('0 0,15,30,45 * * * *')
+    // @Cron('0 0,15,30,45 * * * *')
     // @Cron('0 */3 * * * *')
     async checkOutChecking() {
         console.log('*** Check Attendances For Auto Check-Out ***');
