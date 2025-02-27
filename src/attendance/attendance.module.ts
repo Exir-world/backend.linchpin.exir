@@ -29,6 +29,7 @@ import { CheckOutCheckingHandler } from './application/commands/handlers/check-o
 import { OrganizationModule } from 'src/organization/organization.module';
 import { ShiftsModule } from 'src/shifts/shifts.module';
 import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-employment-settings.module';
+import { UpdateAttendanceAdminHandler } from './application/commands/handlers/update-attendance-admin.handler';
 
 @Module({
     imports: [
@@ -90,6 +91,7 @@ import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-
         CreateStopHandler,
         EndStopHandler,
         CheckOutCheckingHandler,
+        UpdateAttendanceAdminHandler,
 
         // Query Handlers
         GetLastAttendanceHandler,
