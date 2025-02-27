@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request, BadRequestException, Patch } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AttendanceService } from '../../application/services/attendance.service';
 import { SubmitWorkReportDto } from '../dto/submit-work-report.dto';
@@ -18,6 +18,8 @@ import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { CheckOutCheckingCommand } from 'src/attendance/application/commands/check-out-checking.command';
 import { CheckInDto } from '../dto/check-in.dto';
 import { CheckOutDto } from '../dto/check-out.dto';
+import { UpdateAttendanceAdminCommand } from 'src/attendance/application/commands/update-attendance-admin.command';
+import { UpdateAttendanceAdminDto } from '../dto/update-attendance-admin.dto';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -170,6 +172,20 @@ export class AttendanceController {
     @ApiResponse({ status: 200, description: 'با موفقیت دریافت شد.' })
     async getMonthlyReport(@Request() req, @Param('month') month: number) {
         return this.attendanceService.getMonthlyReport(req.user.id, month);
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Patch('admin')
+    @ApiOperation({ summary: 'ویرایش حضور و غیاب' })
+    @ApiResponse({ status: 200, description: 'با موفقیت انجام شد.' })
+    async updateByAdmin(@Body() dto: UpdateAttendanceAdminDto) {
+        return this.attendanceService.updateAttendanceAdmin(
+            new UpdateAttendanceAdminCommand(
+                dto.attendanceId,
+                dto.checkIn,
+                dto.checkOut,
+            )
+        );
     }
 
     // @ApiOperation({})

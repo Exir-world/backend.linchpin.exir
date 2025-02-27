@@ -9,7 +9,6 @@ import { CreateStopCommand } from '../commands/create-stop.command';
 import { EndStopCommand } from '../commands/end-stop.command';
 import { GetDailyAttendanceStatusQuery } from '../queries/get-daily-attendance-status.query';
 import { GetMonthlyReportQuery } from '../queries/get-monthly-report.query';
-import { Cron } from '@nestjs/schedule';
 import { CheckOutCheckingCommand } from '../commands/check-out-checking.command';
 import { DateUtil } from 'src/common/utils/date.util';
 import { OrganizationSharedPort } from 'src/organization/application/ports/organization-shared.port';
@@ -17,6 +16,7 @@ import { UserEmploymentSettingsSharedPort } from 'src/user-employment-settings/a
 import { ShiftsSharedPort } from 'src/shifts/application/ports/shifts-shared.port';
 import { ShiftTimeTypeEnum } from 'src/shifts/domain/enums/shift-time-type.enum';
 import { isWithinRadius } from '../utils/location.util';
+import { UpdateAttendanceAdminCommand } from '../commands/update-attendance-admin.command';
 
 @Injectable()
 export class AttendanceService {
@@ -169,6 +169,10 @@ export class AttendanceService {
                 totalMinutes,
             )
         );
+    }
+
+    async updateAttendanceAdmin(command: UpdateAttendanceAdminCommand): Promise<void> {
+        return this.commandBus.execute(command);
     }
 
     // @Cron('0 0,15,30,45 * * * *')
