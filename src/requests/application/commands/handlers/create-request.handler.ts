@@ -11,7 +11,7 @@ export class CreateRequestHandler implements ICommandHandler<CreateRequestComman
 
     async execute(command: CreateRequestCommand): Promise<RequestDomain> {
         if (command.startTime && command.endTime)
-            if (command.startTime >= command.endTime)
+            if (command.startTime > command.endTime)
                 throw new BadRequestException('Invalid Dates');
 
         const request = new RequestDomain(

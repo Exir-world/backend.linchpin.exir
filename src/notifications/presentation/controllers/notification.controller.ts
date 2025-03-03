@@ -27,7 +27,10 @@ export class NotificationController {
     @ApiOperation({ summary: 'دریافت لیست نوتیفیکیشن‌های کاربر با Pagination' })
     @ApiResponse({ status: 200, description: 'لیست نوتیفیکیشن‌ها' })
     async getAll(@Request() req, /*@Query() dto: GetNotificationsDto*/) {
-        return this.queryBus.execute(new GetNotificationsQuery(req.user.id/*, dto.page, dto.limit*/));
+        const res = await this.queryBus.execute(new GetNotificationsQuery(req.user.id/*, dto.page, dto.limit*/));
+        await this.commandBus.execute(new MarkAsReadCommand(req.user.id, res.notifications.map(n => n.id)));
+
+        return res;
     }
 
     @UseGuards(UserAuthGuard)

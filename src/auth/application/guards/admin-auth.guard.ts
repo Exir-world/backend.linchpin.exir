@@ -3,7 +3,12 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Injectable()
 export class AdminAuthGuard extends AuthGuard('jwt') {
-    canActivate(context: ExecutionContext): boolean | Promise<boolean> {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
+        const isAuthenticated = await super.canActivate(context);
+        if (!isAuthenticated) {
+            throw new UnauthorizedException('Authentication failed');
+        }
+
         const request = context.switchToHttp().getRequest();
         const user = request.user;
 
