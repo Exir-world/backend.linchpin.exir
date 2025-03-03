@@ -69,7 +69,7 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
                 switch (leave.type) {
                     case LeaveTypeEnum.DAILY:
                     case LeaveTypeEnum.SICK:
-                        leavesDuration.days += DateUtil.dateDifferenceInDays(leave.startTime, leave.endTime);
+                        leavesDuration.days += DateUtil.dateDifferenceInDays(leave.startTime, leave.endTime) + 1;
                     case LeaveTypeEnum.HOURLY:
                         leavesDuration.minutes += DateUtil.dateDifferenceInMinutes(leave.startTime, leave.endTime);
                 }
