@@ -17,6 +17,7 @@ import { ShiftsSharedPort } from 'src/shifts/application/ports/shifts-shared.por
 import { ShiftTimeTypeEnum } from 'src/shifts/domain/enums/shift-time-type.enum';
 import { isWithinRadius } from '../utils/location.util';
 import { UpdateAttendanceAdminCommand } from '../commands/update-attendance-admin.command';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class AttendanceService {
@@ -29,6 +30,7 @@ export class AttendanceService {
         private readonly userEmploymentSettingsSharedPort: UserEmploymentSettingsSharedPort,
         @Inject('ShiftsSharedPort')
         private readonly shiftsSharedPort: ShiftsSharedPort,
+        private readonly i18n: I18nService,
     ) { }
 
     /**
@@ -40,13 +42,13 @@ export class AttendanceService {
         const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
 
         if (settings.needLocation) {
-            if (!lat || !lng) throw new BadRequestException('Turn on gps!');
+            if (!lat || !lng) throw new BadRequestException(this.i18n.t('attendance.location.turnOn'));
 
             const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
 
             const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
             if (!locationChcek)
-                throw new BadRequestException('Location Out of range!');
+                throw new BadRequestException(this.i18n.t('attendance.location.outOfRange'));
         }
 
         const startOfDay = DateUtil.convertTimeToUTC(shifts.shiftTimes.at(0).startTime);
@@ -65,13 +67,13 @@ export class AttendanceService {
         const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
 
         if (settings.needLocation) {
-            if (!command.lat || !command.lng) throw new BadRequestException('Turn on gps!');
+            if (!command.lat || !command.lng) throw new BadRequestException(this.i18n.t('attendance.location.turnOn'));
 
             const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
 
             const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
             if (!locationChcek)
-                throw new BadRequestException('Location Out of range!');
+                throw new BadRequestException(this.i18n.t('attendance.location.outOfRange'));
         }
 
         return this.commandBus.execute(command);

@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { UpdateSubtasksCommand } from '../update-subtasks.command';
 import { SubtaskEntity } from 'src/tasks/infrastructure/entities/sub-task.entity';
 import { TaskEntity } from 'src/tasks/infrastructure/entities/task.entity';
+import { I18nService } from 'nestjs-i18n';
+import { NotFoundException } from '@nestjs/common';
 
 @CommandHandler(UpdateSubtasksCommand)
 export class UpdateSubtasksHandler implements ICommandHandler<UpdateSubtasksCommand> {
@@ -12,6 +14,7 @@ export class UpdateSubtasksHandler implements ICommandHandler<UpdateSubtasksComm
         private readonly subtaskRepository: Repository<SubtaskEntity>,
         @InjectRepository(TaskEntity)
         private readonly taskRepository: Repository<TaskEntity>,
+        private readonly i18n: I18nService,
     ) { }
 
     async execute(command: UpdateSubtasksCommand): Promise<void> {
@@ -19,7 +22,7 @@ export class UpdateSubtasksHandler implements ICommandHandler<UpdateSubtasksComm
 
         const task = await this.taskRepository.findOne({ where: { id: taskId, createdBy: creatorId } });
         if (!task) {
-            throw new Error('Task not found');
+            throw new NotFoundException(this.i18n.t('task.task.404'));
         }
 
         const existingSubtasks = await this.subtaskRepository.find({ where: { task: { id: taskId } } });

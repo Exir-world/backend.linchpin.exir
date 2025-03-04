@@ -3,13 +3,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { TaskEntity } from "src/tasks/infrastructure/entities/task.entity";
 import { ApproveTaskByCreatorCommand } from "../approve-task-by-creator.command";
-import { BadRequestException, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, NotFoundException } from "@nestjs/common";
+import { I18nService } from "nestjs-i18n";
 
 @CommandHandler(ApproveTaskByCreatorCommand)
 export class ApproveTaskByCreatorHandler implements ICommandHandler<ApproveTaskByCreatorCommand> {
     constructor(
         @InjectRepository(TaskEntity)
         private readonly taskRepository: Repository<TaskEntity>,
+        private readonly i18n: I18nService,
     ) { }
 
     async execute(command: ApproveTaskByCreatorCommand): Promise<any> {
@@ -17,16 +19,16 @@ export class ApproveTaskByCreatorHandler implements ICommandHandler<ApproveTaskB
 
         const task = await this.taskRepository.findOne({ where: { id: taskId } });
         if (!task)
-            throw new NotFoundException("Task not found");
+            throw new NotFoundException(this.i18n.t('task.task.404'));
 
         if (task.createdBy != creatorId)
-            throw new BadRequestException("Forbidden");
+            throw new ForbiddenException();
 
         task.creatorApprove = true;
         task.creatorComment = comment;
 
         await this.taskRepository.save(task);
 
-        return { message: 'تایید تسک با موفقیت انجام شد' }
+        return { message: this.i18n.t('task.task.confirmSuccess') }
     }
 }

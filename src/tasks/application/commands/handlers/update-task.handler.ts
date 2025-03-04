@@ -6,7 +6,8 @@ import { TaskEntity } from 'src/tasks/infrastructure/entities/task.entity';
 import { TaskTagEntity } from 'src/tasks/infrastructure/entities/task-tag.entity';
 import { TagEntity } from 'src/tasks/infrastructure/entities/tag.entity';
 import { PriorityEntity } from 'src/tasks/infrastructure/entities/priority.entity';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { I18nService } from 'nestjs-i18n';
 
 @CommandHandler(UpdateTaskCommand)
 export class UpdateTaskHandler implements ICommandHandler<UpdateTaskCommand> {
@@ -19,6 +20,7 @@ export class UpdateTaskHandler implements ICommandHandler<UpdateTaskCommand> {
         private readonly tagRepository: Repository<TagEntity>,
         @InjectRepository(PriorityEntity)
         private readonly priorityRepository: Repository<PriorityEntity>,
+        private readonly i18n: I18nService,
     ) { }
 
     async execute(command: UpdateTaskCommand): Promise<void> {
@@ -26,7 +28,7 @@ export class UpdateTaskHandler implements ICommandHandler<UpdateTaskCommand> {
 
         const task = await this.taskRepository.findOne({ where: { id: taskId, createdBy: creatorId } });
         if (!task) {
-            throw new NotFoundException('Task not found');
+            throw new NotFoundException(this.i18n.t('task.task.404'));
         }
 
         if (title !== undefined) task.title = title;
@@ -36,7 +38,7 @@ export class UpdateTaskHandler implements ICommandHandler<UpdateTaskCommand> {
 
         if (priorityId !== undefined) {
             const priority = await this.priorityRepository.findOne({ where: { id: priorityId } });
-            if (!priority) throw new Error('Priority not found');
+            if (!priority) throw new BadRequestException('Priority not found');
             task.priority = priority;
         }
 

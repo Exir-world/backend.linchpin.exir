@@ -8,6 +8,7 @@ import { TagEntity } from "src/tasks/infrastructure/entities/tag.entity";
 import { TaskTagEntity } from "src/tasks/infrastructure/entities/task-tag.entity";
 import { SubtaskEntity } from "src/tasks/infrastructure/entities/sub-task.entity";
 import { AttachmentEntity } from "src/tasks/infrastructure/entities/attachment.entity";
+import { BadRequestException } from "@nestjs/common";
 
 @CommandHandler(CreateTaskCommand)
 export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
@@ -32,7 +33,7 @@ export class CreateTaskHandler implements ICommandHandler<CreateTaskCommand> {
         // یافتن Priority
         const priority = await this.priorityRepository.findOne({ where: { id: priorityId } });
         if (!priority) {
-            throw new Error("Priority not found");
+            throw new BadRequestException("Priority not found");
         }
 
         // ایجاد Task

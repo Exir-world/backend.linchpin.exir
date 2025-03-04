@@ -1,0 +1,26 @@
+{
+    "workReport": {
+        "404": "Work report not found",
+        "submit": "First submit prevoius time work report!"
+    },
+    "checkIn": {
+        "404": "You are not checked in!",
+        "exists": "You are already checked in!",
+        "success": "Checked in successfully"
+    },
+    "checkOut": {
+        "exists": "You are already checked out!",
+        "success": "Checked out successfully"
+    },
+    "stop": {
+        "success": "Stop submitted",
+        "end": "Stop ended"
+    },
+    "attendance": {
+        "404": "Attendance not found"
+    },
+    "location": {
+        "turnOn": "Turn on your GPS",
+        "outOfRange": "Location Out of range"
+    }
+}

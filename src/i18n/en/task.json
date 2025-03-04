@@ -1,0 +1,9 @@
+{
+    "task": {
+        "404": "Task not found",
+        "confirmSuccess": "Task approved"
+    },
+    "subtask": {
+        "doneSuccess": "Subtask Done"
+    }
+}
