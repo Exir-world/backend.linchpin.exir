@@ -2,12 +2,14 @@ import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
 import { CheckOutCheckingCommand } from "../check-out-checking.command";
 import { AttendanceRepository } from "../../ports/attendance.repository";
 import { StopRepository } from "../../ports/stop.repository";
+import { I18nService } from "nestjs-i18n";
 
 @CommandHandler(CheckOutCheckingCommand)
 export class CheckOutCheckingHandler implements ICommandHandler<CheckOutCheckingCommand> {
     constructor(
         private readonly attendanceRepo: AttendanceRepository,
         private readonly stopRepo: StopRepository,
+        private readonly i18n: I18nService,
     ) { }
 
     async execute(command: CheckOutCheckingCommand): Promise<any> {
@@ -25,6 +27,6 @@ export class CheckOutCheckingHandler implements ICommandHandler<CheckOutChecking
         await this.attendanceRepo.save(attendances);
         await this.stopRepo.save(stops);
 
-        return { message: 'خروج شما با موفقیت ثبت شد' }
+        return { message: this.i18n.t('attendance.checkOut.success') }
     }
 }

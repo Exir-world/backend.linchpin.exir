@@ -42,7 +42,7 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
         })).sort((a, b) => a.id - b.id);
 
         return {
-            score: 1300,
+            score: 0,
             scoreIcon: 'https://token.ex.pro/cdn/self-improvement/si_gem.svg',
             userItems,
         }

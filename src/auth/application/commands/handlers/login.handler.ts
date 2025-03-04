@@ -7,6 +7,7 @@ import { UserSessionRepository } from '../../ports/user-session.repository';
 import { UserRepository } from '../../ports/user.repository';
 import { ConfigService } from '@nestjs/config';
 import { calculateJwtExpiresAt } from '../../utils/ms.util';
+import { I18nService } from 'nestjs-i18n';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {
@@ -15,6 +16,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         private readonly sessionRepository: UserSessionRepository,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
+        private readonly i18n: I18nService,
     ) { }
 
     jwtSecret = this.configService.get('JWT_SECRET');
@@ -27,13 +29,13 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         const { phoneNumber, password } = command;
 
         if (!phoneNumber || !password) {
-            throw new BadRequestException('phoneNumber and password are required');
+            throw new BadRequestException(this.i18n.t('auth.login.validation'));
         }
 
         // Verify user credentials
         const user = await this.userRepository.findByPhoneNumber(phoneNumber);
         if (!user || user.password !== password) {
-            throw new BadRequestException('Invalid phone number or password');
+            throw new BadRequestException(this.i18n.t('auth.login.invalidCredentials'));
         }
 
         // Generate tokens

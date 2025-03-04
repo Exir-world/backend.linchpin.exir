@@ -6,10 +6,12 @@ import { UserEmploymentSettingsEntity } from "src/user-employment-settings/infra
 import { UserEmploymentSettings } from "src/user-employment-settings/domain/user-employment-settings.domain";
 import { UserEmploymentSettingsMapper } from "src/user-employment-settings/infrastructure/mappers/user-employment-settings.mapper";
 import { NotFoundException } from "@nestjs/common";
+import { I18nService } from "nestjs-i18n";
 
 @QueryHandler(GetUserEmploymentSettingsQuery)
 export class GetUserEmploymentSettingsHandler implements IQueryHandler<GetUserEmploymentSettingsQuery> {
     constructor(
+        private readonly i18n: I18nService,
         @InjectRepository(UserEmploymentSettingsEntity)
         private readonly userEmploymentSettingsRepository: Repository<UserEmploymentSettingsEntity>
     ) { }
@@ -20,7 +22,7 @@ export class GetUserEmploymentSettingsHandler implements IQueryHandler<GetUserEm
         });
 
         if (!settings)
-            throw new NotFoundException('Settings not found!');
+            throw new NotFoundException();
 
         return UserEmploymentSettingsMapper.toDomain(settings);
     }

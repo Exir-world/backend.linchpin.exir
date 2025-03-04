@@ -1,0 +1,12 @@
+{
+    "request": {
+        "404": "Request not found",
+        "forbidden": "You are not authorized to cancel this request",
+        "wrongStatusForCancel": "This request cannot be canceled",
+        "canceledSuccess": "Request canceled successfully"
+    },
+    "date": {
+        "invalid": "Start date must be little than end date",
+        "required": "Please enter dates"
+    }
+}

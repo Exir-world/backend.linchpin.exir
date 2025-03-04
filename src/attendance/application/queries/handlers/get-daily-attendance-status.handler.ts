@@ -5,6 +5,7 @@ import { GetDailyAttendanceStatusQuery } from '../get-daily-attendance-status.qu
 import { Inject, NotFoundException } from '@nestjs/common';
 import { IUserSharedRepository } from '../../ports/user-shared.repository';
 import { Attendance } from 'src/attendance/domain/attendance';
+import { I18nService } from 'nestjs-i18n';
 
 @QueryHandler(GetDailyAttendanceStatusQuery)
 export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAttendanceStatusQuery> {
@@ -12,12 +13,13 @@ export class GetDailyAttendanceStatusHandler implements IQueryHandler<GetDailyAt
         private readonly attendanceRepo: AttendanceRepository,
         @Inject('IUserSharedRepository')
         private readonly userSharedRepository: IUserSharedRepository,
+        private readonly i18n: I18nService,
     ) { }
 
     async execute(query: GetDailyAttendanceStatusQuery): Promise<any> {
         const user = await this.userSharedRepository.getUserById(query.userId);
         if (!user)
-            throw new NotFoundException('User notfound!');
+            throw new NotFoundException(this.i18n.t('auth.user.404'));
 
         const nowTehran = DateUtil.nowWithTimezone();
 

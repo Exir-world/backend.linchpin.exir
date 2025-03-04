@@ -5,12 +5,14 @@ import { Attendance } from "src/attendance/domain/attendance";
 import { BadRequestException } from "@nestjs/common";
 import { WorkReportRepository } from "../../ports/work-report.repository";
 import { WorkReport } from "src/attendance/domain/work-report";
+import { I18nService } from "nestjs-i18n";
 
 @CommandHandler(CheckInCommand)
 export class CheckInHandler implements ICommandHandler<CheckInCommand> {
     constructor(
         private readonly attendanceRepo: AttendanceRepository,
         private readonly workReportRepo: WorkReportRepository,
+        private readonly i18n: I18nService,
     ) { }
 
     async execute(command: CheckInCommand): Promise<any> {
@@ -18,12 +20,12 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
 
         if (lastAttendance) {
             if (lastAttendance.getCheckIn > command.startOfDay && !lastAttendance.getCheckOut)
-                throw new BadRequestException('You are already checked in!');
+                throw new BadRequestException(this.i18n.t('attendance.checkIn.exists'));
             // else if (lastAttendance.getCheckOut < todayStart && !lastAttendance.getCheckOut)
             //     throw new BadRequestException('You have already checked out!');
 
             if (lastAttendance.getCheckIn > command.startOfDay && !lastAttendance.workReport?.workReport)
-                throw new BadRequestException('First submit prevoius time work report!')
+                throw new BadRequestException(this.i18n.t('attendance.workReport.submit'));
         }
 
         const attendance = new Attendance(0, command.userId);
@@ -35,6 +37,6 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
 
         await this.workReportRepo.save(workReport);
 
-        return { message: 'ورود شما با موفقیت ثبت شد' }
+        return { message: this.i18n.t('attendance.checkIn.success') }
     }
 }

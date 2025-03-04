@@ -2,30 +2,32 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { SubmitWorkReportCommand } from '../submit-work-report.command';
 import { AttendanceRepository } from '../../ports/attendance.repository';
 import { WorkReportRepository } from '../../ports/work-report.repository';
-import { NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { I18nService } from 'nestjs-i18n';
 
 @CommandHandler(SubmitWorkReportCommand)
 export class SubmitWorkReportHandler implements ICommandHandler<SubmitWorkReportCommand> {
     constructor(
         private readonly attendanceRepo: AttendanceRepository,
         private readonly workReportRepo: WorkReportRepository,
+        private readonly i18n: I18nService,
+
     ) { }
 
     async execute(command: SubmitWorkReportCommand): Promise<any> {
         try {
             const attendance = await this.attendanceRepo.findLastByUserId(command.userId);
             if (!attendance || attendance.getUserId != command.userId)
-                throw new NotFoundException('Attendance not found');
+                throw new NotFoundException(this.i18n.t('attendance.attendance.404'));
 
             attendance.workReport.workReport = command.reportText;
 
             await this.workReportRepo.save(attendance.workReport);
 
-            return { message: 'گزارش کار با موفقیت ثبت شد' }
+            return { message: this.i18n.t('attendance.workReport.success') }
 
         } catch (error) {
-            console.error('Error in CheckInHandler:', error);
-            throw new Error('Failed to check-in user');
+            throw new InternalServerErrorException();
         }
     }
 }

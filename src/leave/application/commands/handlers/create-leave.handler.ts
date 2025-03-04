@@ -3,6 +3,7 @@ import { CreateLeaveCommand } from '../create-leave.command';
 import { LeaveRepository } from '../../ports/leave.repository';
 import { Leave } from 'src/leave/domain/leave';
 import { DateUtil } from 'src/common/utils/date.util';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @CommandHandler(CreateLeaveCommand)
 export class CreateLeaveHandler implements ICommandHandler<CreateLeaveCommand> {
@@ -25,6 +26,7 @@ export class CreateLeaveHandler implements ICommandHandler<CreateLeaveCommand> {
 
             return await this.leaveRepository.createLeaveRequest(leave);
         } catch (error) {
+            throw new InternalServerErrorException()
         }
     }
 }

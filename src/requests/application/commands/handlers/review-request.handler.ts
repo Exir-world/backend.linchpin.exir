@@ -6,6 +6,7 @@ import { IAttendanceSharedRepository } from '../../ports/attendance-shared.repos
 import { ILeaveSharedRepository } from '../../ports/leave-shared.repository';
 import { RequestType } from 'src/requests/domain/enums/request-type.enum';
 import { LeaveTypeEnum } from 'src/leave/domain/enums/leave-type.enum';
+import { I18nService } from 'nestjs-i18n';
 
 @CommandHandler(ReviewRequestCommand)
 export class ReviewRequestHandler implements ICommandHandler<ReviewRequestCommand> {
@@ -15,12 +16,13 @@ export class ReviewRequestHandler implements ICommandHandler<ReviewRequestComman
         @Inject('IAttendanceSharedRepository')
         private readonly attendanceRepository: IAttendanceSharedRepository,
         private readonly requestRepository: RequestRepository,
+        private readonly i18n: I18nService,
     ) { }
 
     async execute(command: ReviewRequestCommand) {
         const request = await this.requestRepository.findOneById(command.requestId);
         if (!request) {
-            throw new NotFoundException('Request not found');
+            throw new NotFoundException(this.i18n.t('request.request.404'));
         }
 
         if (command.action === 'APPROVE') {
