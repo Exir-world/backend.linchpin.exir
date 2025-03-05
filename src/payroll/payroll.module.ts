@@ -6,6 +6,7 @@ import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-
 import { AttendanceModule } from 'src/attendance/attendance.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { CalculatePayrollHandler } from './application/commands/handlers/calculate-payroll.handler';
+import { PdfService } from './application/pdf.service';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { CalculatePayrollHandler } from './application/commands/handlers/calcula
     ],
     controllers: [PayrollController],
     providers: [
+        PdfService,
         PayrollService,
         CalculatePayrollHandler,
         {
