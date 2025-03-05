@@ -1,0 +1,13 @@
+{
+    "items": {
+        "food": "Mental and physical nourishment",
+        "podcast": "Podcast recording",
+        "suggest": "Productivity suggestions",
+        "team": "Teamwork",
+        "tools": "Training on new tools",
+        "walk": "Walking",
+        "education": "Language and Excel training",
+        "discipline": "Organizational discipline",
+        "social": "Activity on social networks"
+    }
+}
