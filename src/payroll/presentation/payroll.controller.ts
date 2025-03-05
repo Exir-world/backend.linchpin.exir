@@ -33,14 +33,14 @@ export class PayrollController {
     async downloadFish(
         @Res() res: Response
     ): Promise<any> {
-        const pdfBuffer = await this.pdfService.generatePayslipPdf();
+        // const pdfBuffer = await this.pdfService.generatePayslipPdf();
 
-        res.set({
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': 'attachment; filename="payslip.pdf"',
-            'Content-Length': pdfBuffer.length,
-        });
+        // res.set({
+        //     'Content-Type': 'application/pdf',
+        //     'Content-Disposition': 'attachment; filename="payslip.pdf"',
+        //     'Content-Length': pdfBuffer.length,
+        // });
 
-        res.end(pdfBuffer); // مستقیماً فایل PDF را به پاسخ ارسال کن
+        // res.end(pdfBuffer); // مستقیماً فایل PDF را به پاسخ ارسال کن
     }
 }
