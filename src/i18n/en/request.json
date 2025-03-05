@@ -8,5 +8,12 @@
     "date": {
         "invalid": "Start date must be little than end date",
         "required": "Please enter dates"
+    },
+    "types": {
+        "manualCheckIn": "Manual check-in",
+        "manualCheckOut": "Manual check-out",
+        "dailyLeave": "Annual leave",
+        "houlyLeave": "Hourly leave",
+        "sickLeave": "Sick leave"
     }
 }

@@ -5,6 +5,7 @@ import { OrganizationSharedPort } from 'src/organization/application/ports/organ
 import { Inject } from '@nestjs/common';
 import { GetUserSelfImprovementsByOrgIdQuery } from '../get-user-self-improvements-by-org-id.query';
 import { UserSelfImprovementEntity } from 'src/user-self-improvement/infrastructure/entities/user-self-improvement.entity';
+import { I18nService } from 'nestjs-i18n';
 
 @QueryHandler(GetUserSelfImprovementsByOrgIdQuery)
 export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUserSelfImprovementsByOrgIdQuery> {
@@ -12,7 +13,9 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
         @Inject('OrganizationSharedPort')
         private readonly organizationService: OrganizationSharedPort,
         @InjectRepository(UserSelfImprovementEntity)
-        private readonly repository: Repository<UserSelfImprovementEntity>) { }
+        private readonly repository: Repository<UserSelfImprovementEntity>,
+        private readonly i18n: I18nService,
+    ) { }
 
     async execute(query: GetUserSelfImprovementsByOrgIdQuery): Promise<any> {
         const userId = query.userId;
@@ -34,7 +37,7 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
 
         const userItems = imps[0].items.map(item => ({
             id: item.id,
-            title: item.title,
+            title: this.i18n.t(item.title),
             image: item.image,
             color: item.color,
             date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
@@ -43,7 +46,7 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
 
         return {
             score: 0,
-            scoreIcon: 'https://token.ex.pro/cdn/self-improvement/si_gem.svg',
+            scoreIcon: 'https://exirtu.be/cdn/self-improvement/si_gem.svg',
             userItems,
         }
     }
