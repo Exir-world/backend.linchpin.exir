@@ -5,6 +5,7 @@ import { RequestDomain } from 'src/requests/domain/request';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { BadRequestException } from '@nestjs/common';
 import { I18nService } from 'nestjs-i18n';
+import { RequestType } from 'src/requests/domain/enums/request-type.enum';
 
 @CommandHandler(CreateRequestCommand)
 export class CreateRequestHandler implements ICommandHandler<CreateRequestCommand> {
@@ -17,7 +18,7 @@ export class CreateRequestHandler implements ICommandHandler<CreateRequestComman
             if (command.startTime > command.endTime)
                 throw new BadRequestException(this.i18n.t('request.date.invalid'));
         }
-        else
+        else if ([RequestType.DAILY_LEAVE, RequestType.HOURLY_LEAVE, RequestType.SICK_LEAVE].includes(command.type))
             throw new BadRequestException(this.i18n.t('request.date.required'));
 
         const request = new RequestDomain(
