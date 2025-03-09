@@ -30,6 +30,8 @@ import { OrganizationModule } from 'src/organization/organization.module';
 import { ShiftsModule } from 'src/shifts/shifts.module';
 import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-employment-settings.module';
 import { UpdateAttendanceAdminHandler } from './application/commands/handlers/update-attendance-admin.handler';
+import { GetAttendancesReportHandler } from './application/queries/handlers/get-attendances-report.handler';
+import { GetDailyAttendancesReportHandler } from './application/queries/handlers/get-daily-attendances-report.handler';
 
 @Module({
     imports: [
@@ -97,6 +99,8 @@ import { UpdateAttendanceAdminHandler } from './application/commands/handlers/up
         GetLastAttendanceHandler,
         GetDailyAttendanceStatusHandler,
         GetMonthlyReportHandler,
+        GetAttendancesReportHandler,
+        GetDailyAttendancesReportHandler,
     ],
     exports: ['AttendanceSharedRepository']
 })

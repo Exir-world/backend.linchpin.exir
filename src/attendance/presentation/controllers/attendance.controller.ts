@@ -20,6 +20,10 @@ import { CheckInDto } from '../dto/check-in.dto';
 import { CheckOutDto } from '../dto/check-out.dto';
 import { UpdateAttendanceAdminCommand } from 'src/attendance/application/commands/update-attendance-admin.command';
 import { UpdateAttendanceAdminDto } from '../dto/update-attendance-admin.dto';
+import { GetAttendancesReportDto } from '../dto/get-attendances-report.dto';
+import { GetAttendancesReportQuery } from 'src/attendance/application/queries/get-attendances-report.query';
+import { GetDailyAttendancesReportDto } from '../dto/get-daily-attendances-report.dto';
+import { GetDailyAttendancesReportQuery } from 'src/attendance/application/queries/get-daily-attendances-report.query';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -189,13 +193,29 @@ export class AttendanceController {
     }
 
     @UseGuards(UserAuthGuard)
-    @Post('check-in')
-    @ApiOperation({ summary: 'ثبت ورود کاربر' })
-    @ApiResponse({ status: 200, description: 'ورود با موفقیت ثبت شد.' })
+    @Post('report')
+    @ApiOperation({  })
     @HttpCode(HttpStatus.OK)
-    async getAttendances(@Request() req, @Body() dto: CheckInDto) {
-        const { lat, lng } = dto;
-        return this.attendanceService.checkIn(req.user.id, lat, lng);
+    async getAttendancesReport(@Request() req, @Body() dto: GetAttendancesReportDto) {
+        const { startDate, endDate } = dto;
+        return this.attendanceService.getAttendancesReport(
+            new GetAttendancesReportQuery(
+                req.user.id, startDate, endDate
+            )
+        );
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Post('daily/report')
+    @ApiOperation({  })
+    @HttpCode(HttpStatus.OK)
+    async getAttendancesDailyReport(@Request() req, @Body() dto: GetDailyAttendancesReportDto) {
+        const { date } = dto;
+        return this.attendanceService.getDailyAttendancesReport(
+            new GetDailyAttendancesReportQuery(
+                req.user.id, date
+            )
+        );
     }
 
     // @ApiOperation({})

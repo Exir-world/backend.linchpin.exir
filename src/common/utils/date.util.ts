@@ -71,6 +71,26 @@ export class DateUtil {
     }
 
     /**
+     * تبدیل تاریخ میلادی به شمسی با فرمت 'YYYY/MM/DD dddd'
+     * @param isoDate - تاریخ میلادی به‌صورت ISO (e.g., '2024-12-24T08:48:50.610Z')
+     * @returns تاریخ شمسی به‌صورت رشته با فرمت 'YYYY/MM/DD dddd'
+     */
+    static convertToJalaliWithDayOfWeek(isoDate: string): string {
+        const date = new persianDate(new Date(isoDate));
+        return date.format('YYYY/MM/DD dddd');
+    }
+
+    /**
+     * تبدیل تاریخ میلادی به شمسی با فرمت 'YYYY, نام ماه'
+     * @param isoDate - تاریخ میلادی به‌صورت ISO (e.g., '2024-12-24T08:48:50.610Z')
+     * @returns تاریخ شمسی به‌صورت رشته با فرمت 'YYYY, نام ماه'
+     */
+    static convertToJalaliWithMonthName(isoDate: string): string {
+        const date = new persianDate(new Date(isoDate));
+        return date.format('YYYY MMMM');
+    }
+
+    /**
      * دریافت ابتدای ماه شمسی جاری به‌صورت UTC
      * @returns تاریخ UTC به‌صورت ISO
      */

@@ -18,6 +18,8 @@ import { ShiftTimeTypeEnum } from 'src/shifts/domain/enums/shift-time-type.enum'
 import { isWithinRadius } from '../utils/location.util';
 import { UpdateAttendanceAdminCommand } from '../commands/update-attendance-admin.command';
 import { I18nService } from 'nestjs-i18n';
+import { GetAttendancesReportQuery } from '../queries/get-attendances-report.query';
+import { GetDailyAttendancesReportQuery } from '../queries/get-daily-attendances-report.query';
 
 @Injectable()
 export class AttendanceService {
@@ -214,5 +216,14 @@ export class AttendanceService {
         //     const startOfCurrentTime = DateUtil.convertTimeToUTC(time.currentStartTime);
         //     return this.commandBus.execute(new CheckOutCheckingCommand(startOfCurrentTime));
         // }
+    }
+
+    async getAttendancesReport(query: GetAttendancesReportQuery): Promise<void> {
+        // const { userId, startDate, endDate } = query;
+        return this.queryBus.execute(query);
+    }
+
+    async getDailyAttendancesReport(query: GetDailyAttendancesReportQuery): Promise<void> {
+        return this.queryBus.execute(query);
     }
 }
