@@ -69,7 +69,7 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         return entity ? AttendanceMapper.toDomain(entity) : null;
     }
 
-    async filterByUserAndRange(userId: number, startTime: Date, endTime: Date) {
+    async filterByUserAndRange(userId: number, startTime: Date, endTime: Date, orderAsc: boolean = false): Promise<Attendance[]> {
 
         const attendances = await this.attendanceRepo.find({
             where: {
@@ -83,11 +83,11 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
                 'stops'
             ],
             order: {
-                checkIn: 'DESC',
+                checkIn: orderAsc ? 'ASC' : 'DESC',
             }
         });
 
-        return attendances;
+        return AttendanceMapper.toDomainList(attendances);
     }
 
     async findLastForCheckoutByUser(userId: number): Promise<Attendance | null> {

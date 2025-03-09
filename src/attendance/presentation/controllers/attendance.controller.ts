@@ -188,6 +188,16 @@ export class AttendanceController {
         );
     }
 
+    @UseGuards(UserAuthGuard)
+    @Post('check-in')
+    @ApiOperation({ summary: 'ثبت ورود کاربر' })
+    @ApiResponse({ status: 200, description: 'ورود با موفقیت ثبت شد.' })
+    @HttpCode(HttpStatus.OK)
+    async getAttendances(@Request() req, @Body() dto: CheckInDto) {
+        const { lat, lng } = dto;
+        return this.attendanceService.checkIn(req.user.id, lat, lng);
+    }
+
     // @ApiOperation({})
     // @Post('auto-check-out')
     // async autoCheckout(@Request() req) {
