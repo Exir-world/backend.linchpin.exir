@@ -15,73 +15,82 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
     ) { }
 
     async execute(query: GetMonthlyReportQuery): Promise<any> {
-        const dayHours = query.totalDuration;
-        const monthHours = dayHours * 24;
+        // const dayHours = query.totalDuration;
+        // const monthHours = dayHours * 24;
         const monthStarts = DateUtil.getStartOfPreviousMonths(query.monthAgo);
 
-        const startTime = monthStarts[monthStarts.length - 1].startDate.toJSDate();
-        const endTime = monthStarts[0].startDate.plus({ months: 1 }).toJSDate()
+        // const startTime = monthStarts[monthStarts.length - 1].startDate.toJSDate();
+        // const endTime = monthStarts[0].startDate.plus({ months: 1 }).toJSDate()
 
-        const attendances = await this.attendanceRepo.filterByUserAndRange(query.userId, startTime, endTime);
-        const leaves = await this.leaveRepo.filterByUserAndRange(query.userId, startTime, endTime);
+        // const attendances = await this.attendanceRepo.filterByUserAndRange(query.userId, startTime, endTime);
+        // const leaves = await this.leaveRepo.filterByUserAndRange(query.userId, startTime, endTime);
+
+        let currentYear = true;
 
         // گروه‌بندی و محاسبه زمان کار
-        const workTimes = monthStarts.map((month) => {
+        const workTimes = monthStarts.map((month, index) => {
+            if (!currentYear)
+                return undefined;
+
             const startOfMonth = month.startDate;
             const endOfMonth = month.startDate.plus({ months: 1 });
 
-            // فیلتر رکوردها برای این ماه
-            const monthRecords = attendances.filter(record => {
-                const recordDate = DateUtil.fromJsDate(record.checkIn);
-                return recordDate >= startOfMonth && recordDate < endOfMonth;
-            });
+            //     // فیلتر رکوردها برای این ماه
+            //     const monthRecords = attendances.filter(record => {
+            //         const recordDate = DateUtil.fromJsDate(record.checkIn);
+            //         return recordDate >= startOfMonth && recordDate < endOfMonth;
+            //     });
 
-            if (!monthRecords.length)
-                return undefined;
+            //     if (!monthRecords.length)
+            //         return undefined;
 
-            // فیلتر مرخصی های این ماه
-            const leavesMonthRecords = leaves.filter(record => {
-                const recordDate = DateUtil.fromJsDate(record.startTime);
-                return recordDate >= startOfMonth && recordDate < endOfMonth;
-            });
+            //     // فیلتر مرخصی های این ماه
+            //     const leavesMonthRecords = leaves.filter(record => {
+            //         const recordDate = DateUtil.fromJsDate(record.startTime);
+            //         return recordDate >= startOfMonth && recordDate < endOfMonth;
+            //     });
 
-            // محاسبه مجموع زمان کار
-            const workMinutes = monthRecords.reduce((total, record) => {
-                const checkIn = DateUtil.fromJsDate(record.checkIn);
-                const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
+            //     // محاسبه مجموع زمان کار
+            //     const workMinutes = monthRecords.reduce((total, record) => {
+            //         const checkIn = DateUtil.fromJsDate(record.checkIn);
+            //         const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
 
-                // محاسبه زمان حضور (Attendance Duration)
-                const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
+            //         // محاسبه زمان حضور (Attendance Duration)
+            //         const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
 
-                // محاسبه زمان توقف (Stops Duration)
-                const stopsMinutes = record.stops.reduce((stopTotal, stop) => {
-                    const stopStart = DateUtil.fromJsDate(stop.startTime);
-                    const stopEnd = stop.endTime ? DateUtil.fromJsDate(stop.endTime) : stopStart;
-                    return stopTotal + stopEnd.diff(stopStart, 'minutes').minutes;
-                }, 0);
+            //         // محاسبه زمان توقف (Stops Duration)
+            //         const stopsMinutes = record.stops.reduce((stopTotal, stop) => {
+            //             const stopStart = DateUtil.fromJsDate(stop.startTime);
+            //             const stopEnd = stop.endTime ? DateUtil.fromJsDate(stop.endTime) : stopStart;
+            //             return stopTotal + stopEnd.diff(stopStart, 'minutes').minutes;
+            //         }, 0);
 
-                return total + (attendanceMinutes - stopsMinutes);
-            }, 0);
+            //         return total + (attendanceMinutes - stopsMinutes);
+            //     }, 0);
 
-            const leavesDuration = { days: 0, minutes: 0 };
-            for (let i = 0; i < leavesMonthRecords.length; i++) {
-                const leave = leavesMonthRecords[i];
-                switch (leave.type) {
-                    case LeaveTypeEnum.DAILY:
-                    case LeaveTypeEnum.SICK:
-                        leavesDuration.days += DateUtil.dateDifferenceInDays(leave.startTime, leave.endTime) + 1;
-                    case LeaveTypeEnum.HOURLY:
-                        leavesDuration.minutes += DateUtil.dateDifferenceInMinutes(leave.startTime, leave.endTime);
-                }
-            }
+            //     const leavesDuration = { days: 0, minutes: 0 };
+            //     for (let i = 0; i < leavesMonthRecords.length; i++) {
+            //         const leave = leavesMonthRecords[i];
+            //         switch (leave.type) {
+            //             case LeaveTypeEnum.DAILY:
+            //             case LeaveTypeEnum.SICK:
+            //                 leavesDuration.days += DateUtil.dateDifferenceInDays(leave.startTime, leave.endTime) + 1;
+            //             case LeaveTypeEnum.HOURLY:
+            //                 leavesDuration.minutes += DateUtil.dateDifferenceInMinutes(leave.startTime, leave.endTime);
+            //         }
+            //     }
+
+            if (month.monthNumber == 1)
+                currentYear = false;
 
             return {
-                date: month.startDate,
+                startOfMonth,
+                endOfMonth,
                 month: month.monthNumber,
-                workMinutes: Math.floor(workMinutes),
-                overDuration: Math.floor(Math.max(workMinutes - monthHours, 0)),
-                lessDuration: Math.floor(Math.max(monthHours - workMinutes, 0)),
-                leaveDuration: leavesDuration.days * 24 * 60 + leavesDuration.minutes,
+                //         workMinutes: Math.floor(workMinutes),
+                //         overDuration: Math.floor(Math.max(workMinutes - monthHours, 0)),
+                //         lessDuration: Math.floor(Math.max(monthHours - workMinutes, 0)),
+                //         leaveDuration: leavesDuration.days * 24 * 60 + leavesDuration.minutes,
             };
         }).filter(Boolean);
 
