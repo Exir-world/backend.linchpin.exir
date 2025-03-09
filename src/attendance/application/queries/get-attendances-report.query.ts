@@ -1,9 +1,9 @@
 // src/attendance/application/queries/get-last-attendance.query.ts
 
-export class GetAttendancesQuery {
+export class GetAttendancesReportQuery {
     constructor(
         public readonly userId: number,
-        public readonly startDate: Date,
-        public readonly endDate: Date,
+        public readonly startDate: string,
+        public readonly endDate: string,
     ) { }
 }
