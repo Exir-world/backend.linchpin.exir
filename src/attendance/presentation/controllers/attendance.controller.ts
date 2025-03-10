@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request, BadRequestException, Patch } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request, BadRequestException, Patch, Res } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { AttendanceService } from '../../application/services/attendance.service';
 import { SubmitWorkReportDto } from '../dto/submit-work-report.dto';
@@ -24,6 +24,10 @@ import { GetAttendancesReportDto } from '../dto/get-attendances-report.dto';
 import { GetAttendancesReportQuery } from 'src/attendance/application/queries/get-attendances-report.query';
 import { GetDailyAttendancesReportDto } from '../dto/get-daily-attendances-report.dto';
 import { GetDailyAttendancesReportQuery } from 'src/attendance/application/queries/get-daily-attendances-report.query';
+import { GetAdminAttendancesReportDto } from '../dto/get-admin-attendances-report.dto';
+import { GetAdminAttendancesReportQuery } from 'src/attendance/application/queries/get-admin-attendances-report.query';
+import { generateExcel } from 'src/attendance/application/utils/excel.util';
+import { Response } from 'express';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -194,7 +198,7 @@ export class AttendanceController {
 
     @UseGuards(UserAuthGuard)
     @Post('report')
-    @ApiOperation({  })
+    @ApiOperation({})
     @HttpCode(HttpStatus.OK)
     async getAttendancesReport(@Request() req, @Body() dto: GetAttendancesReportDto) {
         const { startDate, endDate } = dto;
@@ -207,7 +211,7 @@ export class AttendanceController {
 
     @UseGuards(UserAuthGuard)
     @Post('daily/report')
-    @ApiOperation({  })
+    @ApiOperation({})
     @HttpCode(HttpStatus.OK)
     async getAttendancesDailyReport(@Request() req, @Body() dto: GetDailyAttendancesReportDto) {
         const { date } = dto;
@@ -216,6 +220,24 @@ export class AttendanceController {
                 req.user.id, date
             )
         );
+    }
+
+    // @UseGuards(UserAuthGuard)
+    @Post('admin/report')
+    @ApiOperation({})
+    @HttpCode(HttpStatus.OK)
+    async getAdminAttendancesReport(
+        @Res() res: Response,
+        @Body() dto: GetAdminAttendancesReportDto
+    ) {
+        const { startDate, endDate } = dto;
+        const attendances = await this.attendanceService.getAdminAttendancesReport(
+            new GetAdminAttendancesReportQuery(startDate, endDate)
+        );
+
+        generateExcel(res, attendances);
+
+        // return attendances;
     }
 
     // @ApiOperation({})
