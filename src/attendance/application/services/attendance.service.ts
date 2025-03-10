@@ -20,6 +20,8 @@ import { UpdateAttendanceAdminCommand } from '../commands/update-attendance-admi
 import { I18nService } from 'nestjs-i18n';
 import { GetAttendancesReportQuery } from '../queries/get-attendances-report.query';
 import { GetDailyAttendancesReportQuery } from '../queries/get-daily-attendances-report.query';
+import { GetAdminAttendancesReportQuery } from '../queries/get-admin-attendances-report.query';
+import { UserSharedRepository } from 'src/auth/application/ports/user-shared.repository';
 
 @Injectable()
 export class AttendanceService {
@@ -33,6 +35,8 @@ export class AttendanceService {
         @Inject('ShiftsSharedPort')
         private readonly shiftsSharedPort: ShiftsSharedPort,
         private readonly i18n: I18nService,
+        @Inject('UserSharedRepository')
+        private readonly userSharedPort: UserSharedRepository,
     ) { }
 
     /**
@@ -225,5 +229,34 @@ export class AttendanceService {
 
     async getDailyAttendancesReport(query: GetDailyAttendancesReportQuery): Promise<void> {
         return this.queryBus.execute(query);
+    }
+
+    async getAdminAttendancesReport(query: GetAdminAttendancesReportQuery): Promise<any> {
+        // const { userId, startDate, endDate } = query;
+        const attendances = await this.queryBus.execute(query);
+        const userIds = attendances.map(a => a.userId);
+
+        const users = await this.userSharedPort.getUserByIds(userIds);
+
+        const groupedAttendances = attendances.reduce((acc, a) => {
+            const user = users.find(u => u.id == a.userId);
+            if (!user) return acc;
+
+            const existingUser = acc.find(u => u.userId == a.userId);
+            if (existingUser) {
+                existingUser.att.push(a);
+            } else {
+                acc.push({
+                    userId: a.userId,
+                    name: user.name,
+                    lastname: user.lastname,
+                    phoneNumber: user.phoneNumber,
+                    att: [a],
+                });
+            }
+            return acc;
+        }, []);
+
+        return groupedAttendances;
     }
 }

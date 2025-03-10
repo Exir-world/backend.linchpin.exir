@@ -269,6 +269,11 @@ export class DateUtil {
         return parsedTime
     }
 
+    static parseTimeFromDate(date: Date, zone = "Asia/Tehran"): string {
+        const parsedTime = DateTime.fromJSDate(date).setZone(zone).toFormat("HH:mm");
+        return parsedTime;
+    }
+
     static nowTime(zone = "Asia/Tehran"): string {
         const parsedTime = DateTime.utc().setZone(zone).toFormat("HH:mm:ss");
         return parsedTime

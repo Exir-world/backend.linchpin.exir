@@ -32,6 +32,7 @@ import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-
 import { UpdateAttendanceAdminHandler } from './application/commands/handlers/update-attendance-admin.handler';
 import { GetAttendancesReportHandler } from './application/queries/handlers/get-attendances-report.handler';
 import { GetDailyAttendancesReportHandler } from './application/queries/handlers/get-daily-attendances-report.handler';
+import { GetAdminAttendancesReportHandler } from './application/queries/handlers/get-admin-attendances-report.handler';
 
 @Module({
     imports: [
@@ -101,6 +102,7 @@ import { GetDailyAttendancesReportHandler } from './application/queries/handlers
         GetMonthlyReportHandler,
         GetAttendancesReportHandler,
         GetDailyAttendancesReportHandler,
+        GetAdminAttendancesReportHandler,
     ],
     exports: ['AttendanceSharedRepository']
 })

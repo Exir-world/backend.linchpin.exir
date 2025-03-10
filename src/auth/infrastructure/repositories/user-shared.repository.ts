@@ -19,6 +19,8 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
             id: user.id,
             name: user.name,
             profileImage: user.profileImage,
+            lastname: user.lastname,
+            phoneNumber: user.phoneNumber,
         }));
     }
 
