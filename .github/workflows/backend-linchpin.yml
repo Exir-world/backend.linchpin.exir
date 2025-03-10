@@ -27,5 +27,4 @@ jobs:
             pm2 stop all || true  # Stop any currently running processes
             pm2 start dist/main.js --name "nestjs-app" # Start the backend app with pm2 (adjust the entry point if needed)
             pm2 save  # Save the process list
-            pm2 startup # Ensure PM2 restarts on system boot
-            
+            pm2 startup # Ensure PM2 restarts on system boot        
