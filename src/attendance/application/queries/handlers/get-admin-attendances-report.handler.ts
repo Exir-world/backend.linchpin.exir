@@ -19,60 +19,130 @@ export class GetAdminAttendancesReportHandler implements IQueryHandler<GetAdminA
 
         const attendances = await this.attendanceRepo.filterByRange(new Date(startDate), new Date(endDate), true);
 
-        const res = Object.entries(attendances.splice(0, 10).reduce((acc, attendance) => {
-            const date = DateUtil.fromJsDate(attendance.checkIn).toISODate();
-            if (!acc[date]) {
-                acc[date] = [];
+        let groupedAttendances: any = attendances.reduce((acc, attendance) => {
+            if (!acc[attendance.userId]) {
+                acc[attendance.userId] = { userId: attendance.userId, attendances: [] };
             }
-            acc[date].push(attendance);
+            acc[attendance.userId].attendances.push(attendance);
             return acc;
-        }, {}))
-            .map(([date, attendances]: any) => {
-                let firstCheckIn =
-                    DateUtil.parseTimeFromDate(attendances.reduce((earliest, current) => {
-                        return current.checkIn < earliest.checkIn ? current : earliest;
-                    }).checkIn);
+        }, {});
 
-                firstCheckIn = firstCheckIn === 'Invalid DateTime' ? '-' : firstCheckIn;
+        groupedAttendances = Object.values(groupedAttendances);
 
-                let lastCheckOut =
-                    DateUtil.parseTimeFromDate(attendances.reduce((latest, current) => {
-                        return current.checkOut > latest.checkOut ? current : latest;
-                    }).checkOut);
+        for (let i = 0; i < groupedAttendances.length; i++) {
+            groupedAttendances[i].attendances = Object.entries(groupedAttendances[i].attendances
+                .reduce((acc, attendance) => {
+                    const date = DateUtil.fromJsDate(attendance.checkIn).toISODate();
+                    if (!acc[date]) {
+                        acc[date] = [];
+                    }
+                    acc[date].push(attendance);
+                    return acc;
+                }, {}))
+                .map(([date, attendances]: any) => {
+                    let firstCheckIn =
+                        DateUtil.parseTimeFromDate(attendances.reduce((earliest, current) => {
+                            return current.checkIn < earliest.checkIn ? current : earliest;
+                        }).checkIn);
 
-                lastCheckOut = lastCheckOut === 'Invalid DateTime' ? '-' : lastCheckOut;
+                    firstCheckIn = firstCheckIn === 'Invalid DateTime' ? '-' : firstCheckIn;
 
-                const atts = attendances.map((a: any) => {
-                    const checkIn = DateUtil.parseTimeFromDate(a.checkIn);
-                    const checkOut = DateUtil.parseTimeFromDate(a.checkOut);
-                    return `${checkIn === 'Invalid DateTime' ? '' : checkIn} - ${checkOut === 'Invalid DateTime' ? '' : checkOut}`;
-                }).join(' , \n');
+                    let lastCheckOut =
+                        DateUtil.parseTimeFromDate(attendances.reduce((latest, current) => {
+                            return current.checkOut > latest.checkOut ? current : latest;
+                        }).checkOut);
 
-                let workTime = attendances.reduce((total, record) => {
-                    const checkIn = DateUtil.fromJsDate(record.checkIn);
-                    const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
-                    const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
+                    lastCheckOut = lastCheckOut === 'Invalid DateTime' ? '-' : lastCheckOut;
 
-                    return total + (attendanceMinutes);
-                }, 0);
+                    const atts = attendances.map((a: any) => {
+                        const checkIn = DateUtil.parseTimeFromDate(a.checkIn);
+                        const checkOut = DateUtil.parseTimeFromDate(a.checkOut);
+                        return `${checkIn === 'Invalid DateTime' ? '' : checkIn} - ${checkOut === 'Invalid DateTime' ? '' : checkOut}`;
+                    }).join(' , \n');
 
-                workTime = Math.floor(workTime);
+                    let workTime = attendances.reduce((total, record) => {
+                        const checkIn = DateUtil.fromJsDate(record.checkIn);
+                        const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
+                        const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
 
-                const workHours = Math.floor(workTime / 60);
-                const workMinutes = workTime % 60;
-                const formattedWorkTime = `${workHours.toString().padStart(2, '0')}:${workMinutes.toString().padStart(2, '0')}`;
+                        return total + (attendanceMinutes);
+                    }, 0);
 
-                return {
-                    userId: attendances?.[0]?.userId,
-                    attendances: atts,
-                    date,
-                    shamsiDate: DateUtil.convertToJalaliWithDayOfWeek(date),
-                    firstCheckIn,
-                    lastCheckOut,
-                    workTime: formattedWorkTime,
-                };
-            });
+                    workTime = Math.floor(workTime);
 
-        return res
+                    const workHours = Math.floor(workTime / 60);
+                    const workMinutes = workTime % 60;
+                    const formattedWorkTime = `${workHours.toString().padStart(2, '0')}:${workMinutes.toString().padStart(2, '0')}`;
+
+                    return {
+                        userId: attendances?.[0]?.userId,
+                        attendances: atts,
+                        date,
+                        shamsiDate: DateUtil.convertToJalaliWithDayOfWeek(date),
+                        firstCheckIn,
+                        lastCheckOut,
+                        workTime: formattedWorkTime,
+                    };
+                });
+        }
+
+        return groupedAttendances
+
+
+        // const res = Object.entries(attendances.reduce((acc, attendance) => {
+        //     const date = DateUtil.fromJsDate(attendance.checkIn).toISODate();
+        //     if (!acc[date]) {
+        //         acc[date] = [];
+        //     }
+        //     acc[date].push(attendance);
+        //     return acc;
+        // }, {}))
+        //     .map(([date, attendances]: any) => {
+        //         let firstCheckIn =
+        //             DateUtil.parseTimeFromDate(attendances.reduce((earliest, current) => {
+        //                 return current.checkIn < earliest.checkIn ? current : earliest;
+        //             }).checkIn);
+
+        //         firstCheckIn = firstCheckIn === 'Invalid DateTime' ? '-' : firstCheckIn;
+
+        //         let lastCheckOut =
+        //             DateUtil.parseTimeFromDate(attendances.reduce((latest, current) => {
+        //                 return current.checkOut > latest.checkOut ? current : latest;
+        //             }).checkOut);
+
+        //         lastCheckOut = lastCheckOut === 'Invalid DateTime' ? '-' : lastCheckOut;
+
+        //         const atts = attendances.map((a: any) => {
+        //             const checkIn = DateUtil.parseTimeFromDate(a.checkIn);
+        //             const checkOut = DateUtil.parseTimeFromDate(a.checkOut);
+        //             return `${checkIn === 'Invalid DateTime' ? '' : checkIn} - ${checkOut === 'Invalid DateTime' ? '' : checkOut}`;
+        //         }).join(' , \n');
+
+        //         let workTime = attendances.reduce((total, record) => {
+        //             const checkIn = DateUtil.fromJsDate(record.checkIn);
+        //             const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
+        //             const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
+
+        //             return total + (attendanceMinutes);
+        //         }, 0);
+
+        //         workTime = Math.floor(workTime);
+
+        //         const workHours = Math.floor(workTime / 60);
+        //         const workMinutes = workTime % 60;
+        //         const formattedWorkTime = `${workHours.toString().padStart(2, '0')}:${workMinutes.toString().padStart(2, '0')}`;
+
+        //         return {
+        //             userId: attendances?.[0]?.userId,
+        //             attendances: atts,
+        //             date,
+        //             shamsiDate: DateUtil.convertToJalaliWithDayOfWeek(date),
+        //             firstCheckIn,
+        //             lastCheckOut,
+        //             workTime: formattedWorkTime,
+        //         };
+        //     });
+
+        // return res
     }
 }

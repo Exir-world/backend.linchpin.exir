@@ -251,7 +251,7 @@ export class AttendanceService {
                     name: user.name,
                     lastname: user.lastname,
                     phoneNumber: user.phoneNumber,
-                    att: [a],
+                    att: a.attendances,
                 });
             }
             return acc;

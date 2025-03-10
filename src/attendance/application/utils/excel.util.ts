@@ -1,9 +1,34 @@
 import * as ExcelJS from 'exceljs';
 import { Response } from 'express';
 
+function sumTimes(timeStrings: string[]): string {
+    let totalMinutes = 0;
+
+    timeStrings.forEach(time => {
+        const [hours, minutes] = time.split(':').map(Number);
+        totalMinutes += hours * 60 + minutes;
+    });
+
+    // تبدیل مجموع دقیقه به HH:mm
+    const totalHours = Math.floor(totalMinutes / 60);
+    const remainingMinutes = totalMinutes % 60;
+
+    return `${String(totalHours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}`;
+}
+
 export async function generateExcel(res: Response, data: any[]): Promise<void> {
     // 1. ایجاد یک ورک‌بوک جدید
     const workbook = new ExcelJS.Workbook();
+
+    const worksheet = workbook.addWorksheet('خلاصه کارکرد');
+    worksheet.columns = [
+        { header: 'نام کاربر', key: 'lastname', width: 10 },
+        { header: 'مجموع کارکرد', key: 'workTimes', width: 20 },
+    ];
+
+    data.forEach(d => {
+        worksheet.addRow({ lastname: d.lastname, workTimes: sumTimes(d.att.map(a => a.workTime)) });
+    })
 
     for (let i = 0; i < data.length; i++) {
         const user = data[i];
@@ -40,6 +65,11 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
         user.att.forEach(d => {
             worksheet.addRow([d.shamsiDate, d.attendances, d.workTime, d.firstCheckIn, d.lastCheckOut]);
         });
+
+        const sumOfWorkTimes = sumTimes(user.att.map(d => d.workTime));
+
+        worksheet.addRow(['', '', `+ ${sumOfWorkTimes}`, '', '']);
+
 
         worksheet.columns.forEach(column => {
             column.width = 25; // مقدار عرض ثابت برای تمام ستون‌ها
