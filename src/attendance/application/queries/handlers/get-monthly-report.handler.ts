@@ -19,30 +19,30 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
         // const monthHours = dayHours * 24;
         const monthStarts = DateUtil.getStartOfPreviousMonths(query.monthAgo);
 
-        // const startTime = monthStarts[monthStarts.length - 1].startDate.toJSDate();
-        // const endTime = monthStarts[0].startDate.plus({ months: 1 }).toJSDate()
+        const startTime = monthStarts[monthStarts.length - 1].startDate.toJSDate();
+        const endTime = monthStarts[0].startDate.plus({ months: 1 }).toJSDate()
 
-        // const attendances = await this.attendanceRepo.filterByUserAndRange(query.userId, startTime, endTime);
+        const attendances = await this.attendanceRepo.filterByUserAndRange(query.userId, startTime, endTime);
         // const leaves = await this.leaveRepo.filterByUserAndRange(query.userId, startTime, endTime);
 
         let currentYear = true;
 
         // گروه‌بندی و محاسبه زمان کار
-        const workTimes = monthStarts.map((month, index) => {
+        const workTimes = monthStarts.map((month) => {
             if (!currentYear)
                 return undefined;
 
             const startOfMonth = month.startDate;
             const endOfMonth = month.startDate.plus({ months: 1 });
 
-            //     // فیلتر رکوردها برای این ماه
-            //     const monthRecords = attendances.filter(record => {
-            //         const recordDate = DateUtil.fromJsDate(record.checkIn);
-            //         return recordDate >= startOfMonth && recordDate < endOfMonth;
-            //     });
+            // فیلتر رکوردها برای این ماه
+            const monthRecords = attendances.filter(record => {
+                const recordDate = DateUtil.fromJsDate(record.checkIn);
+                return recordDate >= startOfMonth && recordDate < endOfMonth;
+            });
 
-            //     if (!monthRecords.length)
-            //         return undefined;
+            if (!monthRecords.length)
+                return undefined;
 
             //     // فیلتر مرخصی های این ماه
             //     const leavesMonthRecords = leaves.filter(record => {
