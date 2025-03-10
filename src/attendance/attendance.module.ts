@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AttendanceEntity } from './infrastructure/entities/attendance.entity';
 import { WorkReportEntity } from './infrastructure/entities/work-report.entity';
