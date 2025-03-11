@@ -20,11 +20,24 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/html/backend.linchpin.exir
-            git pull origin main
+            # Navigate to project directory
+            cd /var/www/html/backend.linchpin.exir || exit 1
+            
+            # Ensure the correct SSH key is used for Git
+            eval `ssh-agent -s`
+            ssh-add ~/.ssh/id_rsa
+            
+            # Pull latest code
+            git fetch origin main
+            git reset --hard origin/main
+            
+            # Install dependencies
             npm install
+            
+            # Build the project
             npm run build
-            pm2 stop all || true  # Stop any currently running processes
-            pm2 start dist/main.js --name "nestjs-app" # Start the backend app with pm2 (adjust the entry point if needed)
-            pm2 save  # Save the process list
-            pm2 startup # Ensure PM2 restarts on system boot        
+            
+            # Restart the NestJS app using PM2
+            pm2 restart nestjs-app || pm2 start dist/main.js --name "nestjs-app"
+            pm2 save
+            pm2 startup
