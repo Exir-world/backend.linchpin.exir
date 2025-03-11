@@ -21,20 +21,41 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
     const workbook = new ExcelJS.Workbook();
 
     const worksheet = workbook.addWorksheet('خلاصه کارکرد');
+    worksheet.views = [{ rightToLeft: true }];
     worksheet.columns = [
-        { header: 'نام کاربر', key: 'lastname', width: 10 },
-        { header: 'مجموع کارکرد', key: 'workTimes', width: 20 },
+        { header: 'نام کاربر', key: 'lastname', width: 25 },
+        { header: 'مجموع کارکرد', key: 'workTimes', width: 15 },
     ];
+
+    // تنظیم استایل هدرها
+    worksheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true };
+        cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+        };
+    });
 
     data.forEach(d => {
         worksheet.addRow({ lastname: d.lastname, workTimes: sumTimes(d.att.map(a => a.workTime)) });
     })
+
+    // تنظیم ارتفاع ردیف‌ها و تراز کردن سلول‌ها
+    worksheet.eachRow((row, rowNumber) => {
+        row.height = 20; // تنظیم ارتفاع ردیف
+        row.eachCell((cell, colNumber) => {
+            cell.alignment = { horizontal: 'center', vertical: 'middle' }; // تراز کردن سلول‌ها
+        });
+    });
 
     for (let i = 0; i < data.length; i++) {
         const user = data[i];
 
         // ایجاد شیت با نام کاربر
         const worksheet = workbook.addWorksheet(user.lastname);
+        worksheet.views = [{ rightToLeft: true }];
 
         // 🟢 1. تیتر جدول اول (اطلاعات کاربر)
         worksheet.getCell('A1').value = 'اطلاعات کاربر';
@@ -43,7 +64,16 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
         worksheet.mergeCells('A1:C1');
 
         // 🟢 2. هدرهای جدول اول
-        worksheet.addRow(['نام کاربر', 'نام مستعار', 'شماره همراه']).font = { bold: true };
+        const headerRow = worksheet.addRow(['نام کاربر', 'نام مستعار', 'شماره همراه']);
+        headerRow.font = { bold: true };
+        headerRow.eachCell((cell) => {
+            cell.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            };
+        });
 
         // 🟢 3. اضافه کردن داده‌های جدول اول
         worksheet.addRow([user.lastname, user.name, user.phoneNumber]);
@@ -58,8 +88,17 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
         worksheet.mergeCells(`A${gapRow}:E${gapRow}`);
 
         // 🟢 5. هدرهای جدول دوم
-        worksheet.getRow(gapRow + 1).values = ['تاریخ و روز', 'تردد ها', 'کارکرد', 'اولین ورود', 'آخرین خروج'];
-        worksheet.getRow(gapRow + 1).font = { bold: true };
+        const attendanceHeaderRow = worksheet.getRow(gapRow + 1);
+        attendanceHeaderRow.values = ['تاریخ و روز', 'تردد ها', 'کارکرد', 'اولین ورود', 'آخرین خروج'];
+        attendanceHeaderRow.font = { bold: true };
+        attendanceHeaderRow.eachCell((cell) => {
+            cell.border = {
+                top: { style: 'thin' },
+                left: { style: 'thin' },
+                bottom: { style: 'thin' },
+                right: { style: 'thin' },
+            };
+        });
 
         // 🟢 6. اضافه کردن داده‌های تردد
         user.att.forEach(d => {
@@ -73,6 +112,14 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
 
         worksheet.columns.forEach(column => {
             column.width = 25; // مقدار عرض ثابت برای تمام ستون‌ها
+        });
+
+        // تنظیم ارتفاع ردیف‌ها و تراز کردن سلول‌ها
+        worksheet.eachRow((row, rowNumber) => {
+            row.height = 20; // تنظیم ارتفاع ردیف
+            row.eachCell((cell, colNumber) => {
+                cell.alignment = { horizontal: 'center', vertical: 'middle' }; // تراز کردن سلول‌ها
+            });
         });
     }
 
