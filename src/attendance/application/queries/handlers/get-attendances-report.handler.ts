@@ -54,7 +54,7 @@ export class GetAttendancesReportHandler implements IQueryHandler<GetAttendances
                     shamsiDate: DateUtil.convertToJalaliWithDayOfWeek(date),
                     firstCheckIn,
                     lastCheckOut,
-                    workTime: Math.floor(workTime),
+                    workTime: Math.floor(workTime / 60),
                 };
             });
 

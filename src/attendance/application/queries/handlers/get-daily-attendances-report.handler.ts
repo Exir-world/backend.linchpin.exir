@@ -21,7 +21,6 @@ export class GetDailyAttendancesReportHandler implements IQueryHandler<GetDailyA
         endDate.setDate(endDate.getDate() + 1);
 
         const attendances = await this.attendanceRepo.filterByUserAndRange(userId, startDate, endDate, true);
-        console.log(startDate, endDate, attendances);
         const workMinutes = attendances.reduce((total, record) => {
             const checkIn = DateUtil.fromJsDate(record.checkIn);
             const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
@@ -43,8 +42,8 @@ export class GetDailyAttendancesReportHandler implements IQueryHandler<GetDailyA
 
         return {
             title,
-            attendanceMinutes: Math.floor(workMinutes),
-            workMinutes: Math.floor(workMinutes),
+            attendanceMinutes: Math.floor(workMinutes / 60),
+            workMinutes: Math.floor(workMinutes / 60),
             attendances: attendances.map(attendance => ({
                 checkIn: attendance.checkIn,
                 checkOut: attendance.checkOut,
