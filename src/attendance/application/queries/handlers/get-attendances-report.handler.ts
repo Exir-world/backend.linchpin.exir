@@ -21,42 +21,42 @@ export class GetAttendancesReportHandler implements IQueryHandler<GetAttendances
         const groupedAttendances = Object.entries(attendances.reduce((acc, attendance) => {
             const date = DateUtil.fromJsDate(attendance.checkIn).toISODate();
             if (!acc[date]) {
-            acc[date] = [];
+                acc[date] = [];
             }
             acc[date].push(attendance);
             return acc;
-        }, {})) 
-        .map(([date, attendances]: any) => {
-            const firstCheckIn = attendances.reduce((earliest, current) => {
-            return current.checkIn < earliest.checkIn ? current : earliest;
-            }).checkIn;
+        }, {}))
+            .map(([date, attendances]: any) => {
+                const firstCheckIn = attendances.reduce((earliest, current) => {
+                    return current.checkIn < earliest.checkIn ? current : earliest;
+                }).checkIn;
 
-            const lastCheckOut = attendances.reduce((latest, current) => {
-            return current.checkOut > latest.checkOut ? current : latest;
-            }).checkOut;
+                const lastCheckOut = attendances.reduce((latest, current) => {
+                    return current.checkOut > latest.checkOut ? current : latest;
+                }).checkOut;
 
-            const workTime = attendances.reduce((total, record) => {
-            const checkIn = DateUtil.fromJsDate(record.checkIn);
-            const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
-            const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
+                const workTime = attendances.reduce((total, record) => {
+                    const checkIn = DateUtil.fromJsDate(record.checkIn);
+                    const checkOut = record.checkOut ? DateUtil.fromJsDate(record.checkOut) : checkIn;
+                    const attendanceMinutes = checkOut.diff(checkIn, 'minutes').minutes;
 
-            const stopsMinutes = record.stops.reduce((stopTotal, stop) => {
-                const stopStart = DateUtil.fromJsDate(stop.startTime);
-                const stopEnd = stop.endTime ? DateUtil.fromJsDate(stop.endTime) : stopStart;
-                return stopTotal + stopEnd.diff(stopStart, 'minutes').minutes;
-            }, 0);
+                    const stopsMinutes = record.stops.reduce((stopTotal, stop) => {
+                        const stopStart = DateUtil.fromJsDate(stop.startTime);
+                        const stopEnd = stop.endTime ? DateUtil.fromJsDate(stop.endTime) : stopStart;
+                        return stopTotal + stopEnd.diff(stopStart, 'minutes').minutes;
+                    }, 0);
 
-            return total + (attendanceMinutes - stopsMinutes);
-            }, 0);
+                    return total + (attendanceMinutes - stopsMinutes);
+                }, 0);
 
-            return {
-                date,
-                shamsiDate: DateUtil.convertToJalaliWithDayOfWeek(date),
-                firstCheckIn,
-                lastCheckOut,
-                workTime: Math.floor(workTime),
-            };
-        });
+                return {
+                    date,
+                    shamsiDate: DateUtil.convertToJalaliWithDayOfWeek(date),
+                    firstCheckIn,
+                    lastCheckOut,
+                    workTime: Math.floor(workTime),
+                };
+            });
 
         const title = `گزارش عملکرد ${DateUtil.convertToJalaliWithMonthName(startDate)}`;
 
@@ -94,12 +94,12 @@ export class GetAttendancesReportHandler implements IQueryHandler<GetAttendances
 
         return {
             title,
-            attendanceMinutes: Math.floor(workMinutes),
-            workMinutes: Math.floor(workMinutes),
-            overDuration: Math.floor(Math.max(workMinutes - 480, 0)),
-            lessDuration: Math.floor(Math.max(480 - workMinutes, 0)),
-            leaveWithPayrollDuration: leavesDuration.days * 24 * 60 + leavesDuration.minutes,
-            leaveWithoutPayrollDuration: leavesDuration.days * 24 * 60 + leavesDuration.minutes,
+            attendanceMinutes: Math.floor(workMinutes / 60),
+            workMinutes: Math.floor(workMinutes / 60),
+            overDuration: Math.floor(Math.max(workMinutes - 480, 0) / 60),
+            lessDuration: Math.floor(Math.max(480 - workMinutes, 0) / 60),
+            leaveWithPayrollDuration: Math.floor((leavesDuration.days * 24 * 60 + leavesDuration.minutes) / 60),
+            leaveWithoutPayrollDuration: Math.floor((leavesDuration.days * 24 * 60 + leavesDuration.minutes) / 60),
             attendances: groupedAttendances,
         };
     }
