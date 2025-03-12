@@ -42,8 +42,8 @@ export class GetDailyAttendancesReportHandler implements IQueryHandler<GetDailyA
 
         return {
             title,
-            attendanceMinutes: Math.floor(workMinutes / 60),
-            workMinutes: Math.floor(workMinutes / 60),
+            attendanceMinutes: Math.floor(workMinutes),
+            workMinutes: Math.floor(workMinutes),
             attendances: attendances.map(attendance => ({
                 checkIn: attendance.checkIn,
                 checkOut: attendance.checkOut,
