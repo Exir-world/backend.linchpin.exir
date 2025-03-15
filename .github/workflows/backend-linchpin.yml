@@ -20,11 +20,22 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/html/backend.linchpin.exir || exit 1
+            # Create the .ssh directory if it doesn't exist
+            mkdir -p ~/.ssh
 
-            # Ensure SSH key is used for Git
-            eval `ssh-agent -s`
+            # Add the private SSH key to the SSH agent
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+
+            # Add GitHub's SSH host key to known_hosts to prevent the "Host key verification failed" error
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+            # Ensure SSH agent is running and add the private key
+            eval $(ssh-agent -s)
             ssh-add ~/.ssh/id_rsa
+
+            # Test SSH connection to GitHub (debugging step)
+            ssh -vT git@github.com
 
             # Change Git remote URL from HTTPS to SSH
             git remote set-url origin git@github.com:Exir-world/backend.linchpin.exir.git
