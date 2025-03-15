@@ -41,4 +41,3 @@ jobs:
             pm2 restart nestjs-app || pm2 start dist/main.js --name "backend-linchpin"
             pm2 save
             pm2 startup
-
