@@ -38,7 +38,7 @@ jobs:
             npm run build
 
             # Restart the NestJS app using PM2
-            pm2 restart nestjs-app || pm2 start dist/main.js --name "nestjs-app"
+            pm2 restart nestjs-app || pm2 start dist/main.js --name "backend-linchpin"
             pm2 save
             pm2 startup
 
