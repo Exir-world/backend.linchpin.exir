@@ -54,6 +54,7 @@ async function bootstrap() {
       'https://7694-31-25-92-200.ngrok-free.app',
       'http://127.0.0.1:40410',
       'http://localhost:51664',
+      'https://exirtu.be',
     ], // Replace with your frontend origin
     // origin: [/\.ex\.pro$/],
     credentials: true, // Allow cookies to be sent

@@ -39,24 +39,24 @@ export class Payslip {
 
     // --- مبالغ ---
 
-    @Column({ type: 'numeric', precision: 12, scale: 2, default: 0 })
+    @Column({ type: 'numeric', precision: 12, scale: 0, default: 0 })
     baseSalary: number; // حقوق پایه
 
-    @Column({ type: 'numeric', precision: 12, scale: 2, default: 0 })
+    @Column({ type: 'numeric', precision: 12, scale: 0, default: 0 })
     seniorityPay: number; // پایه سنوات
 
-    @Column({ type: 'numeric', precision: 12, scale: 2, default: 0 })
+    @Column({ type: 'numeric', precision: 12, scale: 0, default: 0 })
     overtimePay: number; // اضافه کار
 
-    @Column({ type: 'numeric', precision: 12, scale: 2, default: 0 })
+    @Column({ type: 'numeric', precision: 12, scale: 0, default: 0 })
     insuranceFee: number; // حق بیمه
 
-    @Column({ type: 'numeric', precision: 12, scale: 2, default: 0 })
+    @Column({ type: 'numeric', precision: 12, scale: 0, default: 0 })
     bonus: number; // عیدی
 
-    @Column({ type: 'numeric', precision: 12, scale: 2, default: 0 })
+    @Column({ type: 'numeric', precision: 12, scale: 0, default: 0 })
     totalAmount: number; // جمع کل
 
-    @Column({ type: 'numeric', precision: 12, scale: 2, default: 0 })
+    @Column({ type: 'numeric', precision: 12, scale: 0, default: 0 })
     netPayable: number; // خالص دریافتی
 }
