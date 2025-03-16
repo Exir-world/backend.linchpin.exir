@@ -60,7 +60,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, '..', 'static', 'images'),
-      serveRoot: '/cdn/images', // URL prefix (e.g., http://localhost:3000/images)
+      serveRoot: '/cdn/images', // URL prefix (e.g., http://localhost:3000/image   s)
     }),
 
     // Modules
