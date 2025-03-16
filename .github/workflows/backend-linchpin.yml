@@ -23,7 +23,7 @@ jobs:
             cd /var/www/html/backend.linchpin.exir || exit 1
 
             # Ensure SSH key is used for Git
-            eval `ssh-agent -s`
+            eval ssh-agent -s
             ssh-add ~/.ssh/id_rsa
 
             # Change Git remote URL from HTTPS to SSH
@@ -38,7 +38,6 @@ jobs:
             npm run build
 
             # Restart the NestJS app using PM2
-            pm2 restart nestjs-app || pm2 start dist/main.js --name "nestjs-app"
+            pm2 restart backend-linchpin || pm2 start dist/main.js --name "backend-linchpin"
             pm2 save
             pm2 startup
-
