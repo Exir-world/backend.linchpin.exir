@@ -55,6 +55,7 @@ async function bootstrap() {
       'http://127.0.0.1:40410',
       'http://localhost:51664',
       'https://exirtu.be',
+      'https://cdn.exirtu.be',
     ], // Replace with your frontend origin
     // origin: [/\.ex\.pro$/],
     credentials: true, // Allow cookies to be sent
