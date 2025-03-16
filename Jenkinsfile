@@ -5,7 +5,7 @@ pipeline {
         // Define environment variable for the GitLab PAT, using Jenkins credentials binding
         GITLAB_NPM_TOKEN = credentials('gitlab-npm-token-id')
         SONARQUBE_TOKEN = credentials('sonar-liyan-order')
-        DOCKER_REGISTRY_URL = 'docker.sharifexchange.net'
+        DOCKER_REGISTRY_URL = 'docker.exirtu.be'
         DOCKER_REGISTRY_CREDENTIALS_ID = credentials('docker_registry_user_pass')
         IMAGE_NAME = 'backend.linchpin.ex.pro'
         IMAGE_TAG =  "${env.BUILD_NUMBER}" //'latest' // or use ${env.BUILD_NUMBER} for dynamic tagging
@@ -91,7 +91,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker_registry_user_pass', passwordVariable: 'DOCKER_REGISTRY_PASS', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
                         sh 'echo $DOCKER_REGISTRY_PASS | docker login -u $DOCKER_REGISTRY_USER --password-stdin docker.sharifexchange.net'
                     }
-                    docker.withRegistry("http://$DOCKER_REGISTRY_URL", 'docker_registry_user_pass') 
+                    docker.withRegistry("https://docker.exirtu.be", 'docker_registry_user_pass') 
                     {
                         // Build the Docker image
                         // def customImage = docker.build("$IMAGE_NAME:$IMAGE_TAG", "-f Dockerfile .")
