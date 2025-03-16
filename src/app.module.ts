@@ -16,6 +16,7 @@ import { UserEmploymentSettingsModule } from './user-employment-settings/user-em
 import * as path from 'path';
 import { UserSelfImprovementModule } from './user-self-improvement/user-self-improvement.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 
 @Module({
@@ -55,6 +56,11 @@ import { NotificationsModule } from './notifications/notifications.module';
         new HeaderResolver(['x-lang']),
       ],
       inject: [ConfigService],
+    }),
+
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'static', 'images'),
+      serveRoot: '/cdn/images', // URL prefix (e.g., http://localhost:3000/images)
     }),
 
     // Modules
