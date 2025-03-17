@@ -7,6 +7,17 @@ pipeline {
     }
 
     stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    // Use the SSH key stored in Jenkins credentials to access GitHub repository
+                    withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                        sh 'git clone git@github.com:Exir-world/backend.linchpin.exir.git'
+                    }
+                }
+            }
+        }
+
         stage('Get Latest Image Tag') {
             steps {
                 script {
@@ -18,7 +29,11 @@ pipeline {
                     if (latestTag == "null" || latestTag == "") {
                         latestTag = "1" // Start from 1 if no tags exist
                     } else {
-                        latestTag = (latestTag.toInteger() + 1).toString() // Increment by 1
+                        try {
+                            latestTag = (latestTag.toInteger() + 1).toString() // Increment by 1
+                        } catch (Exception e) {
+                            latestTag = "1" // Default to 1 if there's a NumberFormatException
+                        }
                     }
 
                     env.IMAGE_TAG = latestTag
@@ -60,25 +75,14 @@ pipeline {
         success {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
-                sendTelegramMessage(message)
+                echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
         }
         failure {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
-                sendTelegramMessage(message)
+                echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
         }
-    }
-}
-
-def sendTelegramMessage(message) {
-    withCredentials([string(credentialsId: 'exir_telegram_bot_key', variable: 'TELEGRAM_TOKEN'),
-                     string(credentialsId: 'EXIR_TELEGRAM_CHANNEL_REPORT_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')]) {
-        sh """
-        curl -s -X POST https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage -d chat_id=${TELEGRAM_CHAT_ID} -d text="${message}"
-        """
     }
 }
