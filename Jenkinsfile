@@ -1,14 +1,30 @@
-pipeline { 
+pipeline {
     agent any
 
     environment {
-        // Environment Variables
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
         IMAGE_NAME = 'backend.linchpin.ex.pro'
-        IMAGE_TAG = "${env.BUILD_NUMBER}" // Use build number for versioning
     }
-    
+
     stages {
+        stage('Get Latest Image Tag') {
+            steps {
+                script {
+                    def latestTag = sh(
+                        script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list | jq -r '.tags | sort | last'",
+                        returnStdout: true
+                    ).trim()
+
+                    if (latestTag == "null" || latestTag == "") {
+                        latestTag = "1" // Start from 1 if no tags exist
+                    } else {
+                        latestTag = (latestTag.toInteger() + 1).toString() // Increment by 1
+                    }
+
+                    env.IMAGE_TAG = latestTag
+                }
+            }
+        }
 
         stage('Install Dependencies') {
             steps {
@@ -33,7 +49,7 @@ pipeline {
 
                     docker.withRegistry("https://${DOCKER_REGISTRY_URL}", 'docker_registry_user_pass') {
                         customImage.push()
-                        customImage.push("latest")
+                        customImage.push("latest") // Also push 'latest' tag
                     }
                 }
             }
@@ -44,14 +60,14 @@ pipeline {
         success {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.BUILD_NUMBER}\nLast Commit: ${lastCommitMessage}"
+                def message = "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
                 sendTelegramMessage(message)
             }
         }
         failure {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.BUILD_NUMBER}\nLast Commit: ${lastCommitMessage}"
+                def message = "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
                 sendTelegramMessage(message)
             }
         }
