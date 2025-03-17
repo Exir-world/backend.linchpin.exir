@@ -71,12 +71,12 @@ pipeline {
                     def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
 
                     // Login to Docker registry
-                    withCredentials([usernamePassword(credentialsId: 'docker_registry_user_pass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'DOCKER_REGISTRY_CREDENTIALS_ID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin ${DOCKER_REGISTRY_URL}'
                     }
 
                     // Push Docker image to the registry
-                    docker.withRegistry("https://${DOCKER_REGISTRY_URL}", 'docker_registry_user_pass') {
+                    docker.withRegistry("https://${DOCKER_REGISTRY_URL}", 'DOCKER_REGISTRY_CREDENTIALS_ID') {
                         customImage.push()
                         customImage.push("latest") // Also push 'latest' tag
                     }
