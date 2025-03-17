@@ -4,14 +4,24 @@ pipeline {
     environment {
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
         IMAGE_NAME = 'backend.linchpin.ex.pro'
+        GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
                 script {
-                    withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                        sh 'git clone git@github.com:Exir-world/backend.linchpin.exir.git'
+                    // Check if the repository is already cloned in the workspace
+                    if (!fileExists('backend.linchpin.exir/.git')) {
+                        // Clone the repo if not already cloned
+                        withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY')]) {
+                            sh 'git clone git@github.com:Exir-world/backend.linchpin.exir.git'
+                        }
+                    } else {
+                        // Pull the latest changes if the repo already exists
+                        dir('backend.linchpin.exir') {
+                            sh 'git pull origin main'
+                        }
                     }
                 }
             }
