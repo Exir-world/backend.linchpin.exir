@@ -10,7 +10,6 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 script {
-                    // Use the SSH key stored in Jenkins credentials to access GitHub repository
                     withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         sh 'git clone git@github.com:Exir-world/backend.linchpin.exir.git'
                     }
@@ -21,11 +20,13 @@ pipeline {
         stage('Get Latest Image Tag') {
             steps {
                 script {
+                    // Fetch the latest image tag from Docker registry
                     def latestTag = sh(
                         script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list | jq -r '.tags | sort | last'",
                         returnStdout: true
                     ).trim()
 
+                    // Set to "1" if no tag exists or handle NumberFormatException
                     if (latestTag == "null" || latestTag == "") {
                         latestTag = "1" // Start from 1 if no tags exist
                     } else {
@@ -56,12 +57,15 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
+                    // Build Docker image
                     def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
 
+                    // Login to Docker registry
                     withCredentials([usernamePassword(credentialsId: 'docker_registry_user_pass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin ${DOCKER_REGISTRY_URL}'
                     }
 
+                    // Push Docker image to the registry
                     docker.withRegistry("https://${DOCKER_REGISTRY_URL}", 'docker_registry_user_pass') {
                         customImage.push()
                         customImage.push("latest") // Also push 'latest' tag
@@ -74,12 +78,14 @@ pipeline {
     post {
         success {
             script {
+                // Print success message and last commit
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                 echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
         }
         failure {
             script {
+                // Print failure message and last commit
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                 echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
