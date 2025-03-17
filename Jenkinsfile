@@ -10,20 +10,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                script {
-                    // Check if the repository is already cloned in the workspace
-                    if (!fileExists('backend.linchpin.exir/.git')) {
-                        // Clone the repo if not already cloned
-                        withCredentials([sshUserPrivateKey(credentialsId: 'github-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                            sh 'git clone git@github.com:Exir-world/backend.linchpin.exir.git'
-                        }
-                    } else {
-                        // Pull the latest changes if the repo already exists
-                        dir('backend.linchpin.exir') {
-                            sh 'git pull origin main'
-                        }
-                    }
-                }
+                checkout scm // Automatically checks out the code from the repo
             }
         }
 
@@ -54,13 +41,13 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install'  // Install Node.js dependencies
             }
         }
 
         stage('Build/Test') {
             steps {
-                sh 'npm run build'
+                sh 'npm run build'  // Build the project
             }
         }
 
