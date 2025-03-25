@@ -17,24 +17,24 @@ pipeline {
         stage('Get Latest Image Tag') {
             steps {
                 script {
-                    // Fetch the latest image tag from Docker registry
-                    def latestTag = sh(
-                        script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list | jq -r '.tags | sort | last'",
+                    def tagsJson = sh(
+                        script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list",
                         returnStdout: true
                     ).trim()
-
-                    // Set to "1" if no tag exists or handle NumberFormatException
-                    if (latestTag == "null" || latestTag == "") {
-                        latestTag = "1" // Start from 1 if no tags exist
-                    } else {
-                        try {
-                            latestTag = (latestTag.toInteger() + 1).toString() // Increment by 1
-                        } catch (Exception e) {
-                            latestTag = "1" // Default to 1 if there's a NumberFormatException
+        
+                    def latestTag = "1"
+                    try {
+                        def tags = readJSON text: tagsJson
+                        def numericTags = tags.tags.findAll { it ==~ /^\d+$/ }*.toInteger().sort()
+                        if (numericTags && numericTags.size() > 0) {
+                            latestTag = (numericTags[-1] + 1).toString()
                         }
+                    } catch (Exception e) {
+                        echo "⚠️ Failed to parse tags. Defaulting to tag 1. Error: ${e.message}"
                     }
-
+        
                     env.IMAGE_TAG = latestTag
+                    echo "🚀 Using image tag: ${env.IMAGE_TAG}"
                 }
             }
         }
