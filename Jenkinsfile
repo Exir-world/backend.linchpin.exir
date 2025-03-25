@@ -25,7 +25,15 @@ pipeline {
                     def latestTag = "1"
                     try {
                         def tags = readJSON text: tagsJson
-                        def numericTags = tags.tags.findAll { it ==~ /^\d+$/ }*.toInteger().sort()
+                        def numericTags = []
+        
+                        for (tag in tags.tags) {
+                            if (tag ==~ /^\d+$/) {
+                                numericTags << tag.toInteger()
+                            }
+                        }
+        
+                        numericTags.sort()
                         if (numericTags && numericTags.size() > 0) {
                             latestTag = (numericTags[-1] + 1).toString()
                         }
