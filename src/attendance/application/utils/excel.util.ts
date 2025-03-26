@@ -25,6 +25,7 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
     worksheet.columns = [
         { header: 'نام کاربر', key: 'lastname', width: 25 },
         { header: 'مجموع کارکرد', key: 'workTimes', width: 15 },
+        { header: 'تعداد روز های کارکرد', key: 'workDays', width: 15 },
     ];
 
     // تنظیم استایل هدرها
@@ -39,7 +40,11 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
     });
 
     data.forEach(d => {
-        worksheet.addRow({ lastname: d.lastname, workTimes: sumTimes(d.att.map(a => a.workTime)) });
+        worksheet.addRow({
+            lastname: d.lastname,
+            workTimes: sumTimes(d.att.map(a => a.workTime)),
+            workDays: d.att.filter(a => a.workTime != '00:00').length,
+        });
     })
 
     // تنظیم ارتفاع ردیف‌ها و تراز کردن سلول‌ها

@@ -8,6 +8,20 @@
         "walk": "Walking",
         "education": "Language and Excel training",
         "discipline": "Organizational discipline",
-        "social": "Activity on social networks"
+        "social": "Activity on social networks",
+        "linguistic": "Linguistic Intelligence",
+        "logical": "Logical-Mathematical Intelligence",
+        "spatial": "Spatial Intelligence",
+        "musical": "Musical Intelligence",
+        "bodily": "Bodily-Kinesthetic Intelligence",
+        "interpersonal": "Interpersonal Intelligence",
+        "intrapersonal": "Intrapersonal Intelligence",
+        "naturalistic": "Naturalistic Intelligence",
+        "abiding": "Abiding Intelligence",
+        "porn": "Porn",
+        "racism": "Racism",
+        "gambling": "Gambling",
+        "harassment": "Harassment",
+        "politics": "Politics"
     }
 }

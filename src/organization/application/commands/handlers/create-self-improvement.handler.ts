@@ -31,7 +31,8 @@ export class CreateSelfImprovementHandler implements ICommandHandler<CreateSelfI
         const itemEntities = items.map(item => {
             const newItem = new SelfImprovementItemEntity();
             newItem.title = item.title;
-            newItem.score = item.score;
+            newItem.type = item.type;
+            // newItem.score = item.score;
             newItem.image = item.image;
             newItem.color = item.color;
             newItem.selfImprovement = savedSelfImprovement;
