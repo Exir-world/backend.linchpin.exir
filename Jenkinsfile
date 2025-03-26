@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     def tagsJson = sh(
-                        script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list",
+                        script: "curl -s -X GET https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/tags/list",
                         returnStdout: true
                     ).trim()
 
@@ -52,7 +52,7 @@ pipeline {
                 script {
                     // Remove old image tag if it exists
                     sh """
-                        curl -s -X DELETE https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/manifests/$(curl -s https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/manifests/${env.IMAGE_TAG} | jq -r .config.digest)
+                        curl -s -X DELETE https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\$(curl -s https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\${env.IMAGE_TAG} | jq -r .config.digest)
                     """
                 }
             }
@@ -61,13 +61,13 @@ pipeline {
         stage('Docker Build & Push') {
             steps {
                 script {
-                    def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
+                    def customImage = docker.build("\${IMAGE_NAME}:\${IMAGE_TAG}", "-f Dockerfile .")
 
                     withCredentials([usernamePassword(credentialsId: 'DOCKER_REGISTRY_CREDENTIALS_ID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin ${DOCKER_REGISTRY_URL}'
+                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin \${DOCKER_REGISTRY_URL}'
                     }
 
-                    docker.withRegistry("https://${DOCKER_REGISTRY_URL}", 'DOCKER_REGISTRY_CREDENTIALS_ID') {
+                    docker.withRegistry("https://\${DOCKER_REGISTRY_URL}", 'DOCKER_REGISTRY_CREDENTIALS_ID') {
                         customImage.push()
                         customImage.push("latest")
                     }
@@ -80,13 +80,13 @@ pipeline {
         success {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
+                echo "✅ Pipeline \${env.JOB_NAME} succeeded!\nVersion: \${env.IMAGE_TAG}\nLast Commit: \${lastCommitMessage}"
             }
         }
         failure {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
+                echo "❌ Pipeline \${env.JOB_NAME} failed!\nVersion: \${env.IMAGE_TAG}\nLast Commit: \${lastCommitMessage}"
             }
         }
     }
