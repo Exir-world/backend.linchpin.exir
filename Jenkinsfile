@@ -49,12 +49,14 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                sh 'rm -rf node_modules'  // Remove old node_module
                 sh 'npm install'  // Install Node.js dependencies
             }
         }
 
         stage('Build/Test') {
             steps {
+                sh 'npx tsc'  // Manually compile TypeScript to see if it works in Jenkin
                 sh 'npm run build'  // Build the project
             }
         }
