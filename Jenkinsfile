@@ -38,7 +38,7 @@ pipeline {
                             latestTag = (numericTags[-1] + 1).toString()
                         }
                     } catch (Exception e) {
-                        echo "⚠️ Failed to parse tags. Defaulting to tag 1. Error: ${e.message}"
+                        echo "Failed to parse tags. Defaulting to tag 1. Error: ${e.message}"
                     }
 
                     env.IMAGE_TAG = latestTag
