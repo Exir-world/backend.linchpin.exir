@@ -49,6 +49,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+                sh 'printenv'  // Print environment variables
                 sh 'rm -rf node_modules'  // Remove old node_module
                 sh 'npm install'  // Install Node.js dependencies
             }
