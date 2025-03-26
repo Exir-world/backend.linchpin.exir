@@ -3,14 +3,14 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
-        IMAGE_NAME = 'backend-linchpin-exir' // Adjusted name format to fit Docker's requirement
+        IMAGE_NAME = 'backend.linchpin.exir'
         GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                checkout scm
+                checkout scm // Automatically checks out the code from the repo
             }
         }
 
@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     def tagsJson = sh(
-                        script: "curl -s -X GET https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/tags/list",
+                        script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list",
                         returnStdout: true
                     ).trim()
 
@@ -38,7 +38,7 @@ pipeline {
                             latestTag = (numericTags[-1] + 1).toString()
                         }
                     } catch (Exception e) {
-                        echo "Failed to parse tags. Defaulting to tag 1. Error: ${e.message}"
+                        echo "⚠️ Failed to parse tags. Defaulting to tag 1. Error: ${e.message}"
                     }
 
                     env.IMAGE_TAG = latestTag
@@ -46,17 +46,29 @@ pipeline {
                 }
             }
         }
-        
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'  // Install Node.js dependencies
+            }
+        }
+
+        stage('Build/Test') {
+            steps {
+                sh 'npm run build'  // Build the project
+            }
+        }
+
         stage('Docker Build & Push') {
             steps {
                 script {
-                    def customImage = docker.build("\${IMAGE_NAME}:\${IMAGE_TAG}", "-f Dockerfile .")
+                    def customImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}", "-f Dockerfile .")
 
                     withCredentials([usernamePassword(credentialsId: 'DOCKER_REGISTRY_CREDENTIALS_ID', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin \${DOCKER_REGISTRY_URL}'
+                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin ${DOCKER_REGISTRY_URL}'
                     }
 
-                    docker.withRegistry("https://\${DOCKER_REGISTRY_URL}", 'DOCKER_REGISTRY_CREDENTIALS_ID') {
+                    docker.withRegistry("https://${DOCKER_REGISTRY_URL}", 'DOCKER_REGISTRY_CREDENTIALS_ID') {
                         customImage.push()
                         customImage.push("latest")
                     }
@@ -69,13 +81,13 @@ pipeline {
         success {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "✅ Pipeline \${env.JOB_NAME} succeeded!\nVersion: \${env.IMAGE_TAG}\nLast Commit: \${lastCommitMessage}"
+                echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
         }
         failure {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "❌ Pipeline \${env.JOB_NAME} failed!\nVersion: \${env.IMAGE_TAG}\nLast Commit: \${lastCommitMessage}"
+                echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
         }
     }
