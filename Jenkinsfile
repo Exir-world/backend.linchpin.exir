@@ -3,14 +3,14 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
-        IMAGE_NAME = 'backend.linchpin.exir'
+        IMAGE_NAME = 'backend-linchpin-exir' // Adjusted name format to fit Docker's requirement
         GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                checkout scm // Automatically checks out the code from the repo
+                checkout scm
             }
         }
 
@@ -50,9 +50,17 @@ pipeline {
         stage('Remove Old Image') {
             steps {
                 script {
+                    // Ensure jq is installed on Jenkins agent
+                    sh 'apt-get update && apt-get install -y jq'
+
+                    def imageDigest = sh(
+                        script: "curl -s https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\${env.IMAGE_TAG} | jq -r .config.digest",
+                        returnStdout: true
+                    ).trim()
+
                     // Remove old image tag if it exists
                     sh """
-                        curl -s -X DELETE https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\$(curl -s https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\${env.IMAGE_TAG} | jq -r .config.digest)
+                        curl -s -X DELETE https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\${imageDigest}
                     """
                 }
             }
