@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
-        IMAGE_NAME = 'backend.linchpin.ex.pro'
+        IMAGE_NAME = 'backend.linchpin.exir'
         GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
     }
 
@@ -46,7 +46,18 @@ pipeline {
                 }
             }
         }
-        
+
+        stage('Remove Old Image') {
+            steps {
+                script {
+                    // Remove old image tag if it exists
+                    sh """
+                        curl -s -X DELETE https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/manifests/$(curl -s https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/manifests/${env.IMAGE_TAG} | jq -r .config.digest)
+                    """
+                }
+            }
+        }
+
         stage('Docker Build & Push') {
             steps {
                 script {
