@@ -8,9 +8,11 @@ export class SelfImprovementItemMapper {
         return new SelfImprovementItem(
             entity.id,
             entity.title,
-            entity.score,
+            entity.type,
+            // entity.score,
             entity.image,
             entity.color,
+            entity.subItems
         );
     }
 
@@ -19,7 +21,8 @@ export class SelfImprovementItemMapper {
         const entity = new SelfImprovementItemEntity();
         entity.id = domain.id;
         entity.title = domain.title;
-        entity.score = domain.score;
+        entity.type = domain.type;
+        // entity.score = domain.score;
         entity.image = domain.image;
         entity.color = domain.color;
         return entity;

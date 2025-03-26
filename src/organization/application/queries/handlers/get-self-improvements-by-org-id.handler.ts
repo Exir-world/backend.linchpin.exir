@@ -14,7 +14,7 @@ export class GetSelfImprovementByOrgIdHandler implements IQueryHandler<GetSelfIm
     async execute(query: GetSelfImprovementsByOrgIdQuery): Promise<any> {
         const organizationId = query.orgId;
 
-        const imps = await this.repository.find({ where: { organizationId }, relations: ['items'] });
+        const imps = await this.repository.find({ where: { organizationId }, relations: ['items', 'items.subItems'] });
         return SelfImprovementMapper.toDomainList(imps);
     }
 }

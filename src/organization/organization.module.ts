@@ -13,10 +13,18 @@ import { CreateSelfImprovementHandler } from './application/commands/handlers/cr
 import { GetSelfImprovementByOrgIdHandler } from './application/queries/handlers/get-self-improvements-by-org-id.handler';
 import { GetLocationByOrgIdHandler } from './application/queries/handlers/get-location-by-org-id.handler';
 import { LocationEntity } from './infrastructure/entities/location.entity';
+import { SelfImprovementSubItemEntity } from './infrastructure/entities/self-improvement-subitem.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([OrganizationEntity, TeamEntity, SelfImprovementEntity, SelfImprovementItemEntity, LocationEntity]),
+        TypeOrmModule.forFeature([
+            OrganizationEntity,
+            TeamEntity,
+            SelfImprovementEntity,
+            SelfImprovementItemEntity,
+            LocationEntity,
+            SelfImprovementSubItemEntity,
+        ]),
         CqrsModule,
         forwardRef(() => AuthModule),
     ],

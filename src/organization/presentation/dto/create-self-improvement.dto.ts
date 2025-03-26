@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsNumber, IsString, ValidateNested, IsArray, Min } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsNumber, IsString, ValidateNested, IsArray, Min, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
+import { SelfImprovementItemTypeEnum } from 'src/organization/domain/enums/self-improvement-item-type.enum';
 
 class CreateSelfImprovementItemDto {
     @ApiProperty({ example: "Read a book", description: "Title of the improvement item" })
@@ -8,10 +9,15 @@ class CreateSelfImprovementItemDto {
     @IsNotEmpty()
     title: string;
 
-    @ApiProperty({ example: 10, description: "Score for the improvement item" })
-    @IsNumber()
-    @Min(0)
-    score: number;
+    @ApiProperty({ example: SelfImprovementItemTypeEnum.IMPROVMENT, description: "Type of the improvement item", enum: SelfImprovementItemTypeEnum })
+    @IsEnum(SelfImprovementItemTypeEnum)
+    @IsNotEmpty()
+    type: SelfImprovementItemTypeEnum;
+
+    // @ApiProperty({ example: 10, description: "Score for the improvement item" })
+    // @IsNumber()
+    // @Min(0)
+    // score: number;
 
     @ApiProperty({ example: "https://...", description: "Image of the improvement item" })
     @IsString()
