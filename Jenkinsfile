@@ -46,26 +46,7 @@ pipeline {
                 }
             }
         }
-
-        stage('Remove Old Image') {
-            steps {
-                script {
-                    // Ensure jq is installed on Jenkins agent
-                    sh 'apt-get update && apt-get install -y jq'
-
-                    def imageDigest = sh(
-                        script: "curl -s https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\${env.IMAGE_TAG} | jq -r .config.digest",
-                        returnStdout: true
-                    ).trim()
-
-                    // Remove old image tag if it exists
-                    sh """
-                        curl -s -X DELETE https://\${DOCKER_REGISTRY_URL}/v2/\${IMAGE_NAME}/manifests/\${imageDigest}
-                    """
-                }
-            }
-        }
-
+        
         stage('Docker Build & Push') {
             steps {
                 script {
