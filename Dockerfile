@@ -16,7 +16,7 @@ RUN npm ci
 
 COPY --chown=node:node . .
 COPY --chown=node:node .env .
-RUN npm run build \
+RUN npm run build -- --force \
     && npm prune --production
 
 # ---
