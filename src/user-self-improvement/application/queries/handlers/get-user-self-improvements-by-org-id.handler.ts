@@ -39,17 +39,25 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
         const items = imps[0].items
             .map(item => ({
                 id: item.type === SelfImprovementItemTypeEnum.INTELLIGENSE
-                    ? String(item.id) : String(item.subItems?.[0]?.id),
+                    ? item.id : item.subItems?.[0]?.id,
                 title: this.i18n.t(item.title),
-                type: String(item.type),
+                type: item.type,
                 image: item.image,
                 color: item.color,
                 date: item.type === SelfImprovementItemTypeEnum.INTELLIGENSE
-                    ? undefined : userImps.find(userImp => String(userImp.improvementId) === String(item.subItems?.[0]?.id))?.date,
+                    ? undefined : userImps.find(userImp => userImp.improvementId === item.subItems?.[0]?.id)?.date,
                 done: item.type === SelfImprovementItemTypeEnum.INTELLIGENSE
-                    ? undefined : (userImps.find(userImp => String(userImp.improvementId) === String(item.subItems?.[0]?.id))?.userScore || 0) === item.subItems?.[0]?.score?.[0],
+                    ? userImps.filter(u => item.subItems.map(s => s.id).includes(u.improvementId)).length == item.subItems.length
+                    : (userImps.find(userImp => userImp.improvementId === item.subItems?.[0]?.id)?.userScore || 0) === item.subItems?.[0]?.score?.[0],
             }))
-            .sort((a, b) => a.type.localeCompare(b.type) || a.id.localeCompare(b.id));
+            .sort((a, b) => {
+                const typeOrder = {
+                    [SelfImprovementItemTypeEnum.IMPROVMENT]: 1,
+                    [SelfImprovementItemTypeEnum.INTELLIGENSE]: 2,
+                    [SelfImprovementItemTypeEnum.FORBIDDEN]: 3,
+                };
+                return typeOrder[a.type] - typeOrder[b.type] || a.id - b.id;
+            });
 
         return {
             score: 0,
