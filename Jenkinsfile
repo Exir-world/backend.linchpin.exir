@@ -82,19 +82,42 @@ pipeline {
     }
 
     post {
-        success {
-            script {
-                def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "✅ *your container is alive!!! * `${env.JOB_NAME}`\n*Status:* ✅ Success\n*Version:* `${env.IMAGE_TAG}`\n*Commit:* `${lastCommitMessage}`"
-                sendTelegramMessage(message)
-            }
+    success {
+        script {
+            // Get the last commit message
+            def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+            // Send the Telegram message
+            def message = """
+            your container is alive!!!
+            Status: ✅ Success
+            Commit: ${lastCommitMessage}
+            Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+            """
+            sh """
+            curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
+                -d chat_id=${env.TELEGRAM_CHAT_ID} \
+                -d text="${message}" \
+                -d parse_mode=Markdown
+            """
         }
-        failure {
-            script {
-                def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "❌ *Pipeline:* `${env.JOB_NAME}`\n*Status:* ❌ Failed\n*Version:* `${env.IMAGE_TAG}`\n*Commit:* `${lastCommitMessage}`"
-                sendTelegramMessage(message)
-            }
+    }
+    failure {
+        script {
+            // Get the last commit message
+            def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+            // Send the Telegram message
+            def message = """
+            Pipeline failed!
+            Status: ❌ Failure
+            Commit: ${lastCommitMessage}
+            Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+            """
+            sh """
+            curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
+                -d chat_id=${env.TELEGRAM_CHAT_ID} \
+                -d text="${message}" \
+                -d parse_mode=Markdown
+            """
         }
     }
 }
