@@ -5,24 +5,20 @@ pipeline {
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
         IMAGE_NAME = 'backend.linchpin.exir'
         GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
+        TELEGRAM_CHAT_ID = '-1002585379912'
+        TELEGRAM_BOT_TOKEN = '8027466900:AAG6Q_0p6rSeEXtg8e0gDcYJmIJ_R7zBVew'
     }
 
     stages {
         stage('Cleanup') {
             steps {
-                deleteDir() // deletes workspace content
+                deleteDir()
             }
         }
 
         stage('Checkout Code') {
             steps {
-                checkout scm // Automatically checks out the code from the repo
-            }
-        }
-
-        stage('Debug: Check Code') {
-            steps {
-                sh 'grep score src/organization/application/commands/handlers/create-self-improvement.handler.ts || echo "⚠️ score not found"'
+                checkout scm
             }
         }
 
@@ -67,11 +63,6 @@ pipeline {
             }
         }
 
-        stage('Build/Test') {
-            steps {
-                sh 'npm run build'            }
-        }
-
         stage('Docker Build & Push') {
             steps {
                 script {
@@ -94,14 +85,26 @@ pipeline {
         success {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
+                def message = "✅ *your container is alive!!! * `${env.JOB_NAME}`\n*Status:* ✅ Success\n*Version:* `${env.IMAGE_TAG}`\n*Commit:* `${lastCommitMessage}`"
+                sendTelegramMessage(message)
             }
         }
         failure {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
+                def message = "❌ *Pipeline:* `${env.JOB_NAME}`\n*Status:* ❌ Failed\n*Version:* `${env.IMAGE_TAG}`\n*Commit:* `${lastCommitMessage}`"
+                sendTelegramMessage(message)
             }
         }
     }
+}
+
+// Outside the pipeline block: function to send Telegram message
+def sendTelegramMessage(String message) {
+    sh """
+        curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \\
+        -d chat_id=${env.TELEGRAM_CHAT_ID} \\
+        -d parse_mode=Markdown \\
+        --data-urlencode text="${message}"
+    """
 }
