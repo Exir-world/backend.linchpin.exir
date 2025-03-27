@@ -1,10 +1,11 @@
-import { Controller, Post, Body, Request, UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Body, Request, UseGuards, Get, Param } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { CreateUserSelfImprovementCommand } from 'src/user-self-improvement/application/commands/create-user-self-improvement.command';
 import { GetUserSelfImprovementsByOrgIdQuery } from 'src/user-self-improvement/application/queries/get-user-self-improvements-by-org-id.query';
 import { CreateUserSelfImprovementItemDto } from '../dto/create-user-self-improvement.dto';
+import { GetSubItemsByItemIdQuery } from 'src/user-self-improvement/application/queries/get-subitems-by-item-id.query ';
 
 @ApiTags('User Self Improvement')
 @ApiBearerAuth() // Adds the JWT Authorization header to Swagger UI
@@ -40,5 +41,15 @@ export class UserSelfImprovementController {
     async get(@Request() req) {
         const userId = req.user.id; // Extract user ID from JWT
         return this.queryBus.execute(new GetUserSelfImprovementsByOrgIdQuery(userId));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Get('subitems/:itemId')
+    @ApiOperation({ summary: 'Get multiple user self-improvement evaluations by item ID' })
+    @ApiResponse({ status: 200, description: 'User self-improvement evaluations retrieved successfully' })
+    @ApiResponse({ status: 400, description: 'Validation failed' })
+    async getSubItems(@Request() req, @Param('itemId') itemId: number) {
+        const userId = req.user.id; // Extract user ID from JWT
+        return this.queryBus.execute(new GetSubItemsByItemIdQuery(userId, itemId));
     }
 }
