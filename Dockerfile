@@ -15,7 +15,7 @@ COPY package*.json ./
 RUN npm ci
 
 COPY --chown=node:node . .
-COPY --chown=node:node .env .
+# COPY --chown=node:node .env .
 RUN npm run build \
     && npm prune --production
 
