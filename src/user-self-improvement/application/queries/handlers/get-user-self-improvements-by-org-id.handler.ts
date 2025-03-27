@@ -54,7 +54,7 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
         return {
             score: 0,
             scoreIcon: 'https://cdn.exirtu.be/self-improvement/si_gem.svg',
-            items,
+            userItems: items,
         }
     }
 }
