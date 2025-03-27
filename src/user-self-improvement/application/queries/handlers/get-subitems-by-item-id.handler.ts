@@ -16,6 +16,7 @@ export class GetSubItemsByItemIdHandler implements IQueryHandler<GetSubItemsByIt
         @InjectRepository(UserSelfImprovementEntity)
         private readonly repository: Repository<UserSelfImprovementEntity>,
         private readonly i18n: I18nService,
+
     ) { }
 
     async execute(query: GetSubItemsByItemIdQuery): Promise<any> {
