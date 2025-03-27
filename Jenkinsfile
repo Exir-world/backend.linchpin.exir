@@ -5,6 +5,8 @@ pipeline {
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
         IMAGE_NAME = 'backend.linchpin.exir'
         GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
+        TELEGRAM_CHAT_ID = '-1002585379912'
+        TELEGRAM_BOT_TOKEN = '8027466900:AAG6Q_0p6rSeEXtg8e0gDcYJmIJ_R7zBVew'
     }
 
     stages {
@@ -16,13 +18,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                checkout scm // Automatically checks out the code from the repo
-            }
-        }
-
-        stage('Debug: Check Code') {
-            steps {
-                sh 'grep score src/organization/application/commands/handlers/create-self-improvement.handler.ts || echo "⚠️ score not found"'
+                checkout scm 
             }
         }
 
@@ -67,11 +63,6 @@ pipeline {
             }
         }
 
-        stage('Build/Test') {
-            steps {
-                sh 'npm run build'            }
-        }
-
         stage('Docker Build & Push') {
             steps {
                 script {
@@ -93,14 +84,37 @@ pipeline {
     post {
         success {
             script {
+                // Get the last commit message
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
+                // Send the Telegram message
+                def message = "✅ your container is alive!!!\n" +
+                              "Commit: ${lastCommitMessage}\n" +
+                              "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+
+                sh """
+                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
+                    -d chat_id=${env.TELEGRAM_CHAT_ID} \
+                    -d text="${message}" \
+                    -d parse_mode=Markdown
+                """
             }
         }
+
         failure {
             script {
+                // Get the last commit message
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
+                // Send the Telegram message
+                def message = "❌ Pipeline is dead!\n" +
+                              "Commit: ${lastCommitMessage}\n" +
+                              "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+
+                sh """
+                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
+                    -d chat_id=${env.TELEGRAM_CHAT_ID} \
+                    -d text="${message}" \
+                    -d parse_mode=Markdown
+                """
             }
         }
     }
