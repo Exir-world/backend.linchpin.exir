@@ -18,7 +18,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                checkout scm // Automatically checks out the code from the repo
+                checkout scm 
             }
         }
 
@@ -87,12 +87,10 @@ pipeline {
                 // Get the last commit message
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                 // Send the Telegram message
-                def message = """
-                your container is alive!!!
-                Status: ✅ Success
-                Commit: ${lastCommitMessage}
-                Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
-                """
+                def message = "✅ your container is alive!!!\n" +
+                              "Commit: ${lastCommitMessage}\n" +
+                              "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+
                 sh """
                 curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
                     -d chat_id=${env.TELEGRAM_CHAT_ID} \
@@ -107,12 +105,10 @@ pipeline {
                 // Get the last commit message
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
                 // Send the Telegram message
-                def message = """
-                Pipeline failed!
-                Status: ❌ Failure
-                Commit: ${lastCommitMessage}
-                Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
-                """
+                def message = "❌ Pipeline is dead!\n" +
+                              "Commit: ${lastCommitMessage}\n" +
+                              "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+
                 sh """
                 curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
                     -d chat_id=${env.TELEGRAM_CHAT_ID} \
