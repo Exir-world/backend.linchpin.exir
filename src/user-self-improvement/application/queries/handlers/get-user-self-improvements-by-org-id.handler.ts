@@ -29,8 +29,6 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
 
         const imps = await this.organizationService.getSelfImprovementsByOrgId(1);
 
-        // return imps;
-
         const userImps = await this.repository.find({
             where: {
                 userId,
@@ -38,51 +36,25 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
             },
         });
 
-        const improvmentItems = imps[0].items.filter(i => i.type == SelfImprovementItemTypeEnum.IMPROVMENT)
+        const items = imps[0].items
             .map(item => ({
-                id: item.subItems?.[0]?.id,
+                id: item.type === SelfImprovementItemTypeEnum.INTELLIGENSE
+                    ? String(item.id) : String(item.subItems?.[0]?.id),
                 title: this.i18n.t(item.title),
+                type: String(item.type),
                 image: item.image,
                 color: item.color,
-                date: userImps.find(userImp => userImp.improvementId === item.subItems?.[0]?.id)?.date,
-                done: (userImps.find(userImp => userImp.improvementId === item.subItems?.[0]?.id)?.userScore || 0) == item.subItems?.[0]?.score?.[0],
-            })).sort((a, b) => a.id - b.id);
-
-        const intelligenseItems = imps[0].items.filter(i => i.type == SelfImprovementItemTypeEnum.INTELLIGENSE)
-            .map(item => ({
-                id: item.id,
-                title: this.i18n.t(item.title),
-                image: item.image,
-                color: item.color,
-                // date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
-                // subItems: item.subItems.map(
-                //     subItem => ({
-                //         ...subItem,
-                //         userScore: userImps.find(u => u.improvementId == subItem.id)?.userScore || 0,
-                //         done: !!userImps.find(u => u.improvementId == subItem.id)?.userScore
-                //     })
-                // ),
-                // done: (userImps.find(userImp => userImp.improvementId === item.subItems?.[0]?.id)?.userScore || 0) == item.subItems?.[0]?.score?.[0],
-                // done: (userImps.find(userImp => userImp.improvementId === item.id)?.userScore || 0) == item.sub,
-            })).sort((a, b) => a.id - b.id);
-
-        const forbiddenItems = imps[0].items.filter(i => i.type == SelfImprovementItemTypeEnum.FORBIDDEN)
-            .map(item => ({
-                id: item.subItems?.[0]?.id,
-                title: this.i18n.t(item.title),
-                image: item.image,
-                color: item.color,
-                date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
-                done: (userImps.find(userImp => userImp.improvementId === item.subItems?.[0]?.id)?.userScore || 0) == item.subItems?.[0]?.score?.[0],
-                // done: (userImps.find(userImp => userImp.improvementId === item.id)?.userScore || 0) == item.sub,
-            })).sort((a, b) => a.id - b.id);
+                date: item.type === SelfImprovementItemTypeEnum.INTELLIGENSE
+                    ? undefined : userImps.find(userImp => String(userImp.improvementId) === String(item.subItems?.[0]?.id))?.date,
+                done: item.type === SelfImprovementItemTypeEnum.INTELLIGENSE
+                    ? undefined : (userImps.find(userImp => String(userImp.improvementId) === String(item.subItems?.[0]?.id))?.userScore || 0) === item.subItems?.[0]?.score?.[0],
+            }))
+            .sort((a, b) => a.type.localeCompare(b.type) || a.id.localeCompare(b.id));
 
         return {
             score: 0,
             scoreIcon: 'https://cdn.exirtu.be/self-improvement/si_gem.svg',
-            improvmentItems,
-            intelligenseItems,
-            forbiddenItems,
+            items,
         }
     }
 }
