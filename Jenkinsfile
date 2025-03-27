@@ -11,10 +11,10 @@ pipeline {
     stages {
         stage('Clean & Clone Repository') {
             steps {
-                sshagent(credentials: ['github-ssh-key']) { // Replace with your actual SSH credential ID
+                sshagent(credentials: ['github-ssh-key']) {
                     sh '''
                         echo "🧹 Cleaning up ${WORKDIR} ..."
-                        rm -rf ${WORKDIR}/*
+                        sudo rm -rf ${WORKDIR}/*
                         echo "📥 Cloning repository into ${WORKDIR} ..."
                         git clone ${GIT_REPO_URL} ${WORKDIR}
                     '''
@@ -24,35 +24,49 @@ pipeline {
 
         stage('Get Latest Image Tag') {
             steps {
-                dir("${WORKDIR}") {
-                    script {
-                        def tagsJson = sh(
-                            script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list",
-                            returnStdout: true
-                        ).trim()
+                script {
+                    def tagsJson = sh(
+                        script: "curl -s -X GET https://${DOCKER_REGISTRY_URL}/v2/${IMAGE_NAME}/tags/list",
+                        returnStdout: true
+                    ).trim()
 
-                        def latestTag = "1"
-                        try {
-                            def tags = readJSON text: tagsJson
-                            def numericTags = []
+                    def latestTag = "1"
+                    try {
+                        def tags = readJSON text: tagsJson
+                        def numericTags = []
 
-                            for (tag in tags.tags) {
-                                if (tag ==~ /^\d+$/) {
-                                    numericTags << tag.toInteger()
-                                }
+                        for (tag in tags.tags) {
+                            if (tag ==~ /^\d+$/) {
+                                numericTags << tag.toInteger()
                             }
-
-                            numericTags.sort()
-                            if (numericTags && numericTags.size() > 0) {
-                                latestTag = (numericTags[-1] + 1).toString()
-                            }
-                        } catch (Exception e) {
-                            echo "⚠️ Failed to parse tags. Defaulting to tag 1. Error: ${e.message}"
                         }
 
-                        env.IMAGE_TAG = latestTag
-                        echo "🚀 Using image tag: ${env.IMAGE_TAG}"
+                        numericTags.sort()
+                        if (numericTags && numericTags.size() > 0) {
+                            latestTag = (numericTags[-1] + 1).toString()
+                        }
+                    } catch (Exception e) {
+                        echo "⚠️ Failed to parse tags. Defaulting to tag 1. Error: ${e.message}"
                     }
+
+                    env.IMAGE_TAG = latestTag
+                    echo "🚀 Using image tag: ${env.IMAGE_TAG}"
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Build/Test') {
+            steps {
+                dir("${WORKDIR}") {
+                    sh 'npm run build'
                 }
             }
         }
@@ -79,19 +93,15 @@ pipeline {
 
     post {
         success {
-            dir("${WORKDIR}") {
-                script {
-                    def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                    echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
-                }
+            script {
+                def lastCommitMessage = sh(script: "cd ${WORKDIR} && git log -1 --pretty=%B", returnStdout: true).trim()
+                echo "✅ Pipeline ${env.JOB_NAME} succeeded!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
         }
         failure {
-            dir("${WORKDIR}") {
-                script {
-                    def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                    echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
-                }
+            script {
+                def lastCommitMessage = sh(script: "cd ${WORKDIR} && git log -1 --pretty=%B", returnStdout: true).trim()
+                echo "❌ Pipeline ${env.JOB_NAME} failed!\nVersion: ${env.IMAGE_TAG}\nLast Commit: ${lastCommitMessage}"
             }
         }
     }
