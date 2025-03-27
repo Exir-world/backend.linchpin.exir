@@ -69,8 +69,7 @@ pipeline {
 
         stage('Build/Test') {
             steps {
-                sh 'npm run build -- --force'
-            }
+                sh 'npm run build'            }
         }
 
         stage('Docker Build & Push') {
