@@ -7,25 +7,24 @@ pipeline {
         GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
     }
 
-    stage('Cleanup') {
-        steps {
-            deleteDir() // deletes workspace content
-        }
-    }
-    
     stages {
+        stage('Cleanup') {
+            steps {
+                deleteDir() // deletes workspace content
+            }
+        }
+
         stage('Checkout Code') {
             steps {
                 checkout scm // Automatically checks out the code from the repo
             }
         }
-    }
-    stage('Debug: Check Code') {
-        steps {
-            sh 'grep score src/organization/application/commands/handlers/create-self-improvement.handler.ts || echo "⚠️ score not found"'
-    }
-}
 
+        stage('Debug: Check Code') {
+            steps {
+                sh 'grep score src/organization/application/commands/handlers/create-self-improvement.handler.ts || echo "⚠️ score not found"'
+            }
+        }
 
         stage('Get Latest Image Tag') {
             steps {
@@ -70,7 +69,8 @@ pipeline {
 
         stage('Build/Test') {
             steps {
-                sh 'npm run build -- --force'            }
+                sh 'npm run build -- --force'
+            }
         }
 
         stage('Docker Build & Push') {
@@ -105,3 +105,4 @@ pipeline {
             }
         }
     }
+}
