@@ -19,7 +19,7 @@ pipeline {
                 checkout scm // Automatically checks out the code from the repo
             }
         }
-    
+    }
     stage('Debug: Check Code') {
         steps {
             sh 'grep score src/organization/application/commands/handlers/create-self-improvement.handler.ts || echo "⚠️ score not found"'
@@ -105,4 +105,3 @@ pipeline {
             }
         }
     }
-}
