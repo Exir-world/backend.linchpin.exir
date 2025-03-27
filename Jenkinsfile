@@ -12,13 +12,13 @@ pipeline {
     stages {
         stage('Cleanup') {
             steps {
-                deleteDir()
+                deleteDir() // deletes workspace content
             }
         }
 
         stage('Checkout Code') {
             steps {
-                checkout scm
+                checkout scm // Automatically checks out the code from the repo
             }
         }
 
@@ -82,52 +82,44 @@ pipeline {
     }
 
     post {
-    success {
-        script {
-            // Get the last commit message
-            def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-            // Send the Telegram message
-            def message = """
-            your container is alive!!!
-            Status: ✅ Success
-            Commit: ${lastCommitMessage}
-            Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
-            """
-            sh """
-            curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
-                -d chat_id=${env.TELEGRAM_CHAT_ID} \
-                -d text="${message}" \
-                -d parse_mode=Markdown
-            """
+        success {
+            script {
+                // Get the last commit message
+                def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                // Send the Telegram message
+                def message = """
+                your container is alive!!!
+                Status: ✅ Success
+                Commit: ${lastCommitMessage}
+                Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+                """
+                sh """
+                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
+                    -d chat_id=${env.TELEGRAM_CHAT_ID} \
+                    -d text="${message}" \
+                    -d parse_mode=Markdown
+                """
+            }
         }
-    }
-    failure {
-        script {
-            // Get the last commit message
-            def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-            // Send the Telegram message
-            def message = """
-            Pipeline failed!
-            Status: ❌ Failure
-            Commit: ${lastCommitMessage}
-            Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
-            """
-            sh """
-            curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
-                -d chat_id=${env.TELEGRAM_CHAT_ID} \
-                -d text="${message}" \
-                -d parse_mode=Markdown
-            """
-        }
-    }
-}
 
-// Outside the pipeline block: function to send Telegram message
-def sendTelegramMessage(String message) {
-    sh """
-        curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \\
-        -d chat_id=${env.TELEGRAM_CHAT_ID} \\
-        -d parse_mode=Markdown \\
-        --data-urlencode text="${message}"
-    """
+        failure {
+            script {
+                // Get the last commit message
+                def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                // Send the Telegram message
+                def message = """
+                Pipeline failed!
+                Status: ❌ Failure
+                Commit: ${lastCommitMessage}
+                Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}
+                """
+                sh """
+                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
+                    -d chat_id=${env.TELEGRAM_CHAT_ID} \
+                    -d text="${message}" \
+                    -d parse_mode=Markdown
+                """
+            }
+        }
+    }
 }
