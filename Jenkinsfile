@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clean & Clone Repository') {
             steps {
-                sshagent(credentials: ['github-ssh']) { // Replace with your actual SSH credential ID
+                sshagent(credentials: ['github-ssh-key']) { // Replace with your actual SSH credential ID
                     sh '''
                         echo "🧹 Cleaning up ${WORKDIR} ..."
                         rm -rf ${WORKDIR}/*
