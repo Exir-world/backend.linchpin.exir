@@ -54,14 +54,14 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
                 title: this.i18n.t(item.title),
                 image: item.image,
                 color: item.color,
-                date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
-                subItems: item.subItems.map(
-                    subItem => ({
-                        ...subItem,
-                        userScore: userImps.find(u => u.improvementId == subItem.id)?.userScore || 0,
-                        done: !!userImps.find(u => u.improvementId == subItem.id)?.userScore
-                    })
-                ),
+                // date: userImps.find(userImp => userImp.improvementId === item.id)?.date,
+                // subItems: item.subItems.map(
+                //     subItem => ({
+                //         ...subItem,
+                //         userScore: userImps.find(u => u.improvementId == subItem.id)?.userScore || 0,
+                //         done: !!userImps.find(u => u.improvementId == subItem.id)?.userScore
+                //     })
+                // ),
                 // done: (userImps.find(userImp => userImp.improvementId === item.subItems?.[0]?.id)?.userScore || 0) == item.subItems?.[0]?.score?.[0],
                 // done: (userImps.find(userImp => userImp.improvementId === item.id)?.userScore || 0) == item.sub,
             })).sort((a, b) => a.id - b.id);

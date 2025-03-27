@@ -6,6 +6,7 @@ import { CreateSelfImprovementCommand } from '../commands/create-self-improvemen
 import { GetSelfImprovementsByOrgIdQuery } from '../queries/get-self-improvements-by-org-id.query';
 import { GetLocationByOrgIdQuery } from '../queries/get-location-by-org-id.query';
 import { SelfImprovementItemTypeEnum } from 'src/organization/domain/enums/self-improvement-item-type.enum';
+import { GetSelfImprovementsSubItemsByItemIdQuery } from '../queries/get-self-improvements-subitems-by-item-id.query';
 
 @Injectable()
 export class OrganizationService implements OrganizationSharedPort {
@@ -16,6 +17,10 @@ export class OrganizationService implements OrganizationSharedPort {
 
     async getSelfImprovementsByOrgId(orgId: number): Promise<any> {
         return this.queryBus.execute(new GetSelfImprovementsByOrgIdQuery(orgId));
+    }
+
+    async getSelfImprovementsSubItemsId(itemId: number): Promise<any> {
+        return this.queryBus.execute(new GetSelfImprovementsSubItemsByItemIdQuery(itemId));
     }
 
     async getTeamsByOrgId(orgId: number): Promise<any> {

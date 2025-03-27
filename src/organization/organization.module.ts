@@ -14,6 +14,7 @@ import { GetSelfImprovementByOrgIdHandler } from './application/queries/handlers
 import { GetLocationByOrgIdHandler } from './application/queries/handlers/get-location-by-org-id.handler';
 import { LocationEntity } from './infrastructure/entities/location.entity';
 import { SelfImprovementSubItemEntity } from './infrastructure/entities/self-improvement-subitem.entity';
+import { GetSelfImprovementsSubItemsByItemIdHandler } from './application/queries/handlers/get-self-improvements-subitems-by-item-id.handler';
 
 @Module({
     imports: [
@@ -55,6 +56,7 @@ import { SelfImprovementSubItemEntity } from './infrastructure/entities/self-imp
 
         // Query Handlers
         GetSelfImprovementByOrgIdHandler,
+        GetSelfImprovementsSubItemsByItemIdHandler,
         GetTeamsByOrgIdHandler,
         GetLocationByOrgIdHandler,
     ],

@@ -6,6 +6,7 @@ import { CreateUserSelfImprovementHandler } from './application/commands/handler
 import { UserSelfImprovementController } from './presentation/controllers/user-self-improvement.controller';
 import { GetUserSelfImprovementByOrgIdHandler } from './application/queries/handlers/get-user-self-improvements-by-org-id.handler';
 import { OrganizationModule } from 'src/organization/organization.module';
+import { GetSubItemsByItemIdHandler } from './application/queries/handlers/get-subitems-by-item-id.handler';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { OrganizationModule } from 'src/organization/organization.module';
     providers: [
         GetUserSelfImprovementByOrgIdHandler,
         CreateUserSelfImprovementHandler,
+        GetSubItemsByItemIdHandler,
     ],
 })
 export class UserSelfImprovementModule { }
