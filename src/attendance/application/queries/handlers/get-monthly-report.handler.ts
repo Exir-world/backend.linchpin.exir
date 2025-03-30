@@ -29,8 +29,8 @@ export class GetMonthlyReportHandler implements IQueryHandler<GetMonthlyReportQu
 
         // گروه‌بندی و محاسبه زمان کار
         const workTimes = monthStarts.map((month) => {
-            if (!currentYear)
-                return undefined;
+            // if (!currentYear)
+            //     return undefined;
 
             const startOfMonth = month.startDate;
             const endOfMonth = month.startDate.plus({ months: 1 });
