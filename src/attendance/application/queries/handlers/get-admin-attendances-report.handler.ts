@@ -17,6 +17,9 @@ export class GetAdminAttendancesReportHandler implements IQueryHandler<GetAdminA
     async execute(query: GetAdminAttendancesReportQuery): Promise<any> {
         const { startDate, endDate } = query;
 
+        const lunchTime = { startTime: '14:00:00', endTime: '14:40:00' };
+        const lunchDuration = 40;
+
         const attendances = await this.attendanceRepo.filterByRange(new Date(startDate), new Date(endDate), true);
 
         let groupedAttendances: any = attendances.reduce((acc, attendance) => {
@@ -70,9 +73,16 @@ export class GetAdminAttendancesReportHandler implements IQueryHandler<GetAdminA
 
                     workTime = Math.floor(workTime);
 
+                    const afterLunch = lastCheckOut !== '-' && `${lastCheckOut}:00` > lunchTime.endTime;
+                    const workTimeWithLunch = !afterLunch ? workTime : workTime - lunchDuration;
+
                     const workHours = Math.floor(workTime / 60);
                     const workMinutes = workTime % 60;
                     const formattedWorkTime = `${workHours.toString().padStart(2, '0')}:${workMinutes.toString().padStart(2, '0')}`;
+
+                    const workWithLunchHours = Math.floor(workTimeWithLunch / 60);
+                    const workWithLunchMinutes = workTimeWithLunch % 60;
+                    const formattedWorkTimeWithLunch = `${workWithLunchHours.toString().padStart(2, '0')}:${workWithLunchMinutes.toString().padStart(2, '0')}`;
 
                     return {
                         userId: attendances?.[0]?.userId,
@@ -82,6 +92,8 @@ export class GetAdminAttendancesReportHandler implements IQueryHandler<GetAdminA
                         firstCheckIn,
                         lastCheckOut,
                         workTime: formattedWorkTime,
+                        workTimeWithLunch: formattedWorkTimeWithLunch,
+                        afterLunch,
                     };
                 });
         }

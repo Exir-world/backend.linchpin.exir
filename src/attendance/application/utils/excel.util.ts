@@ -16,7 +16,7 @@ function sumTimes(timeStrings: string[]): string {
     return `${String(totalHours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}`;
 }
 
-export async function generateExcel(res: Response, data: any[]): Promise<void> {
+export async function generateExcel(res: Response, data: any[], workDuration: number, holidaysDayCount: number): Promise<void> {
     // 1. ایجاد یک ورک‌بوک جدید
     const workbook = new ExcelJS.Workbook();
 
@@ -24,8 +24,11 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
     worksheet.views = [{ rightToLeft: true }];
     worksheet.columns = [
         { header: 'نام کاربر', key: 'lastname', width: 25 },
+        { header: 'مجموع کارکرد خالص', key: 'workTimesPure', width: 15 },
         { header: 'مجموع کارکرد', key: 'workTimes', width: 15 },
+        { header: 'مجموع کارکرد (با کسر ناهار)', key: 'workTimesWithLunch', width: 20 },
         { header: 'تعداد روز های کارکرد', key: 'workDays', width: 15 },
+        { header: 'تعداد روز های تعطیلی رسمی', key: 'holidaysDayCount', width: 20 },
     ];
 
     // تنظیم استایل هدرها
@@ -39,11 +42,22 @@ export async function generateExcel(res: Response, data: any[]): Promise<void> {
         };
     });
 
+    const h = workDuration * holidaysDayCount;
+    const workHolidaysHours = Math.floor(h / 60);
+    const workHolidaysMinutes = h % 60;
+    const formattedHolidaysWorkTime = `${workHolidaysHours.toString().padStart(2, '0')}:${workHolidaysMinutes.toString().padStart(2, '0')}`;
+
     data.forEach(d => {
         worksheet.addRow({
             lastname: d.lastname,
             workTimes: sumTimes(d.att.map(a => a.workTime)),
+            workTimesWithLunch: sumTimes(d.att.map(a => a.workTimeWithLunch)),
             workDays: d.att.filter(a => a.workTime != '00:00').length,
+            holidaysDayCount,
+            workTimesPure: sumTimes([
+                sumTimes(d.att.map(a => a.workTimeWithLunch)),
+                formattedHolidaysWorkTime,
+            ]),
         });
     })
 
