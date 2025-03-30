@@ -17,4 +17,12 @@ export class GetAdminAttendancesReportDto {
   @IsNotEmpty()
   @IsDateString()
   endDate: string;
+
+  @ApiProperty({
+    description: 'The number of holidays within the date range.',
+    example: 5,
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  holidaysDayCount: number;
 }

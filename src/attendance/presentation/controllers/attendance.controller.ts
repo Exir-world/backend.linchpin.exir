@@ -230,14 +230,16 @@ export class AttendanceController {
         @Res() res: Response,
         @Body() dto: GetAdminAttendancesReportDto
     ) {
-        const { startDate, endDate } = dto;
+        const workDuration = 440;
+
+        const { startDate, endDate, holidaysDayCount } = dto;
         const attendances = await this.attendanceService.getAdminAttendancesReport(
-            new GetAdminAttendancesReportQuery(startDate, endDate)
+            new GetAdminAttendancesReportQuery(startDate, endDate, holidaysDayCount)
         );
 
-        generateExcel(res, attendances);
+        generateExcel(res, attendances, workDuration, holidaysDayCount);
 
-        // return attendances;
+        return attendances;
     }
 
     // @ApiOperation({})
