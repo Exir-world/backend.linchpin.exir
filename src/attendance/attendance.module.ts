@@ -97,6 +97,7 @@ import { GetAdminAttendancesReportHandler } from './application/queries/handlers
         CheckOutCheckingHandler,
         UpdateAttendanceAdminHandler,
 
+
         // Query Handlers
         GetLastAttendanceHandler,
         GetDailyAttendanceStatusHandler,
