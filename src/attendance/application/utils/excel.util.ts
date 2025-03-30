@@ -1,6 +1,30 @@
 import * as ExcelJS from 'exceljs';
 import { Response } from 'express';
 
+const salary = [
+    { userId: 1, salary: 250000000 },
+    { userId: 2, salary: 300000000 },
+    { userId: 3, salary: 175000000 },
+    { userId: 4, salary: 200000000 },
+    { userId: 7, salary: 200000000 },
+    { userId: 8, salary: 200000000 },
+    { userId: 9, salary: 150000000 },
+    { userId: 10, salary: 400000000 },
+    { userId: 11, salary: 200000000 },
+    { userId: 12, salary: 150000000 },
+    { userId: 14, salary: 150000000 },
+    { userId: 15, salary: 350000000 },
+    { userId: 16, salary: 150000000 },
+    { userId: 17, salary: 150000000 },
+    { userId: 18, salary: 150000000 },
+    { userId: 28, salary: 150000000 },
+    { userId: 32, salary: 120000000 },
+    { userId: 38, salary: 150000000 },
+    { userId: 35, salary: 150000000 },
+    { userId: 33, salary: 150000000 },
+    { userId: 26, salary: 150000000 },
+]
+
 function sumTimes(timeStrings: string[]): string {
     let totalMinutes = 0;
 
@@ -29,6 +53,8 @@ export async function generateExcel(res: Response, data: any[], workDuration: nu
         { header: 'مجموع کارکرد (با کسر ناهار)', key: 'workTimesWithLunch', width: 20 },
         { header: 'تعداد روز های کارکرد', key: 'workDays', width: 15 },
         { header: 'تعداد روز های تعطیلی رسمی', key: 'holidaysDayCount', width: 20 },
+        { header: 'پایه حقوق', key: 'salary', width: 20 },
+        { header: 'حقوق دریافتی', key: 'paidSalary', width: 20 },
     ];
 
     // تنظیم استایل هدرها
@@ -48,16 +74,28 @@ export async function generateExcel(res: Response, data: any[], workDuration: nu
     const formattedHolidaysWorkTime = `${workHolidaysHours.toString().padStart(2, '0')}:${workHolidaysMinutes.toString().padStart(2, '0')}`;
 
     data.forEach(d => {
+        const workTimesPureFormated = sumTimes([
+            sumTimes(d.att.map(a => a.workTimeWithLunch)),
+            formattedHolidaysWorkTime,
+        ]);
+
+        const workTimesPure = workTimesPureFormated.split(':').reduce((acc, time) => (60 * acc) + +time, 0);
+
         worksheet.addRow({
             lastname: d.lastname,
             workTimes: sumTimes(d.att.map(a => a.workTime)),
             workTimesWithLunch: sumTimes(d.att.map(a => a.workTimeWithLunch)),
             workDays: d.att.filter(a => a.workTime != '00:00').length,
             holidaysDayCount,
-            workTimesPure: sumTimes([
-                sumTimes(d.att.map(a => a.workTimeWithLunch)),
-                formattedHolidaysWorkTime,
-            ]),
+            workTimesPure: workTimesPureFormated,
+            salary: salary.find(s => s.userId == d.userId)?.salary
+                ? salary.find(s => s.userId == d.userId)?.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : '-',
+            paidSalary: salary.find(s => s.userId == d.userId)?.salary
+                ? Math.floor((workTimesPure / (440 * 26)) * salary.find(s => s.userId == d.userId)?.salary)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : '-',
         });
     })
 
