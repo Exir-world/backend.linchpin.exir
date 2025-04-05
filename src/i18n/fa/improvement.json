@@ -23,5 +23,106 @@
         "gambling": "قمار",
         "harassment": "آزار و اذیت",
         "politics": "سیاست"
+    },
+    "subitems": {
+        "verbal_linguistic": {
+            "write": "نوشتن",
+            "read": "خواندن",
+            "learn_new_words": "یادگیری کلمات جدید",
+            "express_thoughts": "از بیان افکار",
+            "verbal_discussions": "بحث‌های کلامی",
+            "write_emotions": "نوشتن احساسات",
+            "persuasion": "متقاعدسازی",
+            "learn_languages": "یادگیری زبان‌های جدید",
+            "storytelling": "داستان‌سرایی"
+        },
+        "logical_mathematical": {
+            "solve_puzzles": "حل معما و مسائل منطقی",
+            "math_skills": "مهارت ریاضی",
+            "pattern_recognition": "کشف الگوها",
+            "numerical_problems": "مسائل عددی",
+            "logical_thinking": "فکر کردن منطقی",
+            "mental_calculations": "محاسبات ذهنی",
+            "reasoning_problems": "حل مشکلات با استدلال منطقی",
+            "data_statistics": "درک خوب از داده‌ها و آمار",
+            "programming_analysis": "برنامه‌نویسی یا تحلیل سیستم‌ها"
+        },
+        "visual_spatial": {
+            "mental_imagery": "تصویرسازی ذهنی",
+            "drawing": "نقاشی یا طراحی",
+            "reading_maps": "خواندن نقشه‌ها و نمودارها",
+            "3d_visualization": "تجسم سه‌بعدی",
+            "color_aesthetics": "زیبایی‌شناسی رنگ‌ها",
+            "space_layout": "طراحی و چیدمان فضا",
+            "photography": "عکاسی یا هنر",
+            "mental_models": "ساختن مدل‌های ذهنی",
+            "film_video": "فیلم و تصویر"
+        },
+        "musical": {
+            "music": "موسیقی",
+            "identify_rhythms": "تشخیص ریتم‌ها و ملودی‌ها",
+            "understand_music": "درک موسیقی",
+            "play_instrument": "نواختن ساز",
+            "music_while_working": "موسیقی هنگام کار یا مطالعه",
+            "emotions_music": "احساسات در موسیقی",
+            "memorize_tunes": "حفظ آهنگ",
+            "lyrics_attention": "دقت‌نظر در متن موسیقی",
+            "live_performance": "اجرای زنده موسیقی"
+        },
+        "bodily_kinesthetic": {
+            "physical_activities": "فعالیت‌های فیزیکی",
+            "muscle_coordination": "عصب و عضله",
+            "complex_movements": "انجام حرکات پیچیده",
+            "exercise_learning": "ورزش همزمان با یادگیری",
+            "physical_reactions": "واکنش‌ فیزوالداهه",
+            "performance_dance": "اجرای نمایش یا رقص",
+            "sports": "ورزش",
+            "practical_work": "کار عملی",
+            "handicrafts": "کارهای دستی"
+        },
+        "interpersonal": {
+            "connect_with_others": "ارتباط با دیگران",
+            "teamwork": "کارهای گروهی",
+            "empathy": "درک احساسات دیگران",
+            "resolve_conflicts": "حل تعارضات اجتماعی",
+            "talk_to_strangers": "صحبت کردن با افراد جدید",
+            "leadership": "ایفای نقش رهبر",
+            "advise_others": "مشاوره دادن به دیگران",
+            "social_relations": "روابط اجتماعی",
+            "understand_others": "درک احساسات دیگران"
+        },
+        "intrapersonal": {
+            "self_emotions": "درک احساسات خود",
+            "self_awareness": "خودشناسی",
+            "understand_self": "درک خوب خود",
+            "personal_growth": "رشد شخصی",
+            "inner_decisions": "اعتماد به حس درونی در تصمیم‌گیری",
+            "self_thoughts": "فکرکردن زیاد در مورد خود",
+            "internal_motivation": "انگیزه‌های درونی قوی",
+            "emotion_control": "کنترل احساسات در شرایط سخت",
+            "write_memories": "نوشتن خاطرات شخصی"
+        },
+        "naturalistic": {
+            "enjoy_nature": "لذت از طبیعت",
+            "understand_plants_animals": "درک خوب از گیاهان و حیوانات",
+            "care_environment": "علاقه‌مند به محیط‌زیست",
+            "sense_environment_change": "درک تغییرات محیطی سریع",
+            "notice_species_diff": "توجه به تفاوت‌های بین گونه‌های طبیعی",
+            "hiking": "پیاده‌روی در طبیعت",
+            "gardening": "کار با گیاهان و باغبانی",
+            "understand_seasons": "درک تغییرات فصول و آب‌وهوا",
+            "prefer_nature": "ترجیح محیط طبیعی را به محیط شهری"
+        },
+        "existential_valuedriven": {
+            "loyalty_tasks": "وفاداری به کارها و علایق",
+            "loyalty_beliefs": "وفاداری ماندگار به باورها",
+            "unchanging_interests": "تغییر نکردن دوست‌داشتنی‌ها یا علاقه‌ها",
+            "relationship_commitment": "وفاداری و ماندگاری در روابط",
+            "loyalty_decisions": "وفاداری به تصمیم",
+            "loyalty_subjects": "وفاداری به علاقه در موضوعات",
+            "trustworthy": "شناخت شما به عنوان آدم قابل اعتماد",
+            "keep_promises": "متعهد بودن به وعده‌ها",
+            "long_term_goals": "دنبال کردن پیوسته اهداف بلند مدت زندگی"
+        }
     }
 }
