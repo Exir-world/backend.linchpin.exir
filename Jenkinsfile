@@ -87,7 +87,7 @@ pipeline {
                     docker images --format '{{.Repository}}:{{.Tag}} {{.CreatedAt}}' \\
                         | grep ${IMAGE_NAME} \\
                         | sort -k2 -r \\
-                        | awk 'NR>2 {print \$1}' \\
+                        | awk 'NR>4 {print \$1}' \\
                         | xargs -r docker rmi
                     """
                 }
