@@ -7,7 +7,7 @@ export class UserMapper {
     static toDomain(userEntity: UserEntity): User {
         const role = RoleMapper.toDomain(userEntity.role);
         return new User(
-            userEntity.teamId,
+            userEntity.organizationId,
             userEntity.name,
             userEntity.profileImage,
             userEntity.lastname,
@@ -21,7 +21,7 @@ export class UserMapper {
     static toEntity(user: User): UserEntity {
         const userEntity = new UserEntity();
         userEntity.id = user.id;
-        userEntity.teamId = user.teamId;
+        userEntity.organizationId = user.organizationId;
         userEntity.name = user.name;
         userEntity.lastname = user.lastname;
         userEntity.phoneNumber = user.phoneNumber;

@@ -14,13 +14,14 @@ export class CreateUserEmploymentSettingsHandler implements ICommandHandler<Crea
     ) { }
 
     async execute(command: CreateUserEmploymentSettingsCommand): Promise<UserEmploymentSettings> {
-        const { userId, shiftId, salaryCoef, needLocation } = command;
+        const { userId, shiftId, salary, needLocation, teamId } = command;
 
         const entity = this.userEmploymentSettingsRepository.create({
             userId,
             shiftId,
-            salaryCoef,
+            salary,
             needLocation,
+            teamId,
         });
 
         const settings = await this.userEmploymentSettingsRepository.save(entity);

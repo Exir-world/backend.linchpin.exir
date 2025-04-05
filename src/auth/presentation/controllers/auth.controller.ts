@@ -7,6 +7,7 @@ import { LoginCommand } from 'src/auth/application/commands/login.command';
 import { RefreshDto } from '../dto/refresh-token.dto';
 import { RefreshTokenCommand } from 'src/auth/application/commands/refresh-token.command';
 import { I18nService } from 'nestjs-i18n';
+import { LoginAdminCommand } from 'src/auth/application/commands/login-admin.command';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -32,6 +33,18 @@ export class AuthController {
     async login(@Body() loginDto: LoginDto): Promise<Tokens> {
         return this.authService.login(
             new LoginCommand(
+                loginDto.phoneNumber,
+                loginDto.password
+            )
+        );
+    }
+
+    @Post('login/admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiResponse({ status: 200, description: 'Login successful' })
+    async loginAdmin(@Body() loginDto: LoginDto): Promise<Tokens> {
+        return this.authService.login(
+            new LoginAdminCommand(
                 loginDto.phoneNumber,
                 loginDto.password
             )

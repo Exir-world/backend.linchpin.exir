@@ -12,13 +12,17 @@ export class CreateUserEmploymentSettingsDto {
     @IsNotEmpty()
     shiftId: number;
 
-    @ApiProperty({ example: 1.25, description: "Salary coefficient" })
+    @ApiProperty({ example: 10000000, description: "Salary" })
     @IsNumber()
     @IsNotEmpty()
-    salaryCoef: number;
+    salary: number;
 
     @ApiProperty({ example: true, description: "User need be in location for attendance" })
     @IsBoolean()
     @IsNotEmpty()
     needLocation: boolean;
+
+    @ApiProperty({ example: 3, description: "Team ID assigned to the user", nullable: true })
+    @IsNumber()
+    teamId?: number;
 }

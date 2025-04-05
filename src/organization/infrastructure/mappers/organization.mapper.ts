@@ -3,7 +3,7 @@ import { OrganizationEntity } from "../entities/organization.entity";
 
 export class OrganizationMapper {
     static toDomain(entity: OrganizationEntity): Organization {
-        return new Organization(entity.id, entity.name, entity.address, entity.description);
+        return new Organization(entity.id, entity.creatorId, entity.name, entity.address, entity.description);
     }
 
     static toEntity(domain: Organization): OrganizationEntity {

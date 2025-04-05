@@ -7,7 +7,7 @@ export class UserEntity {
     id: number;
 
     @Column()
-    teamId: number;
+    organizationId: number;
 
     @Column({ type: 'varchar', length: 50 })
     name: string;
