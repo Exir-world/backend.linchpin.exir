@@ -2,12 +2,127 @@
     "items": {
         "food": "التغذية العقلية والجسدية",
         "podcast": "تسجيل البودكاست",
-        "suggest": "اقتراحات لزيادة الإنتاجية",
+        "suggest": "اقتراحات الإنتاجية",
         "team": "العمل الجماعي",
-        "tools": "تدريب على الأدوات الجديدة",
+        "tools": "التدريب على الأدوات الجديدة",
         "walk": "المشي",
         "education": "تدريب على اللغة والإكسل",
         "discipline": "الانضباط التنظيمي",
-        "social": "النشاط على وسائل التواصل الاجتماعي"
+        "social": "النشاط على الشبكات الاجتماعية",
+        "linguistic": "الذكاء اللغوي",
+        "logical": "الذكاء المنطقي-الرياضي",
+        "spatial": "الذكاء المكاني",
+        "musical": "الذكاء الموسيقي",
+        "bodily": "الذكاء الجسدي-الحركي",
+        "interpersonal": "الذكاء الاجتماعي",
+        "intrapersonal": "الذكاء الذاتي",
+        "naturalistic": "الذكاء الطبيعي",
+        "abiding": "الذكاء القيمي",
+        "porn": "الإباحية",
+        "racism": "العنصرية",
+        "gambling": "القمار",
+        "harassment": "التحرش",
+        "politics": "السياسة"
+    },
+    "subitems": {
+        "verbal_linguistic": {
+            "write": "الكتابة",
+            "read": "القراءة",
+            "learn_new_words": "تعلم كلمات جديدة",
+            "express_thoughts": "التعبير عن الأفكار",
+            "verbal_discussions": "المناقشات الشفوية",
+            "write_emotions": "كتابة المشاعر",
+            "persuasion": "الإقناع",
+            "learn_languages": "تعلم لغات جديدة",
+            "storytelling": "رواية القصص"
+        },
+        "logical_mathematical": {
+            "solve_puzzles": "حل الألغاز والمشاكل المنطقية",
+            "math_skills": "مهارات الرياضيات",
+            "pattern_recognition": "التعرف على الأنماط",
+            "numerical_problems": "المشاكل العددية",
+            "logical_thinking": "التفكير المنطقي",
+            "mental_calculations": "الحسابات الذهنية",
+            "reasoning_problems": "حل المشاكل باستخدام التفكير المنطقي",
+            "data_statistics": "فهم جيد للبيانات والإحصائيات",
+            "programming_analysis": "البرمجة أو تحليل الأنظمة"
+        },
+        "visual_spatial": {
+            "mental_imagery": "التصور الذهني",
+            "drawing": "الرسم أو التصميم",
+            "reading_maps": "قراءة الخرائط والمخططات",
+            "3d_visualization": "التصور ثلاثي الأبعاد",
+            "color_aesthetics": "جماليات الألوان",
+            "space_layout": "تصميم وتخطيط المساحات",
+            "photography": "التصوير أو الفن",
+            "mental_models": "بناء النماذج الذهنية",
+            "film_video": "الأفلام والفيديو"
+        },
+        "musical": {
+            "music": "الموسيقى",
+            "identify_rhythms": "التعرف على الإيقاعات والألحان",
+            "understand_music": "فهم الموسيقى",
+            "play_instrument": "عزف على آلة موسيقية",
+            "music_while_working": "الاستماع إلى الموسيقى أثناء العمل أو الدراسة",
+            "emotions_music": "المشاعر في الموسيقى",
+            "memorize_tunes": "حفظ الألحان",
+            "lyrics_attention": "الاهتمام بالكلمات",
+            "live_performance": "الأداء الموسيقي الحي"
+        },
+        "bodily_kinesthetic": {
+            "physical_activities": "الأنشطة البدنية",
+            "muscle_coordination": "تنسيق الأعصاب والعضلات",
+            "complex_movements": "أداء الحركات المعقدة",
+            "exercise_learning": "التمرين أثناء التعلم",
+            "physical_reactions": "ردود الفعل البدنية",
+            "performance_dance": "الأداء أو الرقص",
+            "sports": "الرياضة",
+            "practical_work": "العمل العملي",
+            "handicrafts": "الحرف اليدوية"
+        },
+        "interpersonal": {
+            "connect_with_others": "التواصل مع الآخرين",
+            "teamwork": "العمل الجماعي",
+            "empathy": "فهم مشاعر الآخرين",
+            "resolve_conflicts": "حل النزاعات الاجتماعية",
+            "talk_to_strangers": "التحدث مع أشخاص جدد",
+            "leadership": "لعب دور القائد",
+            "advise_others": "تقديم النصيحة للآخرين",
+            "social_relations": "العلاقات الاجتماعية",
+            "understand_others": "التعاطف"
+        },
+        "intrapersonal": {
+            "self_emotions": "فهم مشاعر الذات",
+            "self_awareness": "الوعي الذاتي",
+            "understand_self": "فهم الذات بشكل جيد",
+            "personal_growth": "النمو الشخصي",
+            "inner_decisions": "الثقة بالمشاعر الداخلية في اتخاذ القرارات",
+            "self_thoughts": "التفكير العميق في الذات",
+            "internal_motivation": "الدافع الداخلي القوي",
+            "emotion_control": "السيطرة على المشاعر تحت الضغط",
+            "write_memories": "كتابة الذكريات الشخصية"
+        },
+        "naturalistic": {
+            "enjoy_nature": "الاستمتاع بالطبيعة",
+            "understand_plants_animals": "فهم جيد للنباتات والحيوانات",
+            "care_environment": "الاهتمام بالبيئة",
+            "sense_environment_change": "فهم التغيرات البيئية السريعة",
+            "notice_species_diff": "ملاحظة الفروقات بين الأنواع",
+            "hiking": "التنزه في الطبيعة",
+            "gardening": "البستنة والعمل مع النباتات",
+            "understand_seasons": "فهم الفصول وتغيرات الطقس",
+            "prefer_nature": "تفضيل البيئات الطبيعية على الحضرية"
+        },
+        "existential_valuedriven": {
+            "loyalty_tasks": "الولاء للمهام والاهتمامات",
+            "loyalty_beliefs": "الولاء الدائم للمعتقدات",
+            "unchanging_interests": "الاهتمامات أو الشغف الذي لا يتغير",
+            "relationship_commitment": "الولاء والالتزام في العلاقات",
+            "loyalty_decisions": "الولاء للقرارات",
+            "loyalty_subjects": "الولاء لمواضيع الاهتمام",
+            "trustworthy": "معروف بالثقة",
+            "keep_promises": "الوفاء بالوعود",
+            "long_term_goals": "السعي لتحقيق أهداف الحياة طويلة الأجل"
+        }
     }
 }
