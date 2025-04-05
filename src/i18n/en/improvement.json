@@ -23,5 +23,106 @@
         "gambling": "Gambling",
         "harassment": "Harassment",
         "politics": "Politics"
+    },
+    "subitems": {
+        "verbal_linguistic": {
+            "write": "Writing",
+            "read": "Reading",
+            "learn_new_words": "Learning new words",
+            "express_thoughts": "Expressing thoughts",
+            "verbal_discussions": "Verbal discussions",
+            "write_emotions": "Writing emotions",
+            "persuasion": "Persuasion",
+            "learn_languages": "Learning new languages",
+            "storytelling": "Storytelling"
+        },
+        "logical_mathematical": {
+            "solve_puzzles": "Solving puzzles and logical problems",
+            "math_skills": "Math skills",
+            "pattern_recognition": "Pattern recognition",
+            "numerical_problems": "Numerical problems",
+            "logical_thinking": "Logical thinking",
+            "mental_calculations": "Mental calculations",
+            "reasoning_problems": "Solving problems with logical reasoning",
+            "data_statistics": "Good understanding of data and statistics",
+            "programming_analysis": "Programming or system analysis"
+        },
+        "visual_spatial": {
+            "mental_imagery": "Mental imagery",
+            "drawing": "Drawing or designing",
+            "reading_maps": "Reading maps and charts",
+            "3d_visualization": "3D visualization",
+            "color_aesthetics": "Color aesthetics",
+            "space_layout": "Space design and layout",
+            "photography": "Photography or art",
+            "mental_models": "Building mental models",
+            "film_video": "Film and video"
+        },
+        "musical": {
+            "music": "Music",
+            "identify_rhythms": "Recognizing rhythms and melodies",
+            "understand_music": "Understanding music",
+            "play_instrument": "Playing an instrument",
+            "music_while_working": "Listening to music while working or studying",
+            "emotions_music": "Emotions in music",
+            "memorize_tunes": "Memorizing tunes",
+            "lyrics_attention": "Attention to lyrics",
+            "live_performance": "Live music performance"
+        },
+        "bodily_kinesthetic": {
+            "physical_activities": "Physical activities",
+            "muscle_coordination": "Nerve and muscle coordination",
+            "complex_movements": "Performing complex movements",
+            "exercise_learning": "Exercise while learning",
+            "physical_reactions": "Physical reflexes",
+            "performance_dance": "Performing or dancing",
+            "sports": "Sports",
+            "practical_work": "Practical work",
+            "handicrafts": "Handicrafts"
+        },
+        "interpersonal": {
+            "connect_with_others": "Connecting with others",
+            "teamwork": "Teamwork",
+            "empathy": "Understanding others' feelings",
+            "resolve_conflicts": "Resolving social conflicts",
+            "talk_to_strangers": "Talking to new people",
+            "leadership": "Playing the role of a leader",
+            "advise_others": "Advising others",
+            "social_relations": "Social relationships",
+            "understand_others": "Empathy"
+        },
+        "intrapersonal": {
+            "self_emotions": "Understanding one's own feelings",
+            "self_awareness": "Self-awareness",
+            "understand_self": "Good self-understanding",
+            "personal_growth": "Personal growth",
+            "inner_decisions": "Trusting inner feelings in decision-making",
+            "self_thoughts": "Thinking deeply about oneself",
+            "internal_motivation": "Strong internal motivation",
+            "emotion_control": "Controlling emotions under stress",
+            "write_memories": "Writing personal memories"
+        },
+        "naturalistic": {
+            "enjoy_nature": "Enjoying nature",
+            "understand_plants_animals": "Good understanding of plants and animals",
+            "care_environment": "Interest in the environment",
+            "sense_environment_change": "Understanding rapid environmental changes",
+            "notice_species_diff": "Noticing differences between species",
+            "hiking": "Hiking in nature",
+            "gardening": "Gardening and working with plants",
+            "understand_seasons": "Understanding seasons and weather changes",
+            "prefer_nature": "Preferring natural environments over urban ones"
+        },
+        "existential_valuedriven": {
+            "loyalty_tasks": "Loyalty to tasks and interests",
+            "loyalty_beliefs": "Enduring loyalty to beliefs",
+            "unchanging_interests": "Unchanging passions or interests",
+            "relationship_commitment": "Loyalty and commitment in relationships",
+            "loyalty_decisions": "Loyalty to decisions",
+            "loyalty_subjects": "Loyalty to subjects of interest",
+            "trustworthy": "Being known as trustworthy",
+            "keep_promises": "Keeping promises",
+            "long_term_goals": "Pursuing long-term life goals"
+        }
     }
 }
