@@ -4,6 +4,7 @@ export const NOTIFICATION_TYPES = {
     [NotificationTypeEnum.SYSTEM]: {
         icon: 'https://cdn.exirtu.be/linchpin/notif_type_system.png',
         color: '#8543FF',
+
     },
     [NotificationTypeEnum.PAYROLL]: {
         icon: 'https://cdn.exirtu.be/linchpin/notif_type_payroll.png',
