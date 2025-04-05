@@ -39,6 +39,8 @@ import { UserSharedRepositoryImpl } from './infrastructure/repositories/user-sha
 import { RefreshTokenHandler } from './application/commands/handlers/refresh-token.handler';
 import { OrganizationModule } from 'src/organization/organization.module';
 import { GetAllUsersWithTeamHandler } from './application/queries/handlers/get-all-users-with-team.handler';
+import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-employment-settings.module';
+import { LoginAdminHandler } from './application/commands/handlers/login-admin.handler';
 
 @Module({
     imports: [
@@ -50,12 +52,13 @@ import { GetAllUsersWithTeamHandler } from './application/queries/handlers/get-a
         ]),
         CqrsModule,
         forwardRef(() => OrganizationModule),
+        UserEmploymentSettingsModule,
     ],
     controllers: [
         RoleController,
         PermissionController,
         AuthController,
-        UserController
+        UserController,
     ],
     providers: [
         // Services
@@ -99,6 +102,7 @@ import { GetAllUsersWithTeamHandler } from './application/queries/handlers/get-a
         DeleteUserHandler,
         LoginHandler,
         RefreshTokenHandler,
+        LoginAdminHandler,
 
         // Query Handlers
         GetUserByIdHandler,

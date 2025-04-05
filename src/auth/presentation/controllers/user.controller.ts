@@ -27,7 +27,16 @@ export class UserController {
     @ApiResponse({ status: 400, description: 'اطلاعات وارد شده نامعتبر است.' })
     async createUser(@Body() dto: CreateUserDto) {
         return await this.commandBus.execute(
-            new CreateUserCommand(dto.teamId, dto.name, dto.profileImage, dto.lastname, dto.phoneNumber, dto.password, dto.role),
+            new CreateUserCommand(
+                dto.organizationId,
+                dto.name,
+                dto.profileImage,
+                dto.lastname,
+                dto.phoneNumber,
+                dto.password,
+                dto.role,
+                dto.settings,
+            ),
         );
     }
 

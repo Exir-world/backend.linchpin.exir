@@ -20,8 +20,9 @@ export class UserEmploymentSettingsController {
         return this.commandBus.execute(new CreateUserEmploymentSettingsCommand(
             dto.userId,
             dto.shiftId,
-            dto.salaryCoef,
+            dto.salary,
             dto.needLocation,
+            dto.teamId,
         ));
     }
 

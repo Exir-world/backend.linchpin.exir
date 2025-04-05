@@ -9,6 +9,7 @@ export class TeamMapper {
             entity.title,
             entity.color,
             entity.description,
+            entity.supervisorId, // Added supervisorId
         );
     }
 
@@ -19,6 +20,7 @@ export class TeamMapper {
         entity.title = domain.getTitle;
         entity.color = domain.getColor;
         entity.description = domain.getDescription;
+        entity.supervisorId = domain.getSupervisorId; // Added supervisorId
 
         return entity;
     }

@@ -8,6 +8,9 @@ export class TeamEntity {
     @Column()
     organizationId: number;
 
+    @Column({ nullable: true })
+    supervisorId: number;
+
     @Column()
     title: string;
 
