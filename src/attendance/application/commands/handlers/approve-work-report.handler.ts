@@ -11,6 +11,7 @@ export class ApproveWorkReportHandler implements ICommandHandler<ApproveWorkRepo
         private readonly i18n: I18nService,
     ) { }
 
+    
     async execute(command: ApproveWorkReportCommand): Promise<void> {
         // بازیابی گزارش کار از مخزن
         const report = await this.workReportRepository.findById(command.workReportId);

@@ -79,22 +79,34 @@ pipeline {
                 }
             }
         }
+
+        stage('Cleanup Old Docker Images') {
+            steps {
+                script {
+                    sh """
+                    docker images --format '{{.Repository}}:{{.Tag}} {{.CreatedAt}}' \\
+                        | grep ${IMAGE_NAME} \\
+                        | sort -k2 -r \\
+                        | awk 'NR>2 {print \$1}' \\
+                        | xargs -r docker rmi
+                    """
+                }
+            }
+        }
     }
 
     post {
         success {
             script {
-                // Get the last commit message
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                // Send the Telegram message
-                def message = "✅ your container is alive!!!\n" +
-                              "Commit: ${lastCommitMessage}\n" +
+                def message = "✅ your container is alive!!!\\n" +
+                              "Commit: ${lastCommitMessage}\\n" +
                               "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 
                 sh """
-                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
-                    -d chat_id=${env.TELEGRAM_CHAT_ID} \
-                    -d text="${message}" \
+                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \\
+                    -d chat_id=${env.TELEGRAM_CHAT_ID} \\
+                    -d text="${message}" \\
                     -d parse_mode=Markdown
                 """
             }
@@ -102,17 +114,15 @@ pipeline {
 
         failure {
             script {
-                // Get the last commit message
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                // Send the Telegram message
-                def message = "❌ Pipeline is dead!\n" +
-                              "Commit: ${lastCommitMessage}\n" +
+                def message = "❌ Pipeline is dead!\\n" +
+                              "Commit: ${lastCommitMessage}\\n" +
                               "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 
                 sh """
-                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \
-                    -d chat_id=${env.TELEGRAM_CHAT_ID} \
-                    -d text="${message}" \
+                curl -s -X POST https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage \\
+                    -d chat_id=${env.TELEGRAM_CHAT_ID} \\
+                    -d text="${message}" \\
                     -d parse_mode=Markdown
                 """
             }
