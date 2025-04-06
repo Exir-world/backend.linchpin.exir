@@ -7,6 +7,9 @@ import { GetSelfImprovementsByOrgIdQuery } from '../queries/get-self-improvement
 import { GetLocationByOrgIdQuery } from '../queries/get-location-by-org-id.query';
 import { SelfImprovementItemTypeEnum } from 'src/organization/domain/enums/self-improvement-item-type.enum';
 import { GetSelfImprovementsSubItemsByItemIdQuery } from '../queries/get-self-improvements-subitems-by-item-id.query';
+import { CreateOrganizationDto } from 'src/organization/presentation/dto/create-organization.dto';
+import { CreateOrganizationCommand } from '../commands/create-organization.command';
+import { CreateTeamCommand } from '../commands/create-team.command';
 
 @Injectable()
 export class OrganizationService implements OrganizationSharedPort {
@@ -14,6 +17,11 @@ export class OrganizationService implements OrganizationSharedPort {
         private readonly queryBus: QueryBus,
         private readonly commandBus: CommandBus,
     ) { }
+
+    async createOrganization(dto: CreateOrganizationDto, creatorId: number): Promise<any> {
+        return this.commandBus.execute(new CreateOrganizationCommand(dto, creatorId));
+
+    }
 
     async getSelfImprovementsByOrgId(orgId: number): Promise<any> {
         return this.queryBus.execute(new GetSelfImprovementsByOrgIdQuery(orgId));
@@ -25,6 +33,26 @@ export class OrganizationService implements OrganizationSharedPort {
 
     async getTeamsByOrgId(orgId: number): Promise<any> {
         return this.queryBus.execute(new GetTeamsByOrgIdQuery(orgId));
+    }
+
+    async createTeam(
+        creatorId,
+        organizationId,
+        title,
+        supervisorId,
+        color,
+        description,
+    ) {
+        const command = new CreateTeamCommand(
+            creatorId,
+            organizationId,
+            title,
+            supervisorId,
+            color,
+            description,
+        );
+
+        return this.commandBus.execute(command);
     }
 
     async getLocationByOrgId(orgId: number): Promise<any> {

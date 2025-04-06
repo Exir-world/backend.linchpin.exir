@@ -1,11 +1,33 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+
+class SettingsDto {
+    @ApiPropertyOptional({ example: 101, description: 'شناسه تیم' })
+    @IsNumber()
+    @IsOptional()
+    teamId?: number;
+
+    @ApiPropertyOptional({ example: 5, description: 'شناسه شیفت' })
+    @IsNumber()
+    @IsOptional()
+    shiftId?: number;
+
+    @ApiPropertyOptional({ example: 50000, description: 'حقوق کاربر' })
+    @IsNumber()
+    @IsOptional()
+    salary?: number;
+
+    @ApiPropertyOptional({ example: true, description: 'آیا نیاز به موقعیت مکانی دارد' })
+    @IsOptional()
+    needToLocation?: boolean;
+}
 
 export class CreateUserDto {
-    @ApiProperty({ example: 1, description: 'شناسه تیم' })
+    @ApiProperty({ example: 1, description: 'شناسه سازمان' })
     @IsNumber()
     @IsNotEmpty()
-    teamId: number;
+    organizationId: number;
 
     @ApiProperty({ example: 'John', description: 'نام کاربر' })
     @IsString({ message: 'نام باید یک رشته باشد' })
@@ -39,4 +61,10 @@ export class CreateUserDto {
     @ApiProperty({ example: 3, description: 'نقش کاربر' })
     @IsInt({ message: 'نقش باید یک عدد صحیح باشد' })
     role: number;
+
+    @ApiPropertyOptional({ description: 'تنظیمات کاربر' })
+    @ValidateNested()
+    @Type(() => SettingsDto)
+    @IsOptional()
+    settings?: SettingsDto;
 }

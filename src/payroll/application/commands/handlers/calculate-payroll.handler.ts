@@ -37,7 +37,7 @@ export class CalculatePayrollHandler implements ICommandHandler<CalculatePayroll
         for (let i = 0; i < users.length; i++) {
             const userId = users[i].id;
             const userName = users[i].name;
-            const userCoef = settings.find(s => s.userId == userId)?.salaryCoef || 0;
+            const userCoef = settings.find(s => s.userId == userId)?.salary || 0;
 
             const userAttendances = attendances.find(att => att.userId == userId)?.attendances || [];
 

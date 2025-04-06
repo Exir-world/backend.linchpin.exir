@@ -23,7 +23,7 @@ export class UserRepositoryImpl extends UserRepository {
         }
 
         return new User(
-            userEntity.teamId,
+            userEntity.organizationId,
             userEntity.name,
             userEntity.profileImage,
             userEntity.lastname,
@@ -34,8 +34,9 @@ export class UserRepositoryImpl extends UserRepository {
         );
     }
 
-    async save(user: User): Promise<void> {
-        await this.ormRepository.save(UserMapper.toEntity(user));
+    async save(user: User): Promise<User> {
+        const newUser = await this.ormRepository.save(UserMapper.toEntity(user));
+        return UserMapper.toDomain(newUser);
     }
 
     async findAll(): Promise<User[]> {

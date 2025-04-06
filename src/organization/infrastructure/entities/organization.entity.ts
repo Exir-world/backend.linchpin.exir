@@ -6,6 +6,9 @@ export class OrganizationEntity {
     id: number;
 
     @Column()
+    creatorId: number;
+
+    @Column()
     name: string;
 
     @Column({ nullable: true })
