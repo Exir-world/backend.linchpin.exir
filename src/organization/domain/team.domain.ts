@@ -4,6 +4,7 @@ export class Team {
     private title: string;
     private color: string;
     private description: string;
+    private supervisorId: number | null;
 
     constructor(
         id: number,
@@ -11,12 +12,14 @@ export class Team {
         title: string,
         color: string,
         description: string,
+        supervisorId: number | null = null,
     ) {
         this.id = id;
         this.organizationId = organizationId;
         this.title = title;
         this.color = color;
         this.description = description;
+        this.supervisorId = supervisorId;
     }
 
     public get getId(): number {
@@ -39,6 +42,10 @@ export class Team {
         return this.description;
     }
 
+    public get getSupervisorId(): number | null {
+        return this.supervisorId;
+    }
+
     public setTitle(title: string): void {
         this.title = title;
     }
@@ -49,5 +56,9 @@ export class Team {
 
     public setDescription(description: string | null): void {
         this.description = description;
+    }
+
+    public setSupervisorId(supervisorId: number | null): void {
+        this.supervisorId = supervisorId;
     }
 }

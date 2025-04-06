@@ -19,7 +19,8 @@ export class GetAllUsersWithTeamHandler implements IQueryHandler<GetAllUsersWith
 
         return users.map(user => ({
             ...user,
-            team: teams.find(team => team.id === user.teamId),
+            // todo
+            // team: teams.find(team => team.id === user.teamId),
         }));
     }
 }

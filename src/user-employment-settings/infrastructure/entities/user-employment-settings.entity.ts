@@ -8,11 +8,14 @@ export class UserEmploymentSettingsEntity {
     @Column()
     userId: number;
 
+    @Column({ nullable: true })
+    teamId: number;
+
+    @Column({ type: "decimal" })
+    salary: number;
+
     @Column()
     shiftId: number;
-
-    @Column({ type: "decimal", precision: 5, scale: 2 })
-    salaryCoef: number;
 
     @Column({ default: true })
     needLocation: boolean;

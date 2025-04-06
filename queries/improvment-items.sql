@@ -19,7 +19,7 @@ VALUES
 
 INSERT INTO "self-improvement-subitem" (title, score, "selfImprovementItemId")
 VALUES
-('نوشتن', '{9, 6, 3}', 16),
+('improvment.subitems.verbal_linguistic.write', '{3,6,9}', 16),
 ('حل معما و مسائل منطقی', '{9, 6, 3}', 17),
 ('تصویرسازی ذهنی', '{9, 6, 3}', 18),
 ('موسیقی', '{9, 6, 3}', 19),

@@ -5,6 +5,7 @@ import { UserEmploymentSettings } from 'src/user-employment-settings/domain/user
 import { GetUserEmploymentSettingsQuery } from '../queries/get-user-employment-settings.query';
 import { GetUsersEmploymentSettingsQuery } from '../queries/get-users-employment-settings.query';
 import { GetAllUsersEmploymentSettingsQuery } from '../queries/get-all-users-employment-settings.query';
+import { CreateUserEmploymentSettingsCommand } from '../commands/create-user-employment-settings.command';
 
 @Injectable()
 export class UserEmploymentSettingsService implements UserEmploymentSettingsSharedPort {
@@ -22,5 +23,19 @@ export class UserEmploymentSettingsService implements UserEmploymentSettingsShar
 
     getSettingsForAll(): Promise<UserEmploymentSettings[]> {
         return this.queryBus.execute(new GetAllUsersEmploymentSettingsQuery());
+    }
+
+    async createSettings(
+        userId: number,
+        shiftId: number,
+        teamId: number,
+        needToLocation: boolean,
+        salary: number
+    ): Promise<UserEmploymentSettings> {
+        const newSettings = await this.queryBus.execute(
+            new CreateUserEmploymentSettingsCommand(userId, shiftId, salary, needToLocation, teamId)
+        );
+
+        return newSettings;
     }
 }
