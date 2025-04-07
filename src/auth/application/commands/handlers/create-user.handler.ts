@@ -32,6 +32,7 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
             role,
             command.nationalCode,
             command.personnelCode,
+            false, // isDeleted
             0
         );
         const newUser = await this.userRepository.save(user);

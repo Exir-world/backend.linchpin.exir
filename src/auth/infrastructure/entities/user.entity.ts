@@ -35,4 +35,7 @@ export class UserEntity {
 
     @Column({ type: 'varchar', length: 20, unique: true, nullable: true })
     personnelCode: string;
+
+    @Column({ type: 'boolean', default: false })
+    isDeleted: boolean;
 }

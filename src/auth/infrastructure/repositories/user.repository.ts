@@ -38,6 +38,7 @@ export class UserRepositoryImpl extends UserRepository {
             RoleMapper.toDomain(userEntity.role),
             userEntity.nationalCode,
             userEntity.personnelCode,
+            userEntity.isDeleted,
             userEntity.id,
         );
     }
