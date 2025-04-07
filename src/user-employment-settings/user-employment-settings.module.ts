@@ -8,6 +8,7 @@ import { GetUserEmploymentSettingsHandler } from './application/queries/handlers
 import { UserEmploymentSettingsService } from './application/services/user-employment-settings.service';
 import { GetUsersEmploymentSettingsHandler } from './application/queries/handlers/get-users-employment-settings.handler';
 import { GetAllUsersEmploymentSettingsHandler } from './application/queries/handlers/get-all-users-employment-settings.handler';
+import { UpdateUserEmploymentSettingsHandler } from './application/commands/handlers/update-user-employment-settings.handler';
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { GetAllUsersEmploymentSettingsHandler } from './application/queries/hand
     ],
     providers: [
         CreateUserEmploymentSettingsHandler,
+        UpdateUserEmploymentSettingsHandler,
 
         GetUserEmploymentSettingsHandler,
         GetUsersEmploymentSettingsHandler,

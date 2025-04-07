@@ -8,5 +8,8 @@ export class CreateUserCommand {
         public readonly password: string,
         public readonly role: number,
         public readonly settings: any,
+        public readonly firstname: string,
+        public readonly nationalCode: string,
+        public readonly personnelCode: string,
     ) { }
 }

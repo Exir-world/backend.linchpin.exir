@@ -8,12 +8,16 @@ export class UserMapper {
         const role = RoleMapper.toDomain(userEntity.role);
         return new User(
             userEntity.organizationId,
+            userEntity.firstname,
             userEntity.name,
             userEntity.profileImage,
             userEntity.lastname,
             userEntity.phoneNumber,
             userEntity.password,
             role,
+            userEntity.nationalCode,
+            userEntity.personnelCode,
+            userEntity.isDeleted,
             userEntity.id,
         );
     }
@@ -22,11 +26,15 @@ export class UserMapper {
         const userEntity = new UserEntity();
         userEntity.id = user.id;
         userEntity.organizationId = user.organizationId;
+        userEntity.firstname = user.firstname;
         userEntity.name = user.name;
         userEntity.lastname = user.lastname;
         userEntity.phoneNumber = user.phoneNumber;
         userEntity.password = user.password;
         userEntity.role = RoleMapper.toEntity(user.role);
+        userEntity.nationalCode = user.nationalCode;
+        userEntity.personnelCode = user.personnelCode;
+        userEntity.isDeleted = user.isDeleted;
         return userEntity;
     }
 }
