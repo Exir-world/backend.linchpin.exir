@@ -1,9 +1,9 @@
+import { UpdateUserDto } from "src/auth/presentation/dto/update-user.dto";
+
 export class UpdateUserCommand {
     constructor(
-        public readonly id: number,
-        public readonly name?: string,
-        public readonly phoneNumber?: string,
-        public readonly password?: string,
-        public readonly role?: number,
+        public readonly userId: number,
+        public readonly adminId: number,
+        public readonly dto: UpdateUserDto,
     ) { }
 }

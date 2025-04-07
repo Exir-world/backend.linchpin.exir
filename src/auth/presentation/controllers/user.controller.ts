@@ -1,5 +1,5 @@
-import { Controller, Post, Get, Patch, Delete, Param, Body, HttpCode, HttpStatus, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Post, Get, Patch, Delete, Param, Body, HttpCode, HttpStatus, UseGuards, Query, Req } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
@@ -10,6 +10,7 @@ import { GetAllUsersQuery } from 'src/auth/application/queries/get-all-users.que
 import { UpdateUserCommand } from 'src/auth/application/commands/update-user.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { GetAllUsersWithTeamQuery } from 'src/auth/application/queries/get-all-users-with-team.query';
+import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -19,7 +20,7 @@ export class UserController {
 
     // @Policies()
     // @UseGuards(UserAuthGuard, PoliciesGuard)
-    @UseGuards(UserAuthGuard)
+    @UseGuards(AdminAuthGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'ایجاد کاربر جدید' })
@@ -36,15 +37,32 @@ export class UserController {
                 dto.password,
                 dto.role,
                 dto.settings,
+                dto.firstname,
+                dto.nationalCode,
+                dto.personnelCode,
             ),
         );
     }
 
+    @UseGuards(AdminAuthGuard)
     @Get()
     @ApiOperation({ summary: 'دریافت لیست کاربران' })
     @ApiResponse({ status: 200, description: 'لیست کاربران بازگردانده شد.' })
-    async getAllUsers() {
-        return await this.queryBus.execute(new GetAllUsersQuery()); // Placeholder
+    @ApiResponse({ status: 400, description: 'شناسه سازمان نامعتبر است.' })
+    @ApiQuery({
+        name: 'organizationId',
+        required: false,
+        type: Number,
+        description: 'شناسه سازمان (اختیاری)'
+    })
+    async getAllUsers(
+        @Query('organizationId') organizationId?: number,
+        @Req() req?: any
+    ) {
+        const adminId = req?.user?.id;
+        return await this.queryBus.execute(
+            new GetAllUsersQuery(adminId, organizationId || null)
+        );
     }
 
     @Get('with-team')
@@ -54,6 +72,7 @@ export class UserController {
         return await this.queryBus.execute(new GetAllUsersWithTeamQuery()); // Placeholder
     }
 
+    @UseGuards(AdminAuthGuard)
     @Get(':id')
     @ApiOperation({ summary: 'دریافت اطلاعات یک کاربر' })
     @ApiResponse({ status: 200, description: 'اطلاعات کاربر بازگردانده شد.' })
@@ -62,18 +81,18 @@ export class UserController {
         return await this.queryBus.execute(new GetUserByIdQuery(id));
     }
 
+    @UseGuards(AdminAuthGuard)
     @Patch(':id')
     @ApiOperation({ summary: 'به‌روزرسانی اطلاعات یک کاربر' })
     @ApiResponse({ status: 200, description: 'اطلاعات کاربر به‌روزرسانی شد.' })
     @ApiResponse({ status: 404, description: 'کاربر مورد نظر یافت نشد.' })
-    async updateUser(@Param('id') id: number, @Body() dto: UpdateUserDto) {
+    async updateUser(@Param('id') id: number, @Body() dto: UpdateUserDto, @Req() req: any) {
+        const adminId = req?.user?.id;
         return await this.commandBus.execute(
             new UpdateUserCommand(
                 id,
-                dto.name,
-                dto.phoneNumber,
-                dto.password,
-                dto.role
+                adminId,
+                dto,
             )
         );
     }
