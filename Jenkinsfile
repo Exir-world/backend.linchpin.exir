@@ -99,8 +99,8 @@ pipeline {
         success {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "✅ your container is alive!!!\\n" +
-                              "Commit: ${lastCommitMessage}\\n" +
+                def message = "✅ your container is alive!!! \n" +
+                              "Commit: ${lastCommitMessage} \n" +
                               "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 
                 sh """
@@ -115,8 +115,8 @@ pipeline {
         failure {
             script {
                 def lastCommitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                def message = "❌ Pipeline is dead!\\n" +
-                              "Commit: ${lastCommitMessage}\\n" +
+                def message = "❌ Pipeline is dead! \n" +
+                              "Commit: ${lastCommitMessage} \n" +
                               "Image Name: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 
                 sh """
