@@ -1,1 +1,3 @@
-export class GetAllUsersQuery { }
+export class GetAllUsersQuery {
+    constructor(public adminId: number, public organId?: number) { }
+}

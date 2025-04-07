@@ -7,9 +7,11 @@ import { GetSelfImprovementsByOrgIdQuery } from '../queries/get-self-improvement
 import { GetLocationByOrgIdQuery } from '../queries/get-location-by-org-id.query';
 import { SelfImprovementItemTypeEnum } from 'src/organization/domain/enums/self-improvement-item-type.enum';
 import { GetSelfImprovementsSubItemsByItemIdQuery } from '../queries/get-self-improvements-subitems-by-item-id.query';
-import { CreateOrganizationDto } from 'src/organization/presentation/dto/create-organization.dto';
+import { CreateOrUpdateOrganizationDto } from 'src/organization/presentation/dto/create-or-update-organization.dto';
 import { CreateOrganizationCommand } from '../commands/create-organization.command';
 import { CreateTeamCommand } from '../commands/create-team.command';
+import { GetOrganizationsByAdminIdQuery } from '../queries/get-organizations-by-admin-id.query';
+import { UpdateOrganizationCommand } from '../commands/update-organization.command';
 
 @Injectable()
 export class OrganizationService implements OrganizationSharedPort {
@@ -18,9 +20,16 @@ export class OrganizationService implements OrganizationSharedPort {
         private readonly commandBus: CommandBus,
     ) { }
 
-    async createOrganization(dto: CreateOrganizationDto, creatorId: number): Promise<any> {
-        return this.commandBus.execute(new CreateOrganizationCommand(dto, creatorId));
+    async getOrganizationsByAdminId(adminId: number): Promise<any> {
+        return this.queryBus.execute(new GetOrganizationsByAdminIdQuery(adminId));
+    }
 
+    async createOrganization(dto: CreateOrUpdateOrganizationDto, creatorId: number): Promise<any> {
+        return this.commandBus.execute(new CreateOrganizationCommand(dto, creatorId));
+    }
+
+    async updateOrganizationByAdmin(organizationId: number, dto: CreateOrUpdateOrganizationDto, adminId: number): Promise<any> {
+        return this.commandBus.execute(new UpdateOrganizationCommand(dto, adminId, organizationId));
     }
 
     async getSelfImprovementsByOrgId(orgId: number): Promise<any> {

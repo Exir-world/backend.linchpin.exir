@@ -1,6 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsInt, IsArray, ValidateNested, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsInt, IsString } from 'class-validator';
 
 export class CreateUserSelfImprovementItemDto {
   @ApiProperty({ example: 1, description: 'The ID of the self-improvement being evaluated' })

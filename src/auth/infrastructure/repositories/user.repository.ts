@@ -15,6 +15,11 @@ export class UserRepositoryImpl extends UserRepository {
         this.ormRepository = this.dataSource.getRepository(UserEntity);
     }
 
+    async findByCondition(condition: any): Promise<User[]> {
+        const users = await this.ormRepository.find({ where: condition, relations: ['role', 'role.permissions'] });
+        return users.map(UserMapper.toDomain);
+    }
+
     async findByPhoneNumber(phoneNumber: string): Promise<User | null> {
         const userEntity = await this.ormRepository.findOne({ where: { phoneNumber }, relations: ['role'] });
 
@@ -24,12 +29,16 @@ export class UserRepositoryImpl extends UserRepository {
 
         return new User(
             userEntity.organizationId,
+            userEntity.firstname,
             userEntity.name,
             userEntity.profileImage,
             userEntity.lastname,
             userEntity.phoneNumber,
             userEntity.password,
             RoleMapper.toDomain(userEntity.role),
+            userEntity.nationalCode,
+            userEntity.personnelCode,
+            userEntity.isDeleted,
             userEntity.id,
         );
     }
