@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class SettingsDto {
@@ -85,4 +85,9 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'کد پرسنلی نمی‌تواند خالی باشد' })
     @MaxLength(20, { message: 'کد پرسنلی نمی‌تواند بیشتر از 20 کاراکتر باشد' })
     personnelCode: string;
+
+    @ApiProperty({ example: false, description: 'وضعیت حذف کاربر' })
+    @IsBoolean()
+    @IsNotEmpty()
+    isDelete: boolean = false;
 }

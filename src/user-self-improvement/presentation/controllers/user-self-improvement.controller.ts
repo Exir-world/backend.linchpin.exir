@@ -6,6 +6,7 @@ import { CreateUserSelfImprovementCommand } from 'src/user-self-improvement/appl
 import { GetUserSelfImprovementsByOrgIdQuery } from 'src/user-self-improvement/application/queries/get-user-self-improvements-by-org-id.query';
 import { CreateUserSelfImprovementItemDto } from '../dto/create-user-self-improvement.dto';
 import { GetSubItemsByItemIdQuery } from 'src/user-self-improvement/application/queries/get-subitems-by-item-id.query ';
+import { CreateUserSelfImprovementSubItemDto } from '../dto/create-user-self-improvement-subitem.dto';
 
 @ApiTags('User Self Improvement')
 @ApiBearerAuth() // Adds the JWT Authorization header to Swagger UI
@@ -33,6 +34,25 @@ export class UserSelfImprovementController {
         );
 
         return this.queryBus.execute(new GetUserSelfImprovementsByOrgIdQuery(userId));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Post('subitem')
+    @ApiOperation({ summary: 'Create multiple user self-improvement evaluations' })
+    @ApiResponse({ status: 201, description: 'User self-improvement evaluations created successfully' })
+    @ApiResponse({ status: 400, description: 'Validation failed' })
+    async createSubItem(@Body() body: CreateUserSelfImprovementSubItemDto, @Request() req) {
+        const userId = req.user.id;
+        await this.commandBus.execute(
+            new CreateUserSelfImprovementCommand(
+                userId,
+                body.subItemId,
+                body.userScore,
+                ''
+            )
+        );
+
+        return this.queryBus.execute(new GetSubItemsByItemIdQuery(userId, body.itemId));
     }
 
     @UseGuards(UserAuthGuard)

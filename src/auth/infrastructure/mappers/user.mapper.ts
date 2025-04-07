@@ -17,6 +17,7 @@ export class UserMapper {
             role,
             userEntity.nationalCode,
             userEntity.personnelCode,
+            userEntity.isDeleted,
             userEntity.id,
         );
     }
@@ -33,6 +34,7 @@ export class UserMapper {
         userEntity.role = RoleMapper.toEntity(user.role);
         userEntity.nationalCode = user.nationalCode;
         userEntity.personnelCode = user.personnelCode;
+        userEntity.isDeleted = user.isDeleted;
         return userEntity;
     }
 }
