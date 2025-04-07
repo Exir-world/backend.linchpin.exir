@@ -23,12 +23,15 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
 
         const user = new User(
             command.organizationId,
+            command.firstname,
             command.name,
             command.profileImage,
             command.lastname,
             command.phoneNumber,
             command.password,
             role,
+            command.nationalCode,
+            command.personnelCode,
             0
         );
         const newUser = await this.userRepository.save(user);

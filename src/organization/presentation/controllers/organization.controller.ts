@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { OrganizationService } from 'src/organization/application/services/organization.service';
 import { CreateSelfImprovementDto } from '../dto/create-self-improvement.dto';
 import { UseGuards, Request } from '@nestjs/common';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
-import { CreateOrganizationDto } from '../dto/create-organization.dto';
+import { CreateOrUpdateOrganizationDto } from '../dto/create-or-update-organization.dto';
 import { Team } from 'src/organization/domain/team.domain';
 import { CreateTeamDto } from '../dto/create-team.dto';
 import { CreateTeamCommand } from 'src/organization/application/commands/create-team.command';
@@ -18,13 +18,39 @@ export class OrganizationController {
     ) { }
 
     @UseGuards(AdminAuthGuard)
+    @Get('admin/organizations')
+    @ApiOperation({ summary: 'Get organizations for admin' })
+    @ApiResponse({ status: 200, description: 'Successful response' })
+    @ApiResponse({ status: 404, description: 'Admin not found or no organizations available' })
+    async getOrganizationsForAdmin(@Request() req: any) {
+        const adminId = req.user.id; // Extract admin ID from JWT token
+        return this.organizationService.getOrganizationsByAdminId(adminId);
+    }
+
+    @UseGuards(AdminAuthGuard)
     @Post()
     @ApiOperation({ summary: 'Create a new organization' })
     @ApiResponse({ status: 201, description: 'Organization created successfully.' })
     @ApiResponse({ status: 400, description: 'Validation error.' })
-    async createOrganization(@Body() dto: CreateOrganizationDto, @Request() req: any) {
+    async createOrganization(@Body() dto: CreateOrUpdateOrganizationDto, @Request() req: any) {
         const creatorUserId = req.user.id; // Extract user ID from JWT token
         return this.organizationService.createOrganization(dto, creatorUserId);
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Patch('admin/organizations/:organizationId')
+    @ApiOperation({ summary: 'Update an organization by admin' })
+    @ApiParam({ name: 'organizationId', required: true, description: 'Organization ID' })
+    @ApiResponse({ status: 200, description: 'Organization updated successfully.' })
+    @ApiResponse({ status: 400, description: 'Validation error.' })
+    @ApiResponse({ status: 404, description: 'Organization not found.' })
+    async updateOrganizationByAdmin(
+        @Param('organizationId') organizationId: number,
+        @Body() dto: CreateOrUpdateOrganizationDto,
+        @Request() req: any
+    ) {
+        const adminId = req.user.id; // Extract admin ID from JWT token
+        return this.organizationService.updateOrganizationByAdmin(organizationId, dto, adminId);
     }
 
     @Post('improvements')

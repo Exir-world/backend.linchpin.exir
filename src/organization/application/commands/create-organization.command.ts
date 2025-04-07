@@ -1,4 +1,4 @@
-import { CreateOrganizationDto } from "src/organization/presentation/dto/create-organization.dto";
+import { CreateOrUpdateOrganizationDto } from "src/organization/presentation/dto/create-or-update-organization.dto";
 
 export class CreateOrganizationCommand {
     public readonly name: string;
@@ -6,7 +6,7 @@ export class CreateOrganizationCommand {
     public readonly address?: string;
     public readonly creatorId: number;
 
-    constructor(dto: CreateOrganizationDto, creatorId: number) {
+    constructor(dto: CreateOrUpdateOrganizationDto, creatorId: number) {
         this.name = dto.name;
         this.description = dto.description;
         this.address = dto.address;
