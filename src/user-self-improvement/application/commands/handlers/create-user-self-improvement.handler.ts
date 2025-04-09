@@ -16,16 +16,30 @@ export class CreateUserSelfImprovementHandler implements ICommandHandler<CreateU
     async execute(command: CreateUserSelfImprovementCommand): Promise<UserSelfImprovement> {
         const { userId, improvementId, description, userScore } = command;
 
-        const entity = new UserSelfImprovementEntity();
-        entity.userId = userId;
-        entity.improvementId = improvementId;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        let entity = await this.userSelfImprovementRepository.findOne({
+            where: {
+                userId,
+                improvementId,
+                date: today,
+            },
+        });
+
+        if (!entity) {
+            entity = new UserSelfImprovementEntity();
+            entity.userId = userId;
+            entity.improvementId = improvementId;
+            entity.date = today;
+        }
+
         entity.userScore = userScore;
         entity.description = description;
-        entity.date = new Date();
         entity.supervisorScore = null;
 
-        const savedItems = await this.userSelfImprovementRepository.save(entity);
+        const savedItem = await this.userSelfImprovementRepository.save(entity);
 
-        return UserSelfImprovementMapper.toDomain(savedItems);
+        return UserSelfImprovementMapper.toDomain(savedItem);
     }
 }

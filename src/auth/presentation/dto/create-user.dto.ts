@@ -89,5 +89,5 @@ export class CreateUserDto {
     @ApiProperty({ example: false, description: 'وضعیت حذف کاربر' })
     @IsBoolean()
     @IsNotEmpty()
-    isDelete: boolean = false;
+    isDeleted: boolean = false;
 }
