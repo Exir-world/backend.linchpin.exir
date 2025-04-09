@@ -1,12 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { DepartmentEntity } from './department.entity';
 
 @Entity('teams')
 export class TeamEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    organizationId: number;
+    @Column({ nullable: true })
+    departmentId: number;
+
+    @ManyToOne(() => DepartmentEntity, department => department.teams)
+    @JoinColumn({ name: 'departmentId' })
+    department: DepartmentEntity;
 
     @Column({ nullable: true })
     supervisorId: number;

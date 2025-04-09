@@ -1,4 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { DepartmentEntity } from './department.entity';
+import { OneToMany } from 'typeorm';
 
 @Entity('organization')
 export class OrganizationEntity {
@@ -16,4 +18,7 @@ export class OrganizationEntity {
 
     @Column({ nullable: true })
     description: string;
+
+    @OneToMany(() => DepartmentEntity, department => department.organization)
+    departments: DepartmentEntity[];
 }

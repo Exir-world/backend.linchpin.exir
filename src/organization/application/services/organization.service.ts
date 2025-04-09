@@ -12,6 +12,8 @@ import { CreateOrganizationCommand } from '../commands/create-organization.comma
 import { CreateTeamCommand } from '../commands/create-team.command';
 import { GetOrganizationsByAdminIdQuery } from '../queries/get-organizations-by-admin-id.query';
 import { UpdateOrganizationCommand } from '../commands/update-organization.command';
+import { GetTeamsByDepartmentIdQuery } from '../queries/get-teams-by-department-id.query';
+import { GetDepartmentsByOrgIdQuery } from '../queries/get-departments-by-org-id.query';
 
 @Injectable()
 export class OrganizationService implements OrganizationSharedPort {
@@ -19,6 +21,14 @@ export class OrganizationService implements OrganizationSharedPort {
         private readonly queryBus: QueryBus,
         private readonly commandBus: CommandBus,
     ) { }
+
+    async getTeamsByDepartmentId(departmentId: number): Promise<any> {
+        return this.queryBus.execute(new GetTeamsByDepartmentIdQuery(departmentId));
+    }
+
+    async getDepartmentsByOrgId(orgId: number): Promise<any> {
+        return this.queryBus.execute(new GetDepartmentsByOrgIdQuery(orgId));
+    }
 
     async getOrganizationsByAdminId(adminId: number): Promise<any> {
         return this.queryBus.execute(new GetOrganizationsByAdminIdQuery(adminId));

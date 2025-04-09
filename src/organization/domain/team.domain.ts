@@ -1,6 +1,6 @@
 export class Team {
     private id: number;
-    private organizationId: number;
+    private departmentId: number;
     private title: string;
     private color: string;
     private description: string;
@@ -8,14 +8,14 @@ export class Team {
 
     constructor(
         id: number,
-        organizationId: number,
+        departmentId: number,
         title: string,
         color: string,
         description: string,
         supervisorId: number | null = null,
     ) {
         this.id = id;
-        this.organizationId = organizationId;
+        this.departmentId = departmentId;
         this.title = title;
         this.color = color;
         this.description = description;
@@ -26,8 +26,8 @@ export class Team {
         return this.id;
     }
 
-    public get getOrganizationId(): number {
-        return this.organizationId;
+    public get getDepartmentId(): number {
+        return this.departmentId;
     }
 
     public get getTitle(): string {
