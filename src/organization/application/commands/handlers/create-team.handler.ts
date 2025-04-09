@@ -5,6 +5,7 @@ import { CreateTeamCommand } from '../create-team.command';
 import { TeamEntity } from 'src/organization/infrastructure/entities/team.entity';
 import { OrganizationEntity } from 'src/organization/infrastructure/entities/organization.entity';
 import { BadRequestException } from '@nestjs/common';
+import { DepartmentEntity } from 'src/organization/infrastructure/entities/department.entity';
 
 @CommandHandler(CreateTeamCommand)
 export class CreateTeamHandler implements ICommandHandler<CreateTeamCommand> {
@@ -12,28 +13,30 @@ export class CreateTeamHandler implements ICommandHandler<CreateTeamCommand> {
         @InjectRepository(TeamEntity)
         private readonly teamRepo: Repository<TeamEntity>,
         @InjectRepository(OrganizationEntity)
-        private readonly orgRepo: Repository<OrganizationEntity>
+        private readonly orgRepo: Repository<OrganizationEntity>,
+        @InjectRepository(DepartmentEntity)
+        private readonly depRepo: Repository<DepartmentEntity>
     ) { }
 
     async execute(command: CreateTeamCommand): Promise<TeamEntity> {
         const {
             creatorId,
-            organizationId,
+            departmentId,
             title,
             supervisorId,
             color,
             description,
         } = command;
 
-        const organization = await this.orgRepo.findOne({
-            where: { id: organizationId, creatorId },
+        const dep = await this.depRepo.findOne({
+            where: { id: departmentId, organization: { creatorId } },
         });
 
-        if (!organization)
-            throw new BadRequestException('Organization not found or you are not the creator.');
+        if (!dep)
+            throw new BadRequestException('Department not found.');
 
         const team = this.teamRepo.create({
-            organizationId,
+            departmentId,
             title,
             supervisorId,
             color,

@@ -7,7 +7,6 @@ import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { CreateOrUpdateOrganizationDto } from '../dto/create-or-update-organization.dto';
 import { Team } from 'src/organization/domain/team.domain';
 import { CreateTeamDto } from '../dto/create-team.dto';
-import { CreateTeamCommand } from 'src/organization/application/commands/create-team.command';
 
 @ApiBearerAuth()
 @ApiTags('Organization')
@@ -70,6 +69,16 @@ export class OrganizationController {
         return this.organizationService.getSelfImprovementsByOrgId(organiztionId);
     }
 
+    @Get(':organiztionId/departments')
+    @ApiOperation({ summary: 'Get departments by organization ID' })
+    @ApiParam({ name: 'organiztionId', required: true, description: 'Organization ID' })
+    @ApiResponse({ status: 200, description: 'Successful response' })
+    @ApiResponse({ status: 404, description: 'Organization not found' })
+    getDepartments(@Param('organiztionId') organiztionId: number): any {
+        return this.organizationService.getDepartmentsByOrgId(organiztionId);
+    }
+
+    @UseGuards(AdminAuthGuard)
     @Get(':organiztionId/teams')
     @ApiOperation({ summary: 'Get teams by organization ID' })
     @ApiParam({ name: 'organiztionId', required: true, description: 'Organization ID' })
@@ -77,6 +86,16 @@ export class OrganizationController {
     @ApiResponse({ status: 404, description: 'Organization not found' })
     getTeams(@Param('organiztionId') organiztionId: number): any {
         return this.organizationService.getTeamsByOrgId(organiztionId);
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Get('departments/:departmentId/teams')
+    @ApiOperation({ summary: 'Get teams by department ID' })
+    @ApiParam({ name: 'departmentId', required: true, description: 'Department ID' })
+    @ApiResponse({ status: 200, description: 'Successful response' })
+    @ApiResponse({ status: 404, description: 'Department not found' })
+    getTeamsByDepartmentId(@Param('departmentId') departmentId: number): any {
+        return this.organizationService.getTeamsByDepartmentId(departmentId);
     }
 
     @UseGuards(AdminAuthGuard)

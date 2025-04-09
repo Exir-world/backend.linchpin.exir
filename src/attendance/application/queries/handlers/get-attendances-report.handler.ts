@@ -96,11 +96,11 @@ export class GetAttendancesReportHandler implements IQueryHandler<GetAttendances
             title,
             attendanceMinutes: Math.floor(workMinutes / 60),
             workMinutes: Math.floor(workMinutes / 60),
-            overDuration: Math.floor(Math.max(workMinutes - 480, 0) / 60),
-            lessDuration: Math.floor(Math.max(480 - workMinutes, 0) / 60),
+            overDuration: Math.floor(Math.max(workMinutes - 12480, 0) / 60),
+            lessDuration: Math.floor(Math.max(12480 - workMinutes, 0) / 60),
             leaveWithPayrollDuration: Math.floor((leavesDuration.days * 24 * 60 + leavesDuration.minutes) / 60),
             leaveWithoutPayrollDuration: Math.floor((leavesDuration.days * 24 * 60 + leavesDuration.minutes) / 60),
-            attendances: groupedAttendances,
+            attendances: groupedAttendances.sort((a, b) => b.date.localeCompare(a.date)),
         };
     }
 }
