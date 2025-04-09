@@ -42,27 +42,36 @@ export class UserEmploymentSettingsService implements UserEmploymentSettingsShar
     }
 
     async updateSettings(userId: number, settings: Partial<UserEmploymentSettings>): Promise<UserEmploymentSettings> {
-        const existingSettings = await this.getSettingsByUserId(userId);
+        try {
+            const existingSettings = await this.getSettingsByUserId(userId);
+            const updatedSettings = {
+                ...existingSettings,
+                ...settings,
+            };
+            await this.commandBus.execute(
+                new UpdateUserEmploymentSettingsCommand(
+                    userId,
+                    updatedSettings.shiftId,
+                    updatedSettings.salary,
+                    updatedSettings.needLocation,
+                    updatedSettings.teamId
+                )
+            );
 
-        if (!existingSettings) {
-            throw new BadRequestException(`Settings for user with ID ${userId} not found.`);
+            return updatedSettings;
+
+        } catch (error) {
+            if (error.status === 404) {
+                await this.commandBus.execute(
+                    new CreateUserEmploymentSettingsCommand(
+                        userId,
+                        settings.shiftId,
+                        settings.salary,
+                        settings.needLocation,
+                        settings.teamId
+                    )
+                );
+            }
         }
-
-        const updatedSettings = {
-            ...existingSettings,
-            ...settings,
-        };
-
-        await this.commandBus.execute(
-            new UpdateUserEmploymentSettingsCommand(
-                userId,
-                updatedSettings.shiftId,
-                updatedSettings.salary,
-                updatedSettings.needLocation,
-                updatedSettings.teamId
-            )
-        );
-
-        return updatedSettings;
     }
 }
