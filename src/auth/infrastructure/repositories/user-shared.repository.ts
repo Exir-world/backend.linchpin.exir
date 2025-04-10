@@ -18,9 +18,11 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
         return users.map(user => ({
             id: user.id,
             name: user.name,
-            profileImage: user.profileImage,
-            lastname: user.lastname,
             phoneNumber: user.phoneNumber,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            personnelCode: user.personnelCode,
+            profileImage: user.profileImage,
         }));
     }
 
@@ -30,6 +32,11 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
         return users.map(user => ({
             id: user.id,
             name: user.name,
+            phoneNumber: user.phoneNumber,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            personnelCode: user.personnelCode,
+            profileImage: user.profileImage,
         }));
     }
 
@@ -38,10 +45,34 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
         return users.map(user => ({
             id: user.id,
             name: user.name,
+            phoneNumber: user.phoneNumber,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            personnelCode: user.personnelCode,
+            profileImage: user.profileImage,
         }));
     }
 
     async getUserById(userId: number): Promise<UserDto | null> {
-        return await this.userRepository.findOne({ where: { id: userId }, select: ['id', 'name', 'phoneNumber', 'role'] });
+        const user = await this.userRepository.findOne({
+            where: { id: userId },
+            select: [
+                'id', 'name', 'phoneNumber', 'role', 'firstname', 'lastname', 'personnelCode'
+            ]
+        });
+
+        if (!user) {
+            return null;
+        }
+
+        return {
+            id: user.id,
+            name: user.name,
+            phoneNumber: user.phoneNumber,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            personnelCode: user.personnelCode,
+            profileImage: user.profileImage,
+        };
     }
 }
