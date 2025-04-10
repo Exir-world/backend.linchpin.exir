@@ -13,6 +13,7 @@ import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { GetRequestTypesQuery } from '../application/queries/get-request-types.query';
 import { GetRequestsUserDto } from './dto/get-requests-user.dto';
+import { GetRequestByIdQuery } from '../application/queries/get-request-by-id.query';
 
 @ApiBearerAuth()
 @ApiTags('Requests') // نام بخش در Swagger
@@ -80,6 +81,16 @@ export class RequestController {
     async getAllRequests(@Query() dto: GetAllRequestsDto) {
         const query = new GetAllRequestsQuery(dto.status);
         return await this.requestService.getAllRequests(query);
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @ApiOperation({ summary: 'دریافت درخواست بر اساس شناسه' })
+    @ApiResponse({ status: 200, description: 'درخواست بازگردانده شد.' })
+    @ApiResponse({ status: 404, description: 'درخواست پیدا نشد.' })
+    @Get(':id')
+    async getRequestById(@Param('id') requestId: number) {
+        const query = new GetRequestByIdQuery(requestId);
+        return await this.requestService.getRequestById(query);
     }
 
     @UseGuards(UserAuthGuard)
