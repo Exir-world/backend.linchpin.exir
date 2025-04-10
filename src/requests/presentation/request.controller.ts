@@ -87,8 +87,9 @@ export class RequestController {
     @ApiOperation({ summary: 'دریافت درخواست بر اساس شناسه' })
     @ApiResponse({ status: 200, description: 'درخواست بازگردانده شد.' })
     @ApiResponse({ status: 404, description: 'درخواست پیدا نشد.' })
-    @Get(':id')
+    @Get(':id(\\d+)')
     async getRequestById(@Param('id') requestId: number) {
+        console.log('xxx222');
         const query = new GetRequestByIdQuery(requestId);
         return await this.requestService.getRequestById(query);
     }
@@ -108,6 +109,8 @@ export class RequestController {
     @ApiResponse({ status: 200, description: 'نوع درخواست ها' })
     @Get('request-types')
     async getRequestTypes() {
+        console.log('xxx111');
+
         return await this.requestService.getRequestTypes(new GetRequestTypesQuery());
     }
 }
