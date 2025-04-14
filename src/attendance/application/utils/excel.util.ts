@@ -23,6 +23,8 @@ const salary = [
     { userId: 35, salary: 150000000 },
     { userId: 33, salary: 150000000 },
     { userId: 26, salary: 150000000 },
+    { userId: 27, salary: 150000000 },
+    { userId: 65, salary: 150000000 },
 ]
 
 function sumTimes(timeStrings: string[]): string {
