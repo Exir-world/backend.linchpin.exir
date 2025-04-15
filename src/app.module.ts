@@ -17,6 +17,7 @@ import * as path from 'path';
 import { UserSelfImprovementModule } from './user-self-improvement/user-self-improvement.module';
 import { NotificationsModule } from './notifications/notifications.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
+import { PropertiesModule } from './properties/properties.module';
 
 
 @Module({
@@ -75,6 +76,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     ShiftsModule,
     UserEmploymentSettingsModule,
     NotificationsModule,
+    PropertiesModule,
   ],
   providers: [ResponseInterceptor],
 })
