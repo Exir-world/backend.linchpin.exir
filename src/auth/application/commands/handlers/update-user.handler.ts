@@ -1,33 +1,40 @@
-import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateUserCommand } from '../update-user.command';
-import { UserRepository } from '../../ports/user.repository';
-import { NotFoundException } from '@nestjs/common';
-import { RoleRepository } from '../../ports/role.repository';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserEntity } from 'src/auth/infrastructure/entities/user.entity';
+import { UserEmploymentSettingsSharedPort } from 'src/user-employment-settings/application/ports/user-employment-settings-shared.port';
+import { Inject } from '@nestjs/common';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
     constructor(
-        private readonly userRepository: UserRepository,
-        private readonly roleRepository: RoleRepository,
+        @InjectRepository(UserEntity)
+        private readonly userRepository: Repository<UserEntity>,
+        @Inject('UserEmploymentSettingsSharedPort')
+        private readonly userEmploymentSettingsSharedPort: UserEmploymentSettingsSharedPort,
     ) { }
 
-    async execute(command: UpdateUserCommand): Promise<void> {
-        const user = await this.userRepository.findById(command.id);
-        if (!user) {
-            throw new NotFoundException(`User with ID ${command.id} not found`);
+    async execute(command: UpdateUserCommand): Promise<UserEntity | null> {
+        const { userId, adminId, dto } = command;
+        const { settings, ...restDto } = dto; // Remove settings key from dto
+        const updateData = {
+            ...restDto,
+            role: restDto.role ? { id: restDto.role } : undefined, // Map role to the expected type
+        };
+        await this.userRepository.update({ id: userId }, updateData);
+
+        if (dto.settings) {
+            await this.userEmploymentSettingsSharedPort.updateSettings(
+                userId,
+                {
+                    shiftId: dto.settings.shiftId,
+                    teamId: dto.settings.teamId,
+                    needLocation: dto.settings.needToLocation,
+                    salary: dto.settings.salary,
+                });
         }
 
-        if (command.name) user.name = command.name;
-        if (command.phoneNumber) user.phoneNumber = command.phoneNumber;
-        if (command.password) user.password = command.password;
-        if (command.role) {
-            const role = await this.roleRepository.findById(command.role);
-            if (!role) {
-                throw new NotFoundException(`Role '${command.role}' not found`);
-            }
-            user.role = role; // Assign Role Domain Object
-        }
-
-        await this.userRepository.save(user);
+        return this.userRepository.findOne({ where: { id: userId } });
     }
 }

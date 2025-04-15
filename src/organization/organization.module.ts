@@ -17,6 +17,11 @@ import { SelfImprovementSubItemEntity } from './infrastructure/entities/self-imp
 import { GetSelfImprovementsSubItemsByItemIdHandler } from './application/queries/handlers/get-self-improvements-subitems-by-item-id.handler';
 import { CreateOrganizationHandler } from './application/commands/handlers/create-organization.handler';
 import { CreateTeamHandler } from './application/commands/handlers/create-team.handler';
+import { GetOrganizationsByAdminIdHandler } from './application/queries/handlers/get-organizations-by-admin-id.handler';
+import { UpdateOrganizationHandler } from './application/commands/handlers/update-organization.handler';
+import { DepartmentEntity } from './infrastructure/entities/department.entity';
+import { GetDepartmentsByOrgIdHandler } from './application/queries/handlers/get-departments-by-org-id.handler';
+import { GetTeamsByDepartmentIdHandler } from './application/queries/handlers/get-teams-by-department-id.handler';
 
 @Module({
     imports: [
@@ -27,6 +32,7 @@ import { CreateTeamHandler } from './application/commands/handlers/create-team.h
             SelfImprovementItemEntity,
             LocationEntity,
             SelfImprovementSubItemEntity,
+            DepartmentEntity,
         ]),
         CqrsModule,
         forwardRef(() => AuthModule),
@@ -57,12 +63,16 @@ import { CreateTeamHandler } from './application/commands/handlers/create-team.h
         CreateSelfImprovementHandler,
         CreateOrganizationHandler,
         CreateTeamHandler,
+        UpdateOrganizationHandler,
 
         // Query Handlers
         GetSelfImprovementByOrgIdHandler,
         GetSelfImprovementsSubItemsByItemIdHandler,
         GetTeamsByOrgIdHandler,
         GetLocationByOrgIdHandler,
+        GetOrganizationsByAdminIdHandler,
+        GetDepartmentsByOrgIdHandler,
+        GetTeamsByDepartmentIdHandler,
     ],
     exports: ['OrganizationSharedPort']
 })

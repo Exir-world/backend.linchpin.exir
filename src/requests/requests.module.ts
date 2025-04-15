@@ -15,6 +15,7 @@ import { LeaveModule } from 'src/leave/leave.module';
 import { AttendanceModule } from 'src/attendance/attendance.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { GetRequestTypesHandler } from './application/queries/handlers/get-request-types.handler';
+import { GetRequestByIdHandler } from './application/queries/handlers/get-request-by-id.handler';
 
 @Module({
     imports: [
@@ -53,6 +54,7 @@ import { GetRequestTypesHandler } from './application/queries/handlers/get-reque
         GetUserRequestsHandler,
         GetAllRequestsHandler,
         GetRequestTypesHandler,
+        GetRequestByIdHandler,
     ],
     exports: [
         'IAttendanceSharedRepository'

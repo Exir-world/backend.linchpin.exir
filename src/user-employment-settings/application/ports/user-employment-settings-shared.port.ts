@@ -5,4 +5,5 @@ export interface UserEmploymentSettingsSharedPort {
     getSettingsByUsersId(userIds: number[]): Promise<UserEmploymentSettings[]>;
     getSettingsForAll(): Promise<UserEmploymentSettings[]>;
     createSettings(userId: number, shiftId: number, teamId: number, needToLocation: boolean, salary: number): Promise<UserEmploymentSettings>;
+    updateSettings(userId: number, settings: Partial<UserEmploymentSettings>): Promise<UserEmploymentSettings>;
 }

@@ -5,7 +5,7 @@ export class TeamMapper {
     static toDomain(entity: TeamEntity): Team {
         return new Team(
             entity.id,
-            entity.organizationId,
+            entity.departmentId,
             entity.title,
             entity.color,
             entity.description,
@@ -16,7 +16,7 @@ export class TeamMapper {
     static toEntity(domain: Team): TeamEntity {
         const entity = new TeamEntity();
         entity.id = domain.getId;
-        entity.organizationId = domain.getOrganizationId;
+        entity.departmentId = domain.getDepartmentId;
         entity.title = domain.getTitle;
         entity.color = domain.getColor;
         entity.description = domain.getDescription;

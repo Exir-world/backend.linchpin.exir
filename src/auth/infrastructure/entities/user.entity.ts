@@ -16,6 +16,9 @@ export class UserEntity {
     profileImage: string;
 
     @Column({ type: 'varchar', length: 100, default: '' })
+    firstname: string;
+
+    @Column({ type: 'varchar', length: 100, default: '' })
     lastname: string;
 
     @Column({ type: 'varchar', length: 15, unique: true })
@@ -26,4 +29,13 @@ export class UserEntity {
 
     @ManyToOne(() => RoleEntity, { nullable: false })
     role: RoleEntity;
+
+    @Column({ type: 'varchar', length: 10, unique: true, nullable: true })
+    nationalCode: string;
+
+    @Column({ type: 'varchar', length: 20, unique: true, nullable: true })
+    personnelCode: string;
+
+    @Column({ type: 'boolean', default: false })
+    isDeleted: boolean;
 }
