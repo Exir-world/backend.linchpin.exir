@@ -6,6 +6,7 @@ import { GetUserRequestsQuery } from '../queries/get-user-requests.query';
 import { GetAllRequestsQuery } from '../queries/get-all-requests.query';
 import { CancelRequestCommand } from '../commands/cancel-request.command';
 import { GetRequestTypesQuery } from '../queries/get-request-types.query';
+import { GetRequestByIdQuery } from '../queries/get-request-by-id.query';
 
 @Injectable()
 export class RequestService {
@@ -13,6 +14,10 @@ export class RequestService {
         private readonly commandBus: CommandBus,
         private readonly queryBus: QueryBus,
     ) { }
+
+    async getRequestById(query: GetRequestByIdQuery): Promise<any> {
+        return this.queryBus.execute(query);
+    }
 
     async createRequest(command: CreateRequestCommand): Promise<void> {
         return this.commandBus.execute(command);

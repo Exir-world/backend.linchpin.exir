@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class SettingsDto {
@@ -40,7 +40,7 @@ export class CreateUserDto {
     @IsOptional()
     profileImage: string;
 
-    @ApiProperty({ example: 'Doe', description: 'نام خادنوادگی کاربر' })
+    @ApiProperty({ example: 'Doe', description: 'نام خانوادگی کاربر' })
     @IsString({ message: 'نام باید یک رشته باشد' })
     @IsNotEmpty({ message: 'نام نمی‌تواند خالی باشد' })
     @MaxLength(100, { message: 'نام نمی‌تواند بیشتر از 100 کاراکتر باشد' })
@@ -67,4 +67,27 @@ export class CreateUserDto {
     @Type(() => SettingsDto)
     @IsOptional()
     settings?: SettingsDto;
+
+    @ApiProperty({ example: 'John', description: 'نام کوچک کاربر' })
+    @IsString({ message: 'نام کوچک باید یک رشته باشد' })
+    @IsNotEmpty({ message: 'نام کوچک نمی‌تواند خالی باشد' })
+    @MaxLength(50, { message: 'نام کوچک نمی‌تواند بیشتر از 50 کاراکتر باشد' })
+    firstname: string;
+
+    @ApiProperty({ example: '1234567890', description: 'کد ملی کاربر' })
+    @IsString({ message: 'کد ملی باید یک رشته باشد' })
+    @IsNotEmpty({ message: 'کد ملی نمی‌تواند خالی باشد' })
+    @MaxLength(10, { message: 'کد ملی نمی‌تواند بیشتر از 10 کاراکتر باشد' })
+    nationalCode: string;
+
+    @ApiProperty({ example: 'P12345', description: 'کد پرسنلی کاربر' })
+    @IsString({ message: 'کد پرسنلی باید یک رشته باشد' })
+    @IsNotEmpty({ message: 'کد پرسنلی نمی‌تواند خالی باشد' })
+    @MaxLength(20, { message: 'کد پرسنلی نمی‌تواند بیشتر از 20 کاراکتر باشد' })
+    personnelCode: string;
+
+    @ApiProperty({ example: false, description: 'وضعیت حذف کاربر' })
+    @IsBoolean()
+    @IsNotEmpty()
+    isDeleted: boolean = false;
 }

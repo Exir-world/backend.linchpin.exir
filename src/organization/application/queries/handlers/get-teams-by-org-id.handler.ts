@@ -14,7 +14,7 @@ export class GetTeamsByOrgIdHandler implements IQueryHandler<GetTeamsByOrgIdQuer
     async execute(query: GetTeamsByOrgIdQuery): Promise<any> {
         const organizationId = query.orgId;
 
-        const teams = await this.teamsRepository.find({ where: { organizationId } });
+        const teams = await this.teamsRepository.find({ where: { department: { organizationId } } });
         return TeamMapper.toDomainList(teams);
     }
 }

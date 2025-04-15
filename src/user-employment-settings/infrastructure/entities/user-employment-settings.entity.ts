@@ -11,7 +11,7 @@ export class UserEmploymentSettingsEntity {
     @Column({ nullable: true })
     teamId: number;
 
-    @Column({ type: "decimal" })
+    @Column({ type: "decimal", default: 0 })
     salary: number;
 
     @Column()
