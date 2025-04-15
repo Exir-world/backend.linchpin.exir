@@ -1,5 +1,5 @@
-import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request, BadRequestException, Patch, Res } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Param, HttpCode, HttpStatus, UseGuards, Request, BadRequestException, Patch, Res, Query } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { AttendanceService } from '../../application/services/attendance.service';
 import { SubmitWorkReportDto } from '../dto/submit-work-report.dto';
 import { ApproveWorkReportDto } from '../dto/approve-work-report.dto';
@@ -240,6 +240,26 @@ export class AttendanceController {
         generateExcel(res, attendances, workDuration, holidaysDayCount);
 
         return attendances;
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Get('admin/attendances')
+    @ApiOperation({ summary: 'دریافت گزارش حضور و غیاب توسط ادمین' })
+    @ApiResponse({ status: 200, description: 'گزارش حضور و غیاب با موفقیت دریافت شد.' })
+    @ApiQuery({ name: 'userId', required: false, type: String, description: 'شناسه کاربر' })
+    @ApiQuery({ name: 'startDate', required: false, type: String, description: 'تاریخ شروع' })
+    @ApiQuery({ name: 'endDate', required: false, type: String, description: 'تاریخ پایان' })
+    async filterAttendancesByAdmin(
+        @Request() req,
+        @Query('userId') userId?: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string,
+    ) {
+        // return this.attendanceService.getAttendancesByAdmin(
+        //     +userId,
+        //     startDate,
+        //     endDate,
+        // );
     }
 
     // @ApiOperation({})
