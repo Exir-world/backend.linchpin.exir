@@ -14,6 +14,9 @@ import { GetOrganizationsByAdminIdQuery } from '../queries/get-organizations-by-
 import { UpdateOrganizationCommand } from '../commands/update-organization.command';
 import { GetTeamsByDepartmentIdQuery } from '../queries/get-teams-by-department-id.query';
 import { GetDepartmentsByOrgIdQuery } from '../queries/get-departments-by-org-id.query';
+import { GetDepartmentQuery } from '../queries/get-department.query';
+import { UpdateDepartmentCommand } from '../commands/update-department.command';
+import { CreateDepartmentCommand } from '../commands/create-department.command';
 
 @Injectable()
 export class OrganizationService implements OrganizationSharedPort {
@@ -24,6 +27,18 @@ export class OrganizationService implements OrganizationSharedPort {
 
     async getTeamsByDepartmentId(departmentId: number): Promise<any> {
         return this.queryBus.execute(new GetTeamsByDepartmentIdQuery(departmentId));
+    }
+
+    async getDepartmentById(id: number): Promise<any> {
+        return this.queryBus.execute(new GetDepartmentQuery(id));
+    }
+
+    async createDepartment(createDepartmentDto: any): Promise<any> {
+        return this.commandBus.execute(new CreateDepartmentCommand(createDepartmentDto));
+    }
+
+    async updateDepartment(id: number, updateDepartmentDto: any): Promise<any> {
+        return this.commandBus.execute(new UpdateDepartmentCommand(id, updateDepartmentDto));
     }
 
     async getDepartmentsByOrgId(orgId: number): Promise<any> {

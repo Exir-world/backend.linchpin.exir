@@ -22,6 +22,9 @@ import { UpdateOrganizationHandler } from './application/commands/handlers/updat
 import { DepartmentEntity } from './infrastructure/entities/department.entity';
 import { GetDepartmentsByOrgIdHandler } from './application/queries/handlers/get-departments-by-org-id.handler';
 import { GetTeamsByDepartmentIdHandler } from './application/queries/handlers/get-teams-by-department-id.handler';
+import { CreateDepartmentHandler } from './application/commands/handlers/create-department.handler';
+import { UpdateDepartmentHandler } from './application/commands/handlers/update-department.handler';
+import { GetDepartmentHandler } from './application/queries/handlers/get-department.handler';
 
 @Module({
     imports: [
@@ -64,6 +67,8 @@ import { GetTeamsByDepartmentIdHandler } from './application/queries/handlers/ge
         CreateOrganizationHandler,
         CreateTeamHandler,
         UpdateOrganizationHandler,
+        CreateDepartmentHandler,
+        UpdateDepartmentHandler,
 
         // Query Handlers
         GetSelfImprovementByOrgIdHandler,
@@ -73,6 +78,7 @@ import { GetTeamsByDepartmentIdHandler } from './application/queries/handlers/ge
         GetOrganizationsByAdminIdHandler,
         GetDepartmentsByOrgIdHandler,
         GetTeamsByDepartmentIdHandler,
+        GetDepartmentHandler,
     ],
     exports: ['OrganizationSharedPort']
 })
