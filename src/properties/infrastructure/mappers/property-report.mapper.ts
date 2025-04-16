@@ -9,6 +9,7 @@ export const PropertyReportMapper = {
             entity.propertyId,
             entity.property,
             entity.report,
+            entity.status,
             entity.createdAt,
         );
     },
@@ -20,6 +21,7 @@ export const PropertyReportMapper = {
         entity.propertyId = domain.propertyId;
         entity.property = domain.property;
         entity.report = domain.report;
+        entity.status = domain.status;
         entity.createdAt = domain.createdAt;
         return entity;
     },
