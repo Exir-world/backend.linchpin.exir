@@ -7,6 +7,8 @@ import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { CreateOrUpdateOrganizationDto } from '../dto/create-or-update-organization.dto';
 import { Team } from 'src/organization/domain/team.domain';
 import { CreateTeamDto } from '../dto/create-team.dto';
+import { CreateDepartmentDto } from '../dto/create-department.dto';
+import { UpdateDepartmentDto } from '../dto/update-department.dto';
 
 @ApiBearerAuth()
 @ApiTags('Organization')
@@ -96,6 +98,42 @@ export class OrganizationController {
     @ApiResponse({ status: 404, description: 'Department not found' })
     getTeamsByDepartmentId(@Param('departmentId') departmentId: number): any {
         return this.organizationService.getTeamsByDepartmentId(departmentId);
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Post('departments')
+    @ApiOperation({ summary: 'Create a new department' })
+    @ApiResponse({ status: 201, description: 'Department created successfully.' })
+    @ApiResponse({ status: 400, description: 'Validation error.' })
+    async createDepartment(@Body() dto: CreateDepartmentDto, @Request() req: any) {
+        // const creatorUserId = req.user.id; // Extract user ID from JWT token
+        return this.organizationService.createDepartment(dto);
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Patch('departments/:departmentId')
+    @ApiOperation({ summary: 'Update a department by ID' })
+    @ApiParam({ name: 'departmentId', required: true, description: 'Department ID' })
+    @ApiResponse({ status: 200, description: 'Department updated successfully.' })
+    @ApiResponse({ status: 400, description: 'Validation error.' })
+    @ApiResponse({ status: 404, description: 'Department not found.' })
+    async updateDepartment(
+        @Param('departmentId') departmentId: number,
+        @Body() dto: UpdateDepartmentDto,
+        @Request() req: any
+    ) {
+        // const adminId = req.user.id; // Extract admin ID from JWT token
+        return this.organizationService.updateDepartment(departmentId, dto);
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Get('departments/:departmentId')
+    @ApiOperation({ summary: 'Get a department by ID' })
+    @ApiParam({ name: 'departmentId', required: true, description: 'Department ID' })
+    @ApiResponse({ status: 200, description: 'Successful response' })
+    @ApiResponse({ status: 404, description: 'Department not found' })
+    async getDepartmentById(@Param('departmentId') departmentId: number): Promise<any> {
+        return this.organizationService.getDepartmentById(departmentId);
     }
 
     @UseGuards(AdminAuthGuard)
