@@ -1,15 +1,15 @@
 import { ICommandHandler, CommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
-import { AssignPropertyCommand } from '../assign-property.command';
 import { UserPropertyRepository } from '../../repositories/user-property.repository';
+import { UnassignPropertyCommand } from '../unassign-property.command';
 
-@CommandHandler(AssignPropertyCommand)
-export class UnassignPropertyHandler implements ICommandHandler<AssignPropertyCommand> {
+@CommandHandler(UnassignPropertyCommand)
+export class UnassignPropertyHandler implements ICommandHandler<UnassignPropertyCommand> {
     constructor(
         @Inject('UserPropertyRepository') private readonly repository: UserPropertyRepository,
     ) { }
 
-    async execute(command: AssignPropertyCommand) {
+    async execute(command: UnassignPropertyCommand) {
         return this.repository.unassign(command.userId, command.propertyId);
     }
 }
