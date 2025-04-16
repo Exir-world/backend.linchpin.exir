@@ -243,23 +243,28 @@ export class AttendanceController {
     }
 
     @UseGuards(AdminAuthGuard)
-    @Get('admin/attendances')
+    @Get('admin/filter')
     @ApiOperation({ summary: 'دریافت گزارش حضور و غیاب توسط ادمین' })
     @ApiResponse({ status: 200, description: 'گزارش حضور و غیاب با موفقیت دریافت شد.' })
     @ApiQuery({ name: 'userId', required: false, type: String, description: 'شناسه کاربر' })
     @ApiQuery({ name: 'startDate', required: false, type: String, description: 'تاریخ شروع' })
     @ApiQuery({ name: 'endDate', required: false, type: String, description: 'تاریخ پایان' })
     async filterAttendancesByAdmin(
-        @Request() req,
-        @Query('userId') userId?: string,
-        @Query('startDate') startDate?: string,
-        @Query('endDate') endDate?: string,
+        @Query('userId') userId?: number,
+        @Query('startDate') startDate?: Date,
+        @Query('endDate') endDate?: Date,
     ) {
-        // return this.attendanceService.getAttendancesByAdmin(
-        //     +userId,
-        //     startDate,
-        //     endDate,
-        // );
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+
+        const endToday = new Date();
+        endToday.setHours(23, 59, 59, 999);
+
+        return this.attendanceService.filterAttendancesByAdmin(
+            userId,
+            startDate || todayStart,
+            endDate || endToday,
+        );
     }
 
     // @ApiOperation({})

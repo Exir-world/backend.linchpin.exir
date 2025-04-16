@@ -26,4 +26,9 @@ export class CreatePropertyDto {
     @IsNumber()
     @IsOptional()
     departmentId?: number;
+
+    @ApiPropertyOptional({ type: String, required: false, description: 'The optional image URL of the property' })
+    @IsString()
+    @IsOptional()
+    imageUrl?: string;
 }

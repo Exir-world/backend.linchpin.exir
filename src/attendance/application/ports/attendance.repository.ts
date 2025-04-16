@@ -9,4 +9,5 @@ export abstract class AttendanceRepository {
     abstract filterByRange(startTime: Date, endTime: Date, orderAsc?: boolean): Promise<Attendance[]>;
     abstract findCheckedInAttendances(userIds: number[]): Promise<Attendance[]>;
     abstract findByUserIds(ids: number[]): Promise<Attendance[]>
+
 }

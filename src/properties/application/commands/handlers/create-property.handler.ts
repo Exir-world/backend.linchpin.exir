@@ -19,6 +19,7 @@ export class CreatePropertyHandler implements ICommandHandler<CreatePropertyComm
             createdAt: new Date(),
             organizationId: command.organizationId,
             departmentId: command.departmentId,
+            imageUrl: command.imageUrl,
         });
 
         const entity = PropertyMapper.toEntity(domain);

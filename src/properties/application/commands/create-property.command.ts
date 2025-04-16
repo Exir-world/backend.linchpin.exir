@@ -7,5 +7,6 @@ export class CreatePropertyCommand {
         public readonly status: PropertyStatusEnum,
         public readonly organizationId: number,
         public readonly departmentId?: number,
+        public readonly imageUrl?: string,
     ) { }
 }

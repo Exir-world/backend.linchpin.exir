@@ -22,6 +22,7 @@ import { GetAttendancesReportQuery } from '../queries/get-attendances-report.que
 import { GetDailyAttendancesReportQuery } from '../queries/get-daily-attendances-report.query';
 import { GetAdminAttendancesReportQuery } from '../queries/get-admin-attendances-report.query';
 import { UserSharedRepository } from 'src/auth/application/ports/user-shared.repository';
+import { FilterAttendancesByAdminQuery } from '../queries/filter-attendances-admin.query';
 
 @Injectable()
 export class AttendanceService {
@@ -258,5 +259,10 @@ export class AttendanceService {
         }, []);
 
         return groupedAttendances;
+    }
+
+    async filterAttendancesByAdmin(userId: number, startDate: Date, endDate: Date): Promise<any> {
+        const query = new FilterAttendancesByAdminQuery(userId, startDate, endDate);
+        return this.queryBus.execute(query);
     }
 }
