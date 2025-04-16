@@ -25,7 +25,7 @@ export class PropertyController {
     @ApiResponse({ status: 201, description: 'ملک با موفقیت ایجاد شد.' })
     create(@Body() dto: CreatePropertyDto) {
         const command = new CreatePropertyCommand(
-            dto.title, dto.code, dto.status, dto.organizationId, dto.departmentId
+            dto.title, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.imageUrl
         );
         return this.commandBus.execute(command);
     }
@@ -48,7 +48,7 @@ export class PropertyController {
     @ApiOperation({ summary: 'ویرایش اطلاعات اموال' })
     update(@Param('id') id: number, @Body() dto: UpdatePropertyDto) {
         const command = new UpdatePropertyCommand(
-            id, dto.title, dto.code, dto.status, dto.organizationId, dto.departmentId
+            id, dto.title, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.imageUrl
         );
         return this.commandBus.execute(command);
     }

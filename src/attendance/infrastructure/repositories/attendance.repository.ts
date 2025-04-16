@@ -73,7 +73,7 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
 
         const attendances = await this.attendanceRepo.find({
             where: {
-                userId,
+                userId: userId ? +userId : undefined,
                 checkIn: Between(
                     startTime,
                     endTime

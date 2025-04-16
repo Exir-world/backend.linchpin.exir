@@ -11,6 +11,7 @@ export const PropertyMapper = {
             entity.createdAt,
             entity.organizationId,
             entity.departmentId,
+            entity.imageUrl,
         );
     },
 
@@ -23,6 +24,7 @@ export const PropertyMapper = {
         entity.createdAt = domain.createdAt;
         entity.organizationId = domain.organizationId;
         entity.departmentId = domain.departmentId;
+        entity.imageUrl = domain.imageUrl;
         return entity;
     },
 

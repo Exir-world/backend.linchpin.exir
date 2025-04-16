@@ -9,5 +9,6 @@ export class Property {
         public createdAt: Date,
         public organizationId: number,
         public departmentId?: number,
+        public imageUrl?: string,
     ) { }
 }

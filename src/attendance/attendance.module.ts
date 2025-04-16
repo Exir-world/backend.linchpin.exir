@@ -34,6 +34,7 @@ import { UpdateAttendanceAdminHandler } from './application/commands/handlers/up
 import { GetAttendancesReportHandler } from './application/queries/handlers/get-attendances-report.handler';
 import { GetDailyAttendancesReportHandler } from './application/queries/handlers/get-daily-attendances-report.handler';
 import { GetAdminAttendancesReportHandler } from './application/queries/handlers/get-admin-attendances-report.handler';
+import { FilterAttendancesByAdminHandler } from './application/queries/handlers/filter-attendances-admin.handler';
 
 @Module({
     imports: [
@@ -105,6 +106,7 @@ import { GetAdminAttendancesReportHandler } from './application/queries/handlers
         GetAttendancesReportHandler,
         GetDailyAttendancesReportHandler,
         GetAdminAttendancesReportHandler,
+        FilterAttendancesByAdminHandler,
     ],
     exports: ['AttendanceSharedRepository']
 })

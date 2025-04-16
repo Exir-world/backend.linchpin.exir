@@ -23,4 +23,7 @@ export class PropertyEntity {
 
     @Column({ nullable: true })
     departmentId?: number;
+
+    @Column({ nullable: true })
+    imageUrl?: string;
 }
