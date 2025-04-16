@@ -21,6 +21,7 @@ import { GetPropertyByIdHandler } from './application/queries/handlers/get-prope
 import { GetReportsByPropertyHandler } from './application/queries/handlers/get-reports-by-property.handler';
 import { GetUserPropertiesHandler } from './application/queries/handlers/get-user-properties.handler';
 import { CqrsModule } from '@nestjs/cqrs';
+import { ChangeReportStatusHandler } from './application/commands/handlers/change-report-status.handler';
 
 @Module({
     imports: [
@@ -53,6 +54,7 @@ import { CqrsModule } from '@nestjs/cqrs';
         DeletePropertyHandler,
         UnassignPropertyHandler,
         UpdatePropertyHandler,
+        ChangeReportStatusHandler,
 
         // Queries
         GetAllPropertiesHandler,

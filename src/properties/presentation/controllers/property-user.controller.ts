@@ -1,4 +1,4 @@
-import { Controller, Post, Delete, Get, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Delete, Get, Body, UseGuards, Req, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AssignPropertyDto } from '../dto/assign-property.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
@@ -39,9 +39,16 @@ export class PropertyUserController {
     }
 
     @UseGuards(UserAuthGuard)
-    @Get('my-properties/:userId')
+    @Get('my-properties')
     @ApiOperation({ summary: 'لیست اموال اختصاص داده شده به کاربر (برای کاربر)' })
     getUserProperties(@Req() req) {
         return this.queryBus.execute(new GetUserPropertiesQuery(req.user.id));
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Get('user-properties/:userId')
+    @ApiOperation({ summary: 'لیست اموال اختصاص داده شده به کاربر (برای ادمین)' })
+    getUserPropertiesByAdmin(@Param('userId') userId: number) {
+        return this.queryBus.execute(new GetUserPropertiesQuery(userId));
     }
 }

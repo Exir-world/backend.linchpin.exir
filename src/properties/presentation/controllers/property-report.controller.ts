@@ -8,6 +8,9 @@ import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { GetAllReportsQuery } from 'src/properties/application/queries/get-all-reports.query';
 import { GetReportsByPropertyQuery } from 'src/properties/application/queries/get-reports-by-property.query';
+import { PropertyReportStatusEnum } from 'src/properties/domain/enums/property-report-status.enum';
+import { ChangeReportStatusCommand } from 'src/properties/application/commands/change-report-status.command';
+import { ChangeReportStatusDto } from '../dto/change-report-status.dto';
 
 @ApiBearerAuth()
 @ApiTags('Property Reports')
@@ -44,5 +47,13 @@ export class PropertyReportController {
     @ApiOperation({ summary: 'دریافت گزارش‌های یک اموال خاص (برای ادمین)' })
     getReportsForProperty(@Param('propertyId') propertyId: number) {
         return this.queryBus.execute(new GetReportsByPropertyQuery(propertyId));
+    }
+
+    @UseGuards(AdminAuthGuard)
+    @Post(':reportId/status')
+    @ApiOperation({ summary: 'تغییر وضعیت گزارش توسط ادمین' })
+    changeReportStatus(@Param('reportId') reportId: number, @Body() body: ChangeReportStatusDto) {
+        const command = new ChangeReportStatusCommand(reportId, body.status);
+        return this.commandBus.execute(command);
     }
 }
