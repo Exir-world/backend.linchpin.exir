@@ -19,7 +19,6 @@ export const PropertyReportMapper = {
         entity.id = domain.id;
         entity.userId = domain.userId;
         entity.propertyId = domain.propertyId;
-        entity.property = domain.property;
         entity.report = domain.report;
         entity.status = domain.status;
         entity.createdAt = domain.createdAt;

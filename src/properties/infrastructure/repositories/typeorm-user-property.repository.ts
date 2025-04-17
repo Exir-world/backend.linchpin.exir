@@ -20,6 +20,6 @@ export class TypeOrmUserPropertyRepository implements UserPropertyRepository {
     }
 
     async findByUserId(userId: number): Promise<UserPropertyEntity[]> {
-        return this.repo.find({ where: { userId } });
+        return this.repo.find({ where: { userId }, relations: ['property'] });
     }
 }

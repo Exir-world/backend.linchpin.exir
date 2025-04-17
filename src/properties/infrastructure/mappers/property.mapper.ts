@@ -12,6 +12,7 @@ export const PropertyMapper = {
             entity.organizationId,
             entity.departmentId,
             entity.imageUrl,
+            entity.userProperties,
         );
     },
 

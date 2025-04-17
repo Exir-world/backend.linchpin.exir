@@ -16,17 +16,17 @@ export class TypeOrmPropertyRepository implements PropertyRepository {
     }
 
     async findAll(organizationId?: number, departmentId?: number): Promise<PropertyEntity[]> {
-        const query = this.repo.createQueryBuilder('property');
+        const where: any = {};
 
         if (organizationId) {
-            query.andWhere('property.organizationId = :organizationId', { organizationId });
+            where.organizationId = organizationId;
         }
 
         if (departmentId) {
-            query.andWhere('property.departmentId = :departmentId', { departmentId });
+            where.departmentId = departmentId;
         }
 
-        return await query.getMany();
+        return await this.repo.find({ where, relations: ['userProperties'] });
     }
 
     async findById(id: number): Promise<PropertyEntity> {

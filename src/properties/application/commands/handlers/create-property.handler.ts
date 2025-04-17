@@ -3,6 +3,7 @@ import { Inject } from '@nestjs/common';
 import { CreatePropertyCommand } from '../create-property.command';
 import { PropertyMapper } from 'src/properties/infrastructure/mappers/property.mapper';
 import { PropertyRepository } from '../../repositories/property.repository';
+import { Property } from 'src/properties/domain/property.domain';
 
 @CommandHandler(CreatePropertyCommand)
 export class CreatePropertyHandler implements ICommandHandler<CreatePropertyCommand> {
@@ -11,16 +12,16 @@ export class CreatePropertyHandler implements ICommandHandler<CreatePropertyComm
     ) { }
 
     async execute(command: CreatePropertyCommand): Promise<any> {
-        const domain = PropertyMapper.toDomain({
-            id: null,
-            title: command.title,
-            code: command.code,
-            status: command.status,
-            createdAt: new Date(),
-            organizationId: command.organizationId,
-            departmentId: command.departmentId,
-            imageUrl: command.imageUrl,
-        });
+        const domain = new Property(
+            null,
+            command.title,
+            command.code,
+            command.status,
+            new Date(),
+            command.organizationId,
+            command.departmentId,
+            command.imageUrl,
+        );
 
         const entity = PropertyMapper.toEntity(domain);
         return await this.repository.save(entity);
