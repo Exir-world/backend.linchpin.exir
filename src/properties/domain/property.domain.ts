@@ -10,5 +10,6 @@ export class Property {
         public organizationId: number,
         public departmentId?: number,
         public imageUrl?: string,
+        public userProperties?: any[], // Replace with actual type if available
     ) { }
 }

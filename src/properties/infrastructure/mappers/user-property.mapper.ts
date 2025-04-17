@@ -17,7 +17,6 @@ export const UserPropertyMapper = {
         entity.id = domain.id;
         entity.userId = domain.userId;
         entity.propertyId = domain.propertyId;
-        entity.property = domain.property;
         entity.deliveredAt = domain.deliveredAt;
         return entity;
     },
