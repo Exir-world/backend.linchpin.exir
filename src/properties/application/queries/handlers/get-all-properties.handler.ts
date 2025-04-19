@@ -12,9 +12,9 @@ export class GetAllPropertiesHandler implements IQueryHandler<GetAllPropertiesQu
     ) { }
 
     async execute(query: GetAllPropertiesQuery): Promise<Property[]> {
-        const { organizationId, departmentId } = query;
+        const { organizationId, departmentId, isAssigned } = query;
 
-        const entities = await this.repository.findAll(organizationId, departmentId);
+        const entities = await this.repository.findAll(organizationId, departmentId, isAssigned);
         return PropertyMapper.toDomainList(entities);
     }
 }

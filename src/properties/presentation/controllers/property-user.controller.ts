@@ -7,6 +7,7 @@ import { UnassignPropertyCommand } from 'src/properties/application/commands/una
 import { GetUserPropertiesQuery } from 'src/properties/application/queries/get-user-properties.query';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { UnassignPropertyDto } from '../dto/unassign-property.dto';
 
 @ApiBearerAuth()
 @ApiTags('Property User Assignment')
@@ -23,7 +24,7 @@ export class PropertyUserController {
     @ApiOperation({ summary: 'اختصاص دادن اموال به کاربر (ادمین)' })
     assign(@Body() dto: AssignPropertyDto) {
         const command = new AssignPropertyCommand(
-            dto.userId, dto.propertyId
+            dto.userId, dto.propertyIds
         );
         return this.commandBus.execute(command);
     }
@@ -31,7 +32,7 @@ export class PropertyUserController {
     @UseGuards(AdminAuthGuard)
     @Delete('unassign')
     @ApiOperation({ summary: 'حذف اموال از کاربر (ادمین)' })
-    unassign(@Body() dto: AssignPropertyDto) {
+    unassign(@Body() dto: UnassignPropertyDto) {
         const command = new UnassignPropertyCommand(
             dto.userId, dto.propertyId
         );

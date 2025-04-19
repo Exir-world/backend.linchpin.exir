@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
-export class AssignPropertyDto {
+export class UnassignPropertyDto {
     @ApiProperty()
     @IsNumber()
     @IsNotEmpty()
     userId: number;
 
-    @ApiProperty({ type: [Number] })
-    @IsNumber({}, { each: true })
+    @ApiProperty()
+    @IsNumber()
     @IsNotEmpty()
-    propertyIds: number[];
+    propertyId: number;
 }

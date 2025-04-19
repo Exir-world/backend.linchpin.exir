@@ -9,6 +9,7 @@ import { GetAllPropertiesQuery } from 'src/properties/application/queries/get-al
 import { GetPropertyByIdQuery } from 'src/properties/application/queries/get-property-by-id.query';
 import { UpdatePropertyCommand } from 'src/properties/application/commands/update-property.command';
 import { DeletePropertyCommand } from 'src/properties/application/commands/delete-property.command';
+import { PropertyStatusEnum } from 'src/properties/domain/enums/property-status.enum';
 
 @UseGuards(AdminAuthGuard)
 @ApiBearerAuth()
@@ -34,8 +35,17 @@ export class PropertyController {
     @ApiOperation({ summary: 'دریافت لیست اموال' })
     @ApiQuery({ name: 'organizationId', required: false, type: Number })
     @ApiQuery({ name: 'departmentId', required: false, type: Number })
-    findAll(@Query('organizationId') organizationId?: number, @Query('departmentId') departmentId?: number) {
-        return this.queryBus.execute(new GetAllPropertiesQuery(organizationId, departmentId));
+    @ApiQuery({ name: 'isAssigned', required: false, type: Boolean })
+    findAll(
+        @Query('organizationId') organizationId?: number,
+        @Query('departmentId') departmentId?: number,
+        @Query('isAssigned') isAssigned?: boolean,
+    ) {
+        return this.queryBus.execute(new GetAllPropertiesQuery(
+            organizationId,
+            departmentId,
+            isAssigned,
+        ));
     }
 
     @Get(':id')
