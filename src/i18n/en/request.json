@@ -14,6 +14,7 @@
         "manualCheckOut": "Manual check-out",
         "dailyLeave": "Annual leave",
         "houlyLeave": "Hourly leave",
-        "sickLeave": "Sick leave"
+        "sickLeave": "Sick leave",
+        "newProperty": "New property"
     }
 }

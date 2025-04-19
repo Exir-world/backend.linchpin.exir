@@ -14,6 +14,10 @@
         "manualCheckOut": "تردد دستی (خروج)",
         "dailyLeave": "مرخصی استحقاقی",
         "houlyLeave": "مرخصی ساعتی",
-        "sickLeave": "مرخصی استعلاجی"
+        "sickLeave": "مرخصی استعلاجی",
+        "newProperty": "اموال جدید"
+    },
+    "description": {
+        "required": "وارد کردن توضیحات الزامی است"
     }
 }

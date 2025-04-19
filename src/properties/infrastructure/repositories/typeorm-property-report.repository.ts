@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PropertyReportRepository } from 'src/properties/application/repositories/property-report.repository';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { PropertyReportEntity } from '../entities/property-report.entity';
 import { PropertyReportStatusEnum } from 'src/properties/domain/enums/property-report-status.enum';
 
@@ -26,6 +26,10 @@ export class TypeOrmPropertyReportRepository implements PropertyReportRepository
 
     async findById(reportId: number): Promise<PropertyReportEntity> {
         return this.repo.findOne({ where: { id: reportId } });
+    }
+
+    async findNotGoodsByUserId(userId: number): Promise<PropertyReportEntity[]> {
+        return this.repo.find({ where: { userId, status: Not(PropertyReportStatusEnum.REPAIRED) } });
     }
 
     async updateStatusById(reportId: number, status: PropertyReportStatusEnum): Promise<PropertyReportEntity> {

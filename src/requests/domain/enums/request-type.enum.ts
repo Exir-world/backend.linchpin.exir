@@ -4,5 +4,6 @@ export enum RequestType {
     DAILY_LEAVE = 'DAILY_LEAVE',
     HOURLY_LEAVE = 'HOURLY_LEAVE',
     SICK_LEAVE = 'SICK_LEAVE',
+    NEW_PROPERTY = 'NEW_PROPERTY',
     // OVERTIME = 'OVERTIME'
 }
