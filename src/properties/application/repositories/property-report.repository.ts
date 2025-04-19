@@ -5,6 +5,7 @@ export abstract class PropertyReportRepository {
     abstract create(report: PropertyReportEntity): Promise<PropertyReportEntity>;
     abstract findAll(): Promise<PropertyReportEntity[]>;
     abstract findByPropertyId(propertyId: number): Promise<PropertyReportEntity[]>;
+    abstract findNotGoodsByUserId(userId: number): Promise<PropertyReportEntity[]>;
     abstract findById(reportId: number): Promise<PropertyReportEntity>;
     abstract updateStatusById(reportId: number, status: PropertyReportStatusEnum): Promise<PropertyReportEntity>;
 }

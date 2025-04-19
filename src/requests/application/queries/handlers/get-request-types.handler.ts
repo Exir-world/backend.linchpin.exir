@@ -15,6 +15,7 @@ export class GetRequestTypesHandler implements IQueryHandler<GetRequestTypesQuer
             { requestId: RequestType.DAILY_LEAVE, title: this.i18n.t('request.types.dailyLeave') },
             { requestId: RequestType.HOURLY_LEAVE, title: this.i18n.t('request.types.houlyLeave') },
             { requestId: RequestType.SICK_LEAVE, title: this.i18n.t('request.types.sickLeave') },
+            { requestId: RequestType.NEW_PROPERTY, title: this.i18n.t('request.types.newProperty') },
             // { requestId: RequestType.OVERTIME, title: 'اضافه کار' },
         ]
     }

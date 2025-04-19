@@ -14,6 +14,10 @@ export class CreateRequestHandler implements ICommandHandler<CreateRequestComman
         private readonly requestRepository: RequestRepository) { }
 
     async execute(command: CreateRequestCommand): Promise<RequestDomain> {
+        if (command.type == RequestType.NEW_PROPERTY)
+            if (!command.description)
+                throw new BadRequestException(this.i18n.t('request.description.required'));
+
         if (command.startTime && command.endTime) {
             if (command.startTime > command.endTime)
                 throw new BadRequestException(this.i18n.t('request.date.invalid'));
