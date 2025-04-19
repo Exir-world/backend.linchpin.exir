@@ -11,9 +11,13 @@ export class AssignPropertyHandler implements ICommandHandler<AssignPropertyComm
     ) { }
 
     async execute(command: AssignPropertyCommand) {
-        const entity = new UserPropertyEntity();
-        entity.userId = command.userId;
-        entity.propertyId = command.propertyId;
-        return await this.repository.assign(entity);
+        const { userId, propertyIds } = command;
+        const entities = propertyIds.map(propertyId => {
+            const entity = new UserPropertyEntity();
+            entity.userId = userId;
+            entity.propertyId = propertyId;
+            return entity;
+        });
+        return await this.repository.assign(entities);
     }
 }

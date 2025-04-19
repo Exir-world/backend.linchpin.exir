@@ -11,8 +11,8 @@ export class TypeOrmUserPropertyRepository implements UserPropertyRepository {
         private readonly repo: Repository<UserPropertyEntity>,
     ) { }
 
-    async assign(entity: UserPropertyEntity): Promise<UserPropertyEntity> {
-        return this.repo.save(entity);
+    async assign(entities: UserPropertyEntity[]): Promise<UserPropertyEntity[]> {
+        return this.repo.save(entities);
     }
 
     async unassign(userId: number, propertyId: number): Promise<void> {
