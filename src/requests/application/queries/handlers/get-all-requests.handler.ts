@@ -15,7 +15,7 @@ export class GetAllRequestsHandler implements IQueryHandler<GetAllRequestsQuery>
     ) { }
 
     async execute(query: GetAllRequestsQuery): Promise<any[]> {
-        const requests = await this.requestRepository.findByStatus(query.status);
+        const requests = await this.requestRepository.filterByUserIdAndStatus(query.status, query.userId);
 
         const users = await this.userSharedPort.getUserByIds(requests.map(request => request.userId));
 
