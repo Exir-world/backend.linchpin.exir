@@ -6,5 +6,6 @@ export abstract class RequestRepository {
     abstract findOneById(id: number): Promise<RequestDomain | null>;
     abstract findByUserId(userId: number): Promise<RequestDomain[]>;
     abstract findByStatus(status: RequestStatus): Promise<RequestDomain[]>;
+    abstract filterByUserIdAndStatus(status: RequestStatus, userid: number): Promise<RequestDomain[]>;
     abstract filterByTimeRangeAndStatus(userId: number, status: RequestStatus, startTime: Date, endTime: Date): Promise<RequestDomain[]>;
 }

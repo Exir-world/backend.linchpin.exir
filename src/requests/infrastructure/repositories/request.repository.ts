@@ -35,6 +35,11 @@ export class RequestRepositoryImpl implements RequestRepository {
         return entities.map(RequestMapper.toDomain);
     }
 
+    async filterByUserIdAndStatus(status: RequestStatus, userId: number): Promise<RequestDomain[]> {
+        const entities = await this.ormRepository.find({ where: { status, userId }, order: { createdAt: 'DESC' } });
+        return entities.map(RequestMapper.toDomain);
+    }
+
     async filterByTimeRangeAndStatus(userId: number, status: RequestStatus, startTime: Date, endTime: Date): Promise<RequestDomain[]> {
         const where: any = { userId };
         if (status)

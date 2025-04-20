@@ -79,7 +79,7 @@ export class RequestController {
     @ApiResponse({ status: 200, description: 'لیست درخواست‌ها بازگردانده شد.' })
     @Get()
     async getAllRequests(@Query() dto: GetAllRequestsDto) {
-        const query = new GetAllRequestsQuery(dto.status);
+        const query = new GetAllRequestsQuery(dto.status, dto.userId);
         return await this.requestService.getAllRequests(query);
     }
 
@@ -89,7 +89,6 @@ export class RequestController {
     @ApiResponse({ status: 404, description: 'درخواست پیدا نشد.' })
     @Get(':id(\\d+)')
     async getRequestById(@Param('id') requestId: number) {
-        console.log('xxx222');
         const query = new GetRequestByIdQuery(requestId);
         return await this.requestService.getRequestById(query);
     }
