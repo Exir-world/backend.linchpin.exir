@@ -30,7 +30,7 @@ export class PropertyUserController {
     }
 
     @UseGuards(AdminAuthGuard)
-    @Delete('unassign')
+    @Post('unassign')
     @ApiOperation({ summary: 'حذف اموال از کاربر (ادمین)' })
     unassign(@Body() dto: UnassignPropertyDto) {
         const command = new UnassignPropertyCommand(
