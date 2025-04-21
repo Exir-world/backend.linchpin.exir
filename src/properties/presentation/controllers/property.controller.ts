@@ -9,7 +9,6 @@ import { GetAllPropertiesQuery } from 'src/properties/application/queries/get-al
 import { GetPropertyByIdQuery } from 'src/properties/application/queries/get-property-by-id.query';
 import { UpdatePropertyCommand } from 'src/properties/application/commands/update-property.command';
 import { DeletePropertyCommand } from 'src/properties/application/commands/delete-property.command';
-import { PropertyStatusEnum } from 'src/properties/domain/enums/property-status.enum';
 
 @UseGuards(AdminAuthGuard)
 @ApiBearerAuth()
@@ -26,7 +25,7 @@ export class PropertyController {
     @ApiResponse({ status: 201, description: 'ملک با موفقیت ایجاد شد.' })
     create(@Body() dto: CreatePropertyDto) {
         const command = new CreatePropertyCommand(
-            dto.title, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.imageUrl
+            dto.categoryId, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.brand, dto.model, dto.description, dto.imageUrl, dto.features
         );
         return this.commandBus.execute(command);
     }
@@ -58,7 +57,7 @@ export class PropertyController {
     @ApiOperation({ summary: 'ویرایش اطلاعات اموال' })
     update(@Param('id') id: number, @Body() dto: UpdatePropertyDto) {
         const command = new UpdatePropertyCommand(
-            id, dto.title, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.imageUrl
+            id, dto.categoryId, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.brand, dto.model, dto.description, dto.imageUrl
         );
         return this.commandBus.execute(command);
     }

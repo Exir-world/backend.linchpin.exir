@@ -33,7 +33,7 @@ export class TypeOrmPropertyRepository implements PropertyRepository {
             where.userProperties = { userId: isAssigned ? Not(IsNull()) : IsNull() }
         }
 
-        return await this.repo.find({ where, relations: ['userProperties'] });
+        return await this.repo.find({ where, relations: ['userProperties', 'features.feature'] });
     }
 
     async findById(id: number): Promise<PropertyEntity> {

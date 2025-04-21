@@ -22,16 +22,39 @@ import { GetReportsByPropertyHandler } from './application/queries/handlers/get-
 import { GetUserPropertiesHandler } from './application/queries/handlers/get-user-properties.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ChangeReportStatusHandler } from './application/commands/handlers/change-report-status.handler';
+import { CreatePropertyCategoryHandler } from './application/commands/handlers/create-property-category.handler';
+import { UpdatePropertyCategoryHandler } from './application/commands/handlers/update-property-category.handler';
+import { DeletePropertyCategoryHandler } from './application/commands/handlers/delete-property-category.handler';
+import { GetPropertyCategoriesHandler } from './application/queries/handlers/get-property-categories.handler';
+import { CreatePropertyCategoryFeatureHandler } from './application/commands/handlers/create-property-category-feature.handler';
+import { GetPropertyCategoryFeaturesHandler } from './application/queries/handlers/get-property-category-features.handler';
+import { CreatePropertyFeatureHandler } from './application/commands/handlers/create-property-feature.handler';
+import { DeletePropertyFeatureHandler } from './application/commands/handlers/delete-property-feature.handler';
+import { PropertyCategoryRepositoryImpl } from './infrastructure/repositories/property-category.repository.impl';
+import { PropertyCategoryFeatureRepositoryImpl } from './infrastructure/repositories/property-category-feature.repository.impl';
+import { PropertyFeatureRepositoryImpl } from './infrastructure/repositories/property-feature.repository.impl';
+import { PropertyCategoryController } from './presentation/controllers/property-category.controller';
+import { PropertyCategoryFeatureController } from './presentation/controllers/property-category-feature.controller';
+import { PropertyFeatureController } from './presentation/controllers/property-feature.controller';
+import { PropertyCategoryEntity } from './infrastructure/entities/property-category.entity';
+import { PropertyCategoryFeatureEntity } from './infrastructure/entities/property-category-feature.entity';
+import { PropertyFeatureEntity } from './infrastructure/entities/property-feature.entity';
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([PropertyEntity, PropertyReportEntity, UserPropertyEntity]),
+        TypeOrmModule.forFeature([
+            PropertyEntity, PropertyReportEntity, UserPropertyEntity,
+            PropertyCategoryEntity, PropertyCategoryFeatureEntity, PropertyFeatureEntity,
+        ]),
         CqrsModule,
     ],
     controllers: [
         PropertyController,
         PropertyReportController,
         PropertyUserController,
+        PropertyCategoryController,
+        PropertyCategoryFeatureController,
+        PropertyFeatureController,
     ],
     providers: [
         {
@@ -47,6 +70,19 @@ import { ChangeReportStatusHandler } from './application/commands/handlers/chang
             useClass: TypeOrmPropertyReportRepository,
         },
 
+        {
+            provide: 'PropertyCategoryRepository',
+            useClass: PropertyCategoryRepositoryImpl,
+        },
+        {
+            provide: 'PropertyCategoryFeatureRepository',
+            useClass: PropertyCategoryFeatureRepositoryImpl,
+        },
+        {
+            provide: 'PropertyFeatureRepository',
+            useClass: PropertyFeatureRepositoryImpl,
+        },
+
         // Commands
         AssignPropertyHandler,
         CreatePropertyReportHandler,
@@ -55,6 +91,12 @@ import { ChangeReportStatusHandler } from './application/commands/handlers/chang
         UnassignPropertyHandler,
         UpdatePropertyHandler,
         ChangeReportStatusHandler,
+        CreatePropertyCategoryHandler,
+        UpdatePropertyCategoryHandler,
+        DeletePropertyCategoryHandler,
+        CreatePropertyCategoryFeatureHandler,
+        CreatePropertyFeatureHandler,
+        DeletePropertyFeatureHandler,
 
         // Queries
         GetAllPropertiesHandler,
@@ -62,6 +104,8 @@ import { ChangeReportStatusHandler } from './application/commands/handlers/chang
         GetPropertyByIdHandler,
         GetReportsByPropertyHandler,
         GetUserPropertiesHandler,
+        GetPropertyCategoryFeaturesHandler,
+        GetPropertyCategoriesHandler,
     ],
 })
 export class PropertiesModule { }
