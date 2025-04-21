@@ -17,10 +17,9 @@ export class CreatePropertyCategoryDto {
 
     @ApiPropertyOptional({
         description: 'An optional array of features for the property category',
-        type: [FeatureDto],
+        type: [String],
     })
     @IsOptional()
-    @ValidateNested({ each: true })
-    @Type(() => FeatureDto)
-    features?: FeatureDto[];
+    @Type(() => String)
+    features?: string[];
 }

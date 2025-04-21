@@ -3,7 +3,7 @@ import { PropertyCategory } from "src/properties/domain/property-category.domain
 export abstract class PropertyCategoryRepository {
     abstract create(
         title: string,
-        features?: { title: string }[]
+        features?: string[]
     ): Promise<PropertyCategory>;
 
     abstract findAll(): Promise<PropertyCategory[]>;

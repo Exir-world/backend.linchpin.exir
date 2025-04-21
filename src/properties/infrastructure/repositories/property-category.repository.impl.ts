@@ -20,13 +20,13 @@ export class PropertyCategoryRepositoryImpl extends PropertyCategoryRepository {
         super();
     }
 
-    async create(title: string, features?: { title: string }[]): Promise<PropertyCategory> {
+    async create(title: string, features?: string[]): Promise<PropertyCategory> {
         const category = await this.categoryRepo.save({ title });
 
         if (features?.length) {
             for (const f of features) {
                 const feature = new PropertyCategoryFeatureEntity();
-                feature.title = f.title;
+                feature.title = f;
                 feature.category = category;
                 await this.featureRepo.save(feature);
             }
