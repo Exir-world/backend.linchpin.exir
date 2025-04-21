@@ -15,6 +15,8 @@ export class GetAllPropertiesHandler implements IQueryHandler<GetAllPropertiesQu
         const { organizationId, departmentId, isAssigned } = query;
 
         const entities = await this.repository.findAll(organizationId, departmentId, isAssigned);
+        console.log(entities);
+
         return PropertyMapper.toDomainList(entities);
     }
 }

@@ -3,10 +3,25 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 import { PropertyStatusEnum } from 'src/properties/domain/enums/property-status.enum';
 
 export class CreatePropertyDto {
-    @ApiProperty({ type: String, description: 'The title of the property' })
-    @IsString()
+    @ApiProperty({ type: Number, description: 'The ID of the category' })
+    @IsNumber()
     @IsNotEmpty()
-    title: string;
+    categoryId: number;
+
+    @ApiPropertyOptional({ type: String, description: 'The brand of the property' })
+    @IsString()
+    @IsOptional()
+    brand?: string;
+
+    @ApiPropertyOptional({ type: String, description: 'The model of the property' })
+    @IsString()
+    @IsOptional()
+    model?: string;
+
+    @ApiPropertyOptional({ type: String, description: 'The description of the property' })
+    @IsString()
+    @IsOptional()
+    description: string;
 
     @ApiProperty({ type: String, description: 'The unique code of the property' })
     @IsString()
@@ -31,4 +46,20 @@ export class CreatePropertyDto {
     @IsString()
     @IsOptional()
     imageUrl?: string;
+
+    @ApiPropertyOptional({ type: () => [FeatureDto], description: 'The optional features of the property' })
+    @IsOptional()
+    features?: FeatureDto[];
+}
+
+class FeatureDto {
+    @ApiProperty({ type: Number, description: 'The ID of the feature' })
+    @IsNumber()
+    @IsNotEmpty()
+    id: number;
+
+    @ApiPropertyOptional({ type: String, description: 'The value of the feature' })
+    @IsString()
+    @IsOptional()
+    value?: string;
 }
