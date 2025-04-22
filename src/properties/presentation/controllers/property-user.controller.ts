@@ -8,6 +8,7 @@ import { GetUserPropertiesQuery } from 'src/properties/application/queries/get-u
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { UnassignPropertyDto } from '../dto/unassign-property.dto';
+import { GetUserPropertiesForAdminQuery } from '../../application/queries/get-user-properties-for-admin.query';
 
 @ApiBearerAuth()
 @ApiTags('Property User Assignment')
@@ -50,6 +51,6 @@ export class PropertyUserController {
     @Get('user-properties/:userId')
     @ApiOperation({ summary: 'لیست اموال اختصاص داده شده به کاربر (برای ادمین)' })
     getUserPropertiesByAdmin(@Param('userId') userId: number) {
-        return this.queryBus.execute(new GetUserPropertiesQuery(userId));
+        return this.queryBus.execute(new GetUserPropertiesForAdminQuery(userId));
     }
 }
