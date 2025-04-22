@@ -39,6 +39,7 @@ import { PropertyFeatureController } from './presentation/controllers/property-f
 import { PropertyCategoryEntity } from './infrastructure/entities/property-category.entity';
 import { PropertyCategoryFeatureEntity } from './infrastructure/entities/property-category-feature.entity';
 import { PropertyFeatureEntity } from './infrastructure/entities/property-feature.entity';
+import { GetUserPropertiesForAdminHandler } from './application/queries/handlers/get-user-properties-for-admin.handler';
 
 @Module({
     imports: [
@@ -106,6 +107,7 @@ import { PropertyFeatureEntity } from './infrastructure/entities/property-featur
         GetUserPropertiesHandler,
         GetPropertyCategoryFeaturesHandler,
         GetPropertyCategoriesHandler,
+        GetUserPropertiesForAdminHandler,
     ],
 })
 export class PropertiesModule { }
