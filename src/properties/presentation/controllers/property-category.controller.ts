@@ -38,7 +38,7 @@ export class PropertyCategoryController {
         @Body() dto: UpdatePropertyCategoryDto,
     ) {
         return this.commandBus.execute(
-            new UpdatePropertyCategoryCommand(id, dto.title)
+            new UpdatePropertyCategoryCommand(id, dto.title, (dto.features as any[]))
         );
     }
 

@@ -48,4 +48,14 @@ export class PropertyCategoryFeatureRepositoryImpl extends PropertyCategoryFeatu
     async delete(id: number): Promise<void> {
         await this.featureRepo.delete(id);
     }
+
+    async removeByIds(ids: number[]): Promise<void> {
+        await this.featureRepo.delete(ids);
+    }
+
+    async saveArray(features: PropertyCategoryFeature[]): Promise<PropertyCategoryFeature[]> {
+        const entities = PropertyCategoryFeatureMapper.toEntitiesList(features);
+        const savedEntities = await this.featureRepo.save(entities);
+        return PropertyCategoryFeatureMapper.toDomainList(savedEntities);
+    }
 }

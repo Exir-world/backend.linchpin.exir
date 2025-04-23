@@ -2,13 +2,6 @@ import { IsNotEmpty, IsString, ValidateNested, ArrayMinSize, IsOptional } from '
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-class FeatureDto {
-    @ApiProperty({ description: 'The title of the feature' })
-    @IsNotEmpty()
-    @IsString()
-    title: string;
-}
-
 export class CreatePropertyCategoryDto {
     @ApiProperty({ description: 'The title of the property category' })
     @IsNotEmpty()

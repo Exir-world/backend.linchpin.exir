@@ -59,4 +59,6 @@ export class PropertyCategoryRepositoryImpl extends PropertyCategoryRepository {
     async delete(id: number): Promise<void> {
         await this.categoryRepo.delete(id);
     }
+
+
 }
