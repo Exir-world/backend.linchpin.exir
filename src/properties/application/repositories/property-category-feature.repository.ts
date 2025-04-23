@@ -16,4 +16,10 @@ export abstract class PropertyCategoryFeatureRepository {
     ): Promise<PropertyCategoryFeature>;
 
     abstract delete(id: number): Promise<void>;
+
+    abstract removeByIds(ids: number[]): Promise<void>;
+
+    abstract saveArray(
+        features: PropertyCategoryFeature[]
+    ): Promise<PropertyCategoryFeature[]>;
 }

@@ -47,19 +47,19 @@ export class CreatePropertyDto {
     @IsOptional()
     imageUrl?: string;
 
-    @ApiPropertyOptional({ type: () => [FeatureDto], description: 'The optional features of the property' })
+    @ApiPropertyOptional({ type: () => [Feature2Dto], description: 'The optional features of the property' })
     @IsOptional()
-    features?: FeatureDto[];
+    features?: Feature2Dto[];
 }
 
-class FeatureDto {
+class Feature2Dto {
     @ApiProperty({ type: Number, description: 'The ID of the feature' })
     @IsNumber()
     @IsNotEmpty()
     id: number;
 
-    @ApiPropertyOptional({ type: String, description: 'The value of the feature' })
+    @ApiPropertyOptional({ type: String, description: 'The title of the feature' })
     @IsString()
     @IsOptional()
-    value?: string;
+    title?: string;
 }
