@@ -18,7 +18,6 @@ import { UpdatePropertyHandler } from './application/commands/handlers/update-pr
 import { GetAllPropertiesHandler } from './application/queries/handlers/get-all-properties.handler';
 import { GetAllReportsHandler } from './application/queries/handlers/get-all-reports.handler';
 import { GetPropertyByIdHandler } from './application/queries/handlers/get-property-by-id.handler';
-import { GetReportsByPropertyHandler } from './application/queries/handlers/get-reports-by-property.handler';
 import { GetUserPropertiesHandler } from './application/queries/handlers/get-user-properties.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ChangeReportStatusHandler } from './application/commands/handlers/change-report-status.handler';
@@ -40,6 +39,7 @@ import { PropertyCategoryEntity } from './infrastructure/entities/property-categ
 import { PropertyCategoryFeatureEntity } from './infrastructure/entities/property-category-feature.entity';
 import { PropertyFeatureEntity } from './infrastructure/entities/property-feature.entity';
 import { GetUserPropertiesForAdminHandler } from './application/queries/handlers/get-user-properties-for-admin.handler';
+import { GetReportByIdHandler } from './application/queries/handlers/get-report-by-id.handler';
 
 @Module({
     imports: [
@@ -103,7 +103,7 @@ import { GetUserPropertiesForAdminHandler } from './application/queries/handlers
         GetAllPropertiesHandler,
         GetAllReportsHandler,
         GetPropertyByIdHandler,
-        GetReportsByPropertyHandler,
+        GetReportByIdHandler,
         GetUserPropertiesHandler,
         GetPropertyCategoryFeaturesHandler,
         GetPropertyCategoriesHandler,

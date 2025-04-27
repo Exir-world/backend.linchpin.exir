@@ -9,7 +9,12 @@ export class GetAllReportsHandler implements IQueryHandler<GetAllReportsQuery> {
         @Inject('PropertyReportRepository') private readonly repository: PropertyReportRepository,
     ) { }
 
-    async execute() {
-        return await this.repository.findAll();
+    async execute(query: GetAllReportsQuery) {
+        const { categoryId, code, status } = query;
+        return await this.repository.findAll({
+            categoryId,
+            code,
+            status,
+        });
     }
 }

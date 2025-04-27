@@ -3,7 +3,7 @@ import { PropertyReportEntity } from "src/properties/infrastructure/entities/pro
 
 export abstract class PropertyReportRepository {
     abstract create(report: PropertyReportEntity): Promise<PropertyReportEntity>;
-    abstract findAll(): Promise<PropertyReportEntity[]>;
+    abstract findAll(filters?: { code?: string; categoryId?: number; status?: PropertyReportStatusEnum }): Promise<PropertyReportEntity[]>;
     abstract findByPropertyId(propertyId: number): Promise<PropertyReportEntity[]>;
     abstract findNotGoodsByUserId(userId: number): Promise<PropertyReportEntity[]>;
     abstract findById(reportId: number): Promise<PropertyReportEntity>;

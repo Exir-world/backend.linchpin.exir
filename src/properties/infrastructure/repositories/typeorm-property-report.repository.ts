@@ -16,24 +16,37 @@ export class TypeOrmPropertyReportRepository implements PropertyReportRepository
         return this.repo.save(entity);
     }
 
-    async findAll(): Promise<PropertyReportEntity[]> {
-        return this.repo.find();
+    async findAll(filters?: { code?: string; categoryId?: number; status?: PropertyReportStatusEnum }): Promise<PropertyReportEntity[]> {
+        const where: any = {};
+        if (filters?.code) {
+            where.property = where.property || {};
+            where.property.code = filters.code;
+        }
+        if (filters?.categoryId) {
+            where.property = where.property || {};
+            where.property.category = where.property.category || {};
+            where.property.category.id = filters.categoryId;
+        }
+        if (filters?.status) {
+            where.status = filters.status;
+        }
+        return this.repo.find({ where, relations: ['property', 'property.category'] });
     }
 
     async findByPropertyId(propertyId: number): Promise<PropertyReportEntity[]> {
-        return this.repo.find({ where: { propertyId } });
+        return this.repo.find({ where: { propertyId }, relations: ['property'] });
     }
 
     async findById(reportId: number): Promise<PropertyReportEntity> {
-        return this.repo.findOne({ where: { id: reportId } });
+        return this.repo.findOne({ where: { id: reportId }, relations: ['property'] });
     }
 
     async findNotGoodsByUserId(userId: number): Promise<PropertyReportEntity[]> {
-        return this.repo.find({ where: { userId, status: Not(PropertyReportStatusEnum.REPAIRED) } });
+        return this.repo.find({ where: { userId, status: Not(PropertyReportStatusEnum.REPAIRED) }, relations: ['property'] });
     }
 
     async updateStatusById(reportId: number, status: PropertyReportStatusEnum): Promise<PropertyReportEntity> {
-        const report = await this.repo.findOne({ where: { id: reportId } });
+        const report = await this.repo.findOne({ where: { id: reportId }, relations: ['property'] });
         if (!report) {
             throw new NotFoundException('Property report not found');
         }
