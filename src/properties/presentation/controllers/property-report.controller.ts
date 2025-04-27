@@ -1,16 +1,15 @@
-import { Controller, Post, Get, Body, Param, Req, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Post, Get, Body, Param, Req, UseGuards, Query } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { CreatePropertyReportDto } from '../dto/create-property-report.dto';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreatePropertyReportHandler } from 'src/properties/application/commands/handlers/create-property-report.handler';
 import { CreatePropertyReportCommand } from 'src/properties/application/commands/create-property-report.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { GetAllReportsQuery } from 'src/properties/application/queries/get-all-reports.query';
-import { GetReportsByPropertyQuery } from 'src/properties/application/queries/get-reports-by-property.query';
 import { PropertyReportStatusEnum } from 'src/properties/domain/enums/property-report-status.enum';
 import { ChangeReportStatusCommand } from 'src/properties/application/commands/change-report-status.command';
 import { ChangeReportStatusDto } from '../dto/change-report-status.dto';
+import { GetReportByIdQuery } from 'src/properties/application/queries/get-reports-by-id.query';
 
 @ApiBearerAuth()
 @ApiTags('Property Reports')
@@ -38,15 +37,22 @@ export class PropertyReportController {
     @UseGuards(AdminAuthGuard)
     @Get('all')
     @ApiOperation({ summary: 'دریافت همه گزارش‌ها (برای ادمین)' })
-    getAllReports() {
-        return this.queryBus.execute(new GetAllReportsQuery());
+    @ApiQuery({ name: 'code', required: false, type: String, description: 'کد گزارش' })
+    @ApiQuery({ name: 'categoryId', required: false, type: Number, description: 'شناسه دسته‌بندی' })
+    @ApiQuery({ name: 'status', required: false, enum: PropertyReportStatusEnum, description: 'وضعیت گزارش' })
+    getAllReports(
+        @Query('code') code?: string,
+        @Query('categoryId') categoryId?: number,
+        @Query('status') status?: PropertyReportStatusEnum,
+    ) {
+        return this.queryBus.execute(new GetAllReportsQuery(code, categoryId, status));
     }
 
     @UseGuards(AdminAuthGuard)
-    @Get(':propertyId')
-    @ApiOperation({ summary: 'دریافت گزارش‌های یک اموال خاص (برای ادمین)' })
-    getReportsForProperty(@Param('propertyId') propertyId: number) {
-        return this.queryBus.execute(new GetReportsByPropertyQuery(propertyId));
+    @Get(':id')
+    @ApiOperation({ summary: 'دریافت جزئیات گزارش‌ (برای ادمین)' })
+    getReportbyId(@Param('id') id: number) {
+        return this.queryBus.execute(new GetReportByIdQuery(id));
     }
 
     @UseGuards(AdminAuthGuard)
