@@ -25,11 +25,11 @@ export class PropertyFeatureRepositoryImpl extends PropertyFeatureRepository {
         return PropertyFeatureMapper.toDomain(feature);
     }
 
-    async addFeatureToProperties(propertyId: number, features: { id: number, value: string }[]): Promise<PropertyFeature[]> {
+    async addFeatureToProperties(propertyId: number, features: { featureId: number, value: string }[]): Promise<PropertyFeature[]> {
         const propertyFeatures = features.map((feature) => {
             return this.repo.create({
                 value: feature.value,
-                feature: { id: feature.id } as any,
+                feature: { id: feature.featureId } as any,
                 property: { id: propertyId } as any,
             });
         });
