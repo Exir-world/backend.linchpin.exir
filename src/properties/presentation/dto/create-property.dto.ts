@@ -56,10 +56,10 @@ class Feature2Dto {
     @ApiProperty({ type: Number, description: 'The ID of the feature' })
     @IsNumber()
     @IsNotEmpty()
-    id: number;
+    featureId: number;
 
     @ApiPropertyOptional({ type: String, description: 'The title of the feature' })
     @IsString()
     @IsOptional()
-    title?: string;
+    value: string;
 }

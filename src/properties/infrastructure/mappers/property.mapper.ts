@@ -35,6 +35,7 @@ export const PropertyMapper = {
         entity.brand = domain.brand;
         entity.model = domain.model;
         entity.description = domain.description;
+        entity.features = domain.features;
         return entity;
     },
 
