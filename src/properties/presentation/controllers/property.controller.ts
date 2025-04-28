@@ -57,7 +57,7 @@ export class PropertyController {
     @ApiOperation({ summary: 'ویرایش اطلاعات اموال' })
     update(@Param('id') id: number, @Body() dto: UpdatePropertyDto) {
         const command = new UpdatePropertyCommand(
-            id, dto.categoryId, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.brand, dto.model, dto.description, dto.imageUrl
+            id, dto.categoryId, dto.code, dto.status, dto.organizationId, dto.departmentId, dto.brand, dto.model, dto.description, dto.imageUrl, dto.features
         );
         return this.commandBus.execute(command);
     }

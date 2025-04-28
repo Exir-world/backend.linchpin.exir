@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PropertyRepository } from 'src/properties/application/repositories/property.repository';
-import { IsNull, Not, Repository } from 'typeorm';
+import { In, IsNull, Not, Repository } from 'typeorm';
 import { PropertyEntity } from '../entities/property.entity';
 import { UserPropertyEntity } from '../entities/user-property.entity';
+import { PropertyFeatureEntity } from '../entities/property-feature.entity';
 
 @Injectable()
 export class TypeOrmPropertyRepository implements PropertyRepository {
@@ -12,6 +13,8 @@ export class TypeOrmPropertyRepository implements PropertyRepository {
         private readonly repo: Repository<PropertyEntity>,
         @InjectRepository(UserPropertyEntity)
         private readonly userPropRepo: Repository<UserPropertyEntity>,
+        @InjectRepository(PropertyFeatureEntity)
+        private readonly propFeatureRepo: Repository<PropertyFeatureEntity>,
     ) { }
 
     async save(property: PropertyEntity): Promise<PropertyEntity> {
@@ -37,12 +40,32 @@ export class TypeOrmPropertyRepository implements PropertyRepository {
     }
 
     async findById(id: number): Promise<PropertyEntity> {
-        return await this.repo.findOneBy({ id });
+        return await this.repo.findOne({ where: { id }, relations: ['features.feature', 'category.features'] });
     }
 
-    async update(id: number, data: Partial<PropertyEntity>): Promise<PropertyEntity> {
-        await this.repo.update(id, data);
-        return this.findById(id);
+    async update(id: number, data: any): Promise<PropertyEntity> {
+        console.log(data);
+
+        const prop = await this.repo.findOne({ where: { id } });
+
+        if (!prop) {
+            throw new NotFoundException('Property not found');
+        }
+
+        const { features, categoryId } = data;
+
+        if (categoryId != prop.category.id) {
+            await this.propFeatureRepo.delete({ property: { id: prop.id } });
+            prop.category = { id: categoryId, title: '', features: [] };
+        }
+
+        Object.assign(prop, data);
+
+        if (data.features) {
+            prop.features = data.features.map(f => ({ feature: { id: f.featureId }, property: { id: prop.id }, value: f.value }));
+        }
+
+        return await this.repo.save(prop);
     }
 
     async delete(id: number): Promise<void> {

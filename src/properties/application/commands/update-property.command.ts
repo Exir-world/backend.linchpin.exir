@@ -12,5 +12,6 @@ export class UpdatePropertyCommand {
         public readonly model?: string,
         public readonly description?: string,
         public readonly imageUrl?: string,
+        public readonly features?: any[],
     ) { }
 }

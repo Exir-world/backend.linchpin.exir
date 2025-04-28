@@ -10,9 +10,6 @@ export class UpdatePropertyHandler implements ICommandHandler<UpdatePropertyComm
     ) { }
 
     async execute(command: UpdatePropertyCommand): Promise<any> {
-        return await this.repository.update(command.id, {
-            ...command, category:
-                command.categoryId ? { id: command.categoryId, title: undefined, features: [] } : undefined
-        });
+        return await this.repository.update(command.id, command);
     }
 }
