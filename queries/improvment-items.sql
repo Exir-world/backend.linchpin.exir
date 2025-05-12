@@ -1,5 +1,15 @@
 INSERT INTO "self-improvement-item" (title, "selfImprovementId", image, color, "type")
 VALUES
+('improvement.items.sightSense', 1, '', '#1467BA', 'SENSE'),
+('improvement.items.hearingSense', 1, '', '#1467BA', 'SENSE'),
+('improvement.items.smellSense', 1, '', '#1467BA', 'SENSE'),
+('improvement.items.tasteSense', 1, '', '#1467BA', 'SENSE'),
+('improvement.items.touchSense', 1, '', '#1467BA', 'SENSE'),
+('improvement.items.sixthSense', 1, '', '#1467BA', 'SENSE'),
+('improvement.items.chandelier', 1, '', '#1467BA', 'CHANDELIER')
+
+INSERT INTO "self-improvement-item" (title, "selfImprovementId", image, color, "type")
+VALUES
 ('improvement.items.linguistic', 1, '', '#1467BA', 'INTELLIGENSE'),
 ('improvement.items.logical', 1, '', '#1467BA', 'INTELLIGENSE'),
 ('improvement.items.spatial', 1, '', '#1467BA', 'INTELLIGENSE'),

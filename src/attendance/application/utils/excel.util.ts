@@ -50,11 +50,11 @@ export async function generateExcel(res: Response, data: any[], workDuration: nu
     worksheet.views = [{ rightToLeft: true }];
     worksheet.columns = [
         { header: 'نام کاربر', key: 'lastname', width: 25 },
-        { header: 'مجموع کارکرد خالص', key: 'workTimesPure', width: 15 },
+        // { header: 'مجموع کارکرد خالص', key: 'workTimesPure', width: 15 },
         { header: 'مجموع کارکرد', key: 'workTimes', width: 15 },
-        { header: 'مجموع کارکرد (با کسر ناهار)', key: 'workTimesWithLunch', width: 20 },
+        // { header: 'مجموع کارکرد (با کسر ناهار)', key: 'workTimesWithLunch', width: 20 },
         { header: 'تعداد روز های کارکرد', key: 'workDays', width: 15 },
-        { header: 'تعداد روز های تعطیلی رسمی', key: 'holidaysDayCount', width: 20 },
+        // { header: 'تعداد روز های تعطیلی رسمی', key: 'holidaysDayCount', width: 20 },
         { header: 'پایه حقوق', key: 'salary', width: 20 },
         { header: 'حقوق دریافتی', key: 'paidSalary', width: 20 },
     ];
@@ -82,6 +82,7 @@ export async function generateExcel(res: Response, data: any[], workDuration: nu
         ]);
 
         const workTimesPure = workTimesPureFormated.split(':').reduce((acc, time) => (60 * acc) + +time, 0);
+        const totalWorkTime = sumTimes(d.att.map(a => a.workTime)).split(':').reduce((acc, time) => (60 * acc) + +time, 0);
 
         worksheet.addRow({
             lastname: d.lastname,
@@ -94,7 +95,7 @@ export async function generateExcel(res: Response, data: any[], workDuration: nu
                 ? salary.find(s => s.userId == d.userId)?.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 : '-',
             paidSalary: salary.find(s => s.userId == d.userId)?.salary
-                ? Math.floor((workTimesPure / (440 * 26)) * salary.find(s => s.userId == d.userId)?.salary)
+                ? Math.floor((totalWorkTime / (191 * 60)) * salary.find(s => s.userId == d.userId)?.salary)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 : '-',

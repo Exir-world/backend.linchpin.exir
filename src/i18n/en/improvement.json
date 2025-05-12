@@ -22,7 +22,14 @@
         "racism": "Racism",
         "gambling": "Gambling",
         "harassment": "Harassment",
-        "politics": "Politics"
+        "politics": "Politics",
+        "sightSense": "Sight Sense",
+        "hearingSense": "Hearing Sense",
+        "smellSense": "Smell Sense",
+        "tasteSense": "Taste Sense",
+        "touchSense": "Touch Sense",
+        "sixthSense": "Sixth Sense",
+        "chandelier": "Chandelier"
     },
     "subitems": {
         "verbal_linguistic": {

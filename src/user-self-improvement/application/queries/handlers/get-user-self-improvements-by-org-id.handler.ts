@@ -55,6 +55,8 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
                     [SelfImprovementItemTypeEnum.IMPROVMENT]: 1,
                     [SelfImprovementItemTypeEnum.INTELLIGENSE]: 2,
                     [SelfImprovementItemTypeEnum.FORBIDDEN]: 3,
+                    [SelfImprovementItemTypeEnum.SENSE]: 4,
+                    [SelfImprovementItemTypeEnum.CHANDELIER]: 5,
                 };
                 return typeOrder[a.type] - typeOrder[b.type] || a.id - b.id;
             });
