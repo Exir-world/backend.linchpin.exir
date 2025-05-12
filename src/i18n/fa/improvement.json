@@ -22,7 +22,14 @@
         "racism": "توهین",
         "gambling": "قمار",
         "harassment": "آزار و اذیت",
-        "politics": "سیاست"
+        "politics": "سیاست",
+        "sightSense": "حس بینایی",
+        "hearingSense": "حس شنوایی",
+        "smellSense": "حس بویایی",
+        "tasteSense": "حس چشایی",
+        "touchSense": "حس لامسه",
+        "sixthSense": "حس ششم",
+        "chandelier": "بارفتن"
     },
     "subitems": {
         "verbal_linguistic": {

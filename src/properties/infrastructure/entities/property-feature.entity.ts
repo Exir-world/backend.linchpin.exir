@@ -15,7 +15,7 @@ export class PropertyFeatureEntity {
     @JoinColumn({ name: 'property_id' })
     property: PropertyEntity;
 
-    @ManyToOne(() => PropertyCategoryFeatureEntity)
+    @ManyToOne(() => PropertyCategoryFeatureEntity, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'feature_id' })
     feature: PropertyCategoryFeatureEntity;
 }

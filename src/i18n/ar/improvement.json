@@ -22,7 +22,14 @@
         "racism": "العنصرية",
         "gambling": "القمار",
         "harassment": "التحرش",
-        "politics": "السياسة"
+        "politics": "السياسة",
+        "sightSense": "حاسة البصر",
+        "hearingSense": "حاسة السمع",
+        "smellSense": "حاسة الشم",
+        "tasteSense": "حاسة التذوق",
+        "touchSense": "حاسة اللمس",
+        "sixthSense": "الحاسة السادسة",
+        "chandelier": "الثريا"
     },
     "subitems": {
         "verbal_linguistic": {

@@ -2,4 +2,6 @@ export enum SelfImprovementItemTypeEnum {
     IMPROVMENT = 'IMPROVMENT',
     INTELLIGENSE = 'INTELLIGENSE',
     FORBIDDEN = 'FORBIDDEN',
+    SENSE = 'SENSE',
+    CHANDELIER = 'CHANDELIER',
 }
