@@ -1,0 +1,7 @@
+export enum ImprovementTypeEnum {
+    IMPROVEMENT = 'IMPROVEMENT',
+    INTELLIGENSE = 'INTELLIGENSE',
+    FORBIDDEN = 'FORBIDDEN',
+    SENSE = 'SENSE',
+    CHANDELIER = 'CHANDELIER',
+}
