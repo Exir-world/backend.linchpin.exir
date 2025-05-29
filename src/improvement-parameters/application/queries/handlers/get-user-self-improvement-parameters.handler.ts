@@ -1,11 +1,11 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { Between, IsNull, Repository } from 'typeorm';
+import { Between, IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { I18nService } from 'nestjs-i18n';
-import { SelfImprovementItemTypeEnum } from 'src/organization/domain/enums/self-improvement-item-type.enum';
 import { GetUserImprovementParametersQuery } from '../get-user-improvement-parameters.query';
 import { UserImprovementParameterEntity } from 'src/improvement-parameters/infrastructure/entities/user-improvement-parameter.entitiy';
 import { ImprovementParameterEntity } from 'src/improvement-parameters/infrastructure/entities/improvement-parameter.entitiy';
+import { ImprovementTypeEnum } from 'src/improvement-parameters/domain/enums/improvement-type.enum';
 
 @QueryHandler(GetUserImprovementParametersQuery)
 export class GetUserImprovementParametersQueryHandler implements IQueryHandler<GetUserImprovementParametersQuery> {
@@ -29,6 +29,7 @@ export class GetUserImprovementParametersQueryHandler implements IQueryHandler<G
         const imps = await this.improvementRepo.find({
             where: {
                 parent: parentId ? { id: parentId } : IsNull(),
+                type: Not(ImprovementTypeEnum.IMPROVEMENT),
             },
             relations: ['children']
         });
@@ -56,19 +57,37 @@ export class GetUserImprovementParametersQueryHandler implements IQueryHandler<G
             };
         }).sort((a, b) => {
             const typeOrder = {
-                [SelfImprovementItemTypeEnum.IMPROVMENT]: 1,
-                [SelfImprovementItemTypeEnum.INTELLIGENSE]: 2,
-                [SelfImprovementItemTypeEnum.FORBIDDEN]: 3,
-                [SelfImprovementItemTypeEnum.SENSE]: 4,
-                [SelfImprovementItemTypeEnum.CHANDELIER]: 5,
+                // [ImprovementTypeEnum.IMPROVEMENT]: 1,
+                [ImprovementTypeEnum.INTELLIGENSE]: 2,
+                [ImprovementTypeEnum.FORBIDDEN]: 3,
+                [ImprovementTypeEnum.SENSE]: 4,
+                [ImprovementTypeEnum.HUGGING]: 5,
+                [ImprovementTypeEnum.MIND_FOCUS]: 6,
+                // [ImprovementTypeEnum.CHANDELIER]: 7,
             };
             return typeOrder[a.type] - typeOrder[b.type] || a.id - b.id;
         });
 
+        const groupedItems = Object.values(
+            items.reduce((acc, item) => {
+                if (!acc[item.type]) {
+                    acc[item.type] = {
+                        type: item.type,
+                        title: this.i18n.t(`improvement.titles.${item.type}`),
+                        items: [],
+                    };
+                }
+                acc[item.type].items.push(item);
+                return acc;
+            }, {} as Record<string, { type: string; title: string; items: typeof items }>)
+        );
+
+        const totalScore = items.filter(item => item.done).length * 100000;
+
         return {
-            score: 0,
+            score: totalScore,
             scoreIcon: 'https://cdn.exirtu.be/self-improvement/si_gem.svg',
-            userItems: items,
+            userItems: groupedItems,
         }
     }
 }

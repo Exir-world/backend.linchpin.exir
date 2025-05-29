@@ -3,5 +3,7 @@ export enum ImprovementTypeEnum {
     INTELLIGENSE = 'INTELLIGENSE',
     FORBIDDEN = 'FORBIDDEN',
     SENSE = 'SENSE',
+    HUGGING = 'HUGGING',
+    MIND_FOCUS = 'MIND_FOCUS',
     CHANDELIER = 'CHANDELIER',
 }
