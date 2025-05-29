@@ -1,4 +1,12 @@
 {
+    "titles": {
+        "IMPROVEMENT": "التحسين الفردي",
+        "INTELLIGENSE": "الذكاء",
+        "FORBIDDEN": "المحظورات",
+        "SENSE": "الحواس",
+        "HUGGING": "العناق",
+        "MIND_FOCUS": "تركيز الذهن"
+    },
     "items": {
         "food": "التغذية العقلية والجسدية",
         "podcast": "تسجيل البودكاست",
@@ -29,7 +37,13 @@
         "tasteSense": "حاسة التذوق",
         "touchSense": "حاسة اللمس",
         "sixthSense": "الحاسة السادسة",
-        "chandelier": "الثريا"
+        "chandelier": "الثريا",
+        "morning": "الصباح",
+        "noon": "الظهر",
+        "afternoon": "بعد الظهر",
+        "night": "الليل",
+        "am": "صباحًا",
+        "pm": "مساءً"
     },
     "subitems": {
         "verbal_linguistic": {

@@ -1,4 +1,12 @@
 {
+    "titles": {
+        "IMPROVEMENT": "Personal Improvement",
+        "INTELLIGENSE": "Intelligence",
+        "FORBIDDEN": "Playfulness",
+        "SENSE": "Sense",
+        "HUGGING": "Hugging",
+        "MIND_FOCUS": "Mind Focus"
+    },
     "items": {
         "food": "Mental and physical nourishment",
         "podcast": "Podcast recording",
@@ -29,7 +37,13 @@
         "tasteSense": "Taste Sense",
         "touchSense": "Touch Sense",
         "sixthSense": "Sixth Sense",
-        "chandelier": "Chandelier"
+        "chandelier": "Chandelier",
+        "morning": "Morning",
+        "noon": "Noon",
+        "afternoon": "Afternoon",
+        "night": "Night",
+        "am": "AM",
+        "pm": "PM"
     },
     "subitems": {
         "verbal_linguistic": {

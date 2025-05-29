@@ -1,4 +1,12 @@
 {
+    "titles": {
+        "IMPROVEMENT": "بهبود فردی",
+        "INTELLIGENSE": "هوش‌",
+        "FORBIDDEN": "بازیگوشی",
+        "SENSE": "حس",
+        "HUGGING": "بغل کردن",
+        "MIND_FOCUS": "تمرکز ذهن"
+    },
     "items": {
         "food": "تغذیه فکری و جسمی",
         "podcast": "ضبط پادکست",
@@ -29,7 +37,13 @@
         "tasteSense": "حس چشایی",
         "touchSense": "حس لامسه",
         "sixthSense": "حس ششم",
-        "chandelier": "بارفتن"
+        "chandelier": "بارفتن",
+        "morning": "صبح",
+        "noon": "ظهر",
+        "afternoon": "عصر",
+        "night": "شب",
+        "am": "قبل از ظهر",
+        "pm": "بعد از ظهر"
     },
     "subitems": {
         "verbal_linguistic": {
