@@ -36,7 +36,7 @@ export class GetUserSelfImprovementByOrgIdHandler implements IQueryHandler<GetUs
             },
         });
 
-        const items = imps[0].items
+        const items = imps[0]?.items
             .map(item => ({
                 id: item.type === SelfImprovementItemTypeEnum.INTELLIGENSE
                     ? item.id : item.subItems?.[0]?.id,
