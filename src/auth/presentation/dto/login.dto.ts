@@ -14,4 +14,9 @@ export class LoginDto {
     @MinLength(6, { message: 'رمز عبور باید حداقل 6 کاراکتر باشد' })
     @MaxLength(20, { message: 'رمز عبور نمی‌تواند بیشتر از 20 کاراکتر باشد' })
     password: string;
+
+    @ApiProperty({ example: 'ABC123XYZ', description: 'Unique code for the user device' })
+    @IsString({ message: 'کد یکتای دستگاه باید یک رشته باشد' })
+    @IsNotEmpty({ message: 'کد یکتای دستگاه نمی‌تواند خالی باشد' })
+    deviceUniqueCode: string;
 }

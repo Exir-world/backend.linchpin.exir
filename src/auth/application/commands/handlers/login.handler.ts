@@ -25,7 +25,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     refreshSecret = this.configService.get('REFRESH_SECRET');
     refreshExpires = this.configService.get('REFRESH_EXPIRES') || '90d';
 
-    async execute(command: LoginCommand): Promise<Tokens> {
+    async execute(command: LoginCommand): Promise<{ tokenData: Tokens, userId: number }> {
         const { phoneNumber, password } = command;
 
         if (!phoneNumber || !password) {
@@ -56,6 +56,6 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         await this.sessionRepository.saveSession(user.id, refreshToken, expires);
 
 
-        return { accessToken, refreshToken, expires };
+        return { tokenData: { accessToken, refreshToken, expires }, userId: user.id };
     }
 }

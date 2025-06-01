@@ -8,6 +8,9 @@ import { RefreshDto } from '../dto/refresh-token.dto';
 import { RefreshTokenCommand } from 'src/auth/application/commands/refresh-token.command';
 import { I18nService } from 'nestjs-i18n';
 import { LoginAdminCommand } from 'src/auth/application/commands/login-admin.command';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { GetUserEmploymentSettingsQuery } from 'src/user-employment-settings/application/queries/get-user-employment-settings.query';
+import { HandleUserDeviceCodeLoginCommand } from 'src/user-employment-settings/application/commands/handle-user-device-code-login.command';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -15,6 +18,7 @@ export class AuthController {
     constructor(
         private readonly authService: AuthService,
         private readonly i18n: I18nService,
+        private readonly commandBus: CommandBus,
     ) { }
 
     @Get('test')
@@ -31,24 +35,32 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @ApiResponse({ status: 200, description: 'Login successful' })
     async login(@Body() loginDto: LoginDto): Promise<Tokens> {
-        return this.authService.login(
+        const { deviceUniqueCode } = loginDto;
+
+        const { tokenData, userId } = await this.authService.login(
             new LoginCommand(
                 loginDto.phoneNumber,
                 loginDto.password
             )
         );
+
+        await this.commandBus.execute(new HandleUserDeviceCodeLoginCommand(userId, deviceUniqueCode));
+
+        return tokenData;
     }
 
     @Post('login/admin')
     @HttpCode(HttpStatus.OK)
     @ApiResponse({ status: 200, description: 'Login successful' })
     async loginAdmin(@Body() loginDto: LoginDto): Promise<Tokens> {
-        return this.authService.login(
+        const data = await this.authService.login(
             new LoginAdminCommand(
                 loginDto.phoneNumber,
                 loginDto.password
             )
         );
+
+        return data.tokenData;
     }
 
     @Post('refresh')
