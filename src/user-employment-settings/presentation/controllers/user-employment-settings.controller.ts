@@ -5,6 +5,9 @@ import { CreateUserEmploymentSettingsDto } from "../dto/create-user-employment-s
 import { UserEmploymentSettings } from "src/user-employment-settings/domain/user-employment-settings.domain";
 import { CreateUserEmploymentSettingsCommand } from "src/user-employment-settings/application/commands/create-user-employment-settings.command";
 import { GetUserEmploymentSettingsQuery } from "src/user-employment-settings/application/queries/get-user-employment-settings.query";
+import { Delete, Query } from "@nestjs/common";
+import { ApiParam } from "@nestjs/swagger";
+import { RemoveDeviceUniqueCodeByUserIdCommand } from "src/user-employment-settings/application/commands/remove-device-unique-code.command";
 
 @ApiTags("User Employment Settings")
 @Controller("user-employment-settings")
@@ -31,5 +34,14 @@ export class UserEmploymentSettingsController {
     @ApiResponse({ status: 200, description: "List of employment settings", type: [UserEmploymentSettings] })
     async getUserEmploymentSettings(@Param("userId") userId: number): Promise<UserEmploymentSettings[]> {
         return this.queryBus.execute(new GetUserEmploymentSettingsQuery(userId));
+    }
+
+    @Delete("remove-device-unique-code")
+    @ApiOperation({ summary: "Remove deviceUniqueCode by userId (admin only)" })
+    @ApiParam({ name: "userId", type: Number, required: true })
+    @ApiResponse({ status: 200, description: "Device unique code removed successfully" })
+    async removeDeviceUniqueCodeByUserId(@Query("userId") userId: number): Promise<{ success: boolean }> {
+        await this.commandBus.execute(new RemoveDeviceUniqueCodeByUserIdCommand(userId));
+        return { success: true };
     }
 }
