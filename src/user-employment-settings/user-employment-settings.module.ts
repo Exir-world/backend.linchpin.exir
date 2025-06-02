@@ -10,7 +10,7 @@ import { GetUsersEmploymentSettingsHandler } from './application/queries/handler
 import { GetAllUsersEmploymentSettingsHandler } from './application/queries/handlers/get-all-users-employment-settings.handler';
 import { UpdateUserEmploymentSettingsHandler } from './application/commands/handlers/update-user-employment-settings.handler';
 import { RemoveDeviceUniqueCodeByUserIdHandler } from './application/commands/handlers/remove-device-unique-code.handler';
-import { HandleUserDeviceCodeLoginHandler } from 'src/auth/application/commands/handlers/handle-user-device-code-login.handler';
+import { HandleUserDeviceCodeLoginHandler } from './application/commands/handlers/handle-user-device-code-login.handler';
 
 @Module({
     imports: [

@@ -7,23 +7,28 @@ import {
     IsNumber,
     IsOptional,
     IsString,
+    Max,
+    Min,
     ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class WeeklyTimeInputDto {
-    @ApiProperty({ enum: ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] })
-    @IsString()
-    @IsIn(['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
-    dayOfWeek: string;
-
     @ApiProperty()
+    @IsNumber()
+    @Min(0)
+    @Max(6)
+    dayOfWeek: number;
+
+    @ApiPropertyOptional()
     @IsString()
+    @IsOptional()
     startTime: string; // e.g. "08:00"
 
-    @ApiProperty()
+    @ApiPropertyOptional()
     @IsString()
+    @IsOptional()
     endTime: string; // e.g. "17:00"
 
     @ApiPropertyOptional({ default: false })

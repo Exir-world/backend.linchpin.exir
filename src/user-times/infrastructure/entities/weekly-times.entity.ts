@@ -12,10 +12,10 @@ export class WeeklyTimesEntity {
     @Column()
     dayOfWeek: number; // 0 (Sunday) to 6 (Saturday)
 
-    @Column({ type: 'time' })
+    @Column({ type: 'time', nullable: true })
     startTime: string;
 
-    @Column({ type: 'time' })
+    @Column({ type: 'time', nullable: true })
     endTime: string;
 
     @Column({ default: false })

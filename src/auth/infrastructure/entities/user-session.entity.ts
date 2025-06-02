@@ -17,4 +17,7 @@ export class UserSessionEntity {
 
     @Column({ default: true })
     isActive: boolean;
+
+    @Column({ nullable: true })
+    firebaseToken: string;
 }

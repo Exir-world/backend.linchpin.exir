@@ -8,7 +8,7 @@ import { RefreshTokenCommand } from '../commands/refresh-token.command';
 export class AuthService {
     constructor(private readonly commandBus: CommandBus) { }
 
-    async login(command: LoginCommand): Promise<{ tokenData: Tokens, userId: number }> {
+    async login(command: LoginCommand): Promise<any> {
         return this.commandBus.execute(command);
     }
 

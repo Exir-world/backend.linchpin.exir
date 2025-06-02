@@ -53,6 +53,11 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
         }));
     }
 
+    async getAdmins(): Promise<number[]> {
+        const users = await this.userRepository.find({ where: { role: { id: 1 } } });
+        return users.map(user => user.id);
+    }
+
     async getUserById(userId: number): Promise<UserDto | null> {
         const user = await this.userRepository.findOne({
             where: { id: userId },

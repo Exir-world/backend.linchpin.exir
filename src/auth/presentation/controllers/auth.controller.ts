@@ -35,12 +35,13 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @ApiResponse({ status: 200, description: 'Login successful' })
     async login(@Body() loginDto: LoginDto): Promise<Tokens> {
-        const { deviceUniqueCode } = loginDto;
+        const { deviceUniqueCode, firebase } = loginDto;
 
         const { tokenData, userId } = await this.authService.login(
             new LoginCommand(
                 loginDto.phoneNumber,
-                loginDto.password
+                loginDto.password,
+                firebase,
             )
         );
 
@@ -60,7 +61,7 @@ export class AuthController {
             )
         );
 
-        return data.tokenData;
+        return data;
     }
 
     @Post('refresh')

@@ -26,7 +26,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
     refreshExpires = this.configService.get('REFRESH_EXPIRES') || '90d';
 
     async execute(command: LoginCommand): Promise<{ tokenData: Tokens, userId: number }> {
-        const { phoneNumber, password } = command;
+        const { phoneNumber, password, firebaseToken } = command;
 
         if (!phoneNumber || !password) {
             throw new BadRequestException(this.i18n.t('auth.login.validation'));
@@ -53,7 +53,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         const expires = calculateJwtExpiresAt(this.jwtExpires);
 
         // Save refresh token in session
-        await this.sessionRepository.saveSession(user.id, refreshToken, expires);
+        await this.sessionRepository.saveSession(user.id, refreshToken, expires, firebaseToken);
 
 
         return { tokenData: { accessToken, refreshToken, expires }, userId: user.id };

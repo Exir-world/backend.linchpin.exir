@@ -10,4 +10,5 @@ export abstract class LeaveRepository {
      * دریافت لیست درخواست‌های مرخصی توسط کاربر
      */
     abstract getUserLeaveRequests(userId: number): Promise<Leave[]>;
+    abstract getUserHourlyLeaveRequests(userId: number, startDate: string, endDate: string): Promise<Leave[]>;
 }

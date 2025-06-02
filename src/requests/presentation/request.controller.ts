@@ -14,12 +14,26 @@ import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { GetRequestTypesQuery } from '../application/queries/get-request-types.query';
 import { GetRequestsUserDto } from './dto/get-requests-user.dto';
 import { GetRequestByIdQuery } from '../application/queries/get-request-by-id.query';
+import { SharedNotificationService } from 'src/shared-notification/shared-notification.service';
+import { SharedUsersService } from 'src/shared-user/shared-user.service';
+import { RequestType } from '../domain/enums/request-type.enum';
+import { I18nService } from 'nestjs-i18n';
+
+function toCamelCase(value: string): string {
+    return value.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
 
 @ApiBearerAuth()
 @ApiTags('Requests') // نام بخش در Swagger
 @Controller('requests')
 export class RequestController {
-    constructor(private readonly requestService: RequestService) { }
+    constructor(
+        private readonly requestService: RequestService,
+        private readonly userService: SharedUsersService,
+        private readonly notifier: SharedNotificationService,
+        private readonly i18n: I18nService
+    ) { }
 
     @UseGuards(UserAuthGuard)
     @ApiOperation({ summary: 'ایجاد درخواست جدید' })
@@ -38,7 +52,22 @@ export class RequestController {
             dto.startTime,
             dto.endTime
         );
-        return await this.requestService.createRequest(command);
+        const request = await this.requestService.createRequest(command);
+
+        const users = await this.userService.getUsers({ userIds: [req.user.id] });
+
+        const user = users[0];
+
+        const enumKey = toCamelCase(RequestType[dto.type]);
+
+        const typeTitle = this.i18n.t(`request.types.${enumKey}`, { lang: 'fa' });
+
+        this.notifier.sendToAdmins({
+            title: 'درخواست جدید',
+            message: `درخواست ${typeTitle} توسط ${user?.firstname || ''} ${user?.lastname || ''} ثبت شد`,
+        });
+
+        return request;
     }
 
     @UseGuards(AdminAuthGuard)

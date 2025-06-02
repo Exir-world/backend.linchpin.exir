@@ -16,6 +16,8 @@ import { AttendanceModule } from 'src/attendance/attendance.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { GetRequestTypesHandler } from './application/queries/handlers/get-request-types.handler';
 import { GetRequestByIdHandler } from './application/queries/handlers/get-request-by-id.handler';
+import { SharedNotificationModule } from 'src/shared-notification/shared-notification.module';
+import { SharedUsersModule } from 'src/shared-user/shared-user.module';
 
 @Module({
     imports: [
@@ -23,7 +25,9 @@ import { GetRequestByIdHandler } from './application/queries/handlers/get-reques
         CqrsModule,
         LeaveModule,
         AttendanceModule,
-        AuthModule
+        AuthModule,
+        SharedNotificationModule,
+        SharedUsersModule,
     ],
     controllers: [RequestController],
     providers: [

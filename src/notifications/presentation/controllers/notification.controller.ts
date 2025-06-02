@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Patch, Post, Query, Request, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateNotificationDto } from '../dto/create-notification.dto';
 import { MarkAsReadDto } from '../dto/mark-as-read.dto';
@@ -8,18 +8,61 @@ import { GetNotificationsQuery } from 'src/notifications/application/queries/get
 import { MarkAsReadCommand } from 'src/notifications/application/commands/mark-as-read.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { MarkAsReadMultiDto } from '../dto/mark-as-read-multi.dto';
+import { FirebaseNotificationService } from 'src/notifications/infrastructure/services/firebase-notification.service';
+import { GetFirebaseTokensQuery } from 'src/notifications/application/queries/get-firebase-tokens.query';
 
 @ApiBearerAuth()
 @ApiTags('Notifications')
 @Controller('notifications')
 export class NotificationController {
-    constructor(private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) { }
+    constructor(
+        private readonly commandBus: CommandBus,
+        private readonly queryBus: QueryBus,
+        private readonly firebaseService: FirebaseNotificationService,
+    ) { }
+
+    @Post('send')
+    @ApiOperation({ summary: 'ارسال نوتیفیکیشن جدید' })
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                token: { type: 'string', example: 'fcm_device_token_here' },
+                title: { type: 'string', example: 'عنوان تست' },
+                message: { type: 'string', example: 'این یک پیام تستی است.' },
+            },
+            required: ['token', 'title', 'message'],
+        },
+    })
+    @ApiResponse({ status: 200, description: 'نوتیفیکیشن با موفقیت ارسال شد' })
+    @ApiResponse({ status: 400, description: 'درخواست نامعتبر' })
+    async sendNotification(
+        @Body() body: { token: string; title: string; message: string },
+    ) {
+        return await this.firebaseService.sendNotification(
+            body.token,
+            body.title,
+            body.message,
+        );
+    }
 
     @Post()
     @ApiOperation({ summary: 'ایجاد نوتیفیکیشن جدید' })
     @ApiResponse({ status: 201, description: 'نوتیفیکیشن ایجاد شد.' })
     async create(@Body() dto: CreateNotificationDto) {
-        return this.commandBus.execute(new CreateNotificationCommand(dto.userId, dto.type, dto.title, dto.description));
+        const notification = await this.commandBus.execute(new CreateNotificationCommand(dto.userId, dto.type, dto.title, dto.description));
+
+        const firebases = await this.queryBus.execute(new GetFirebaseTokensQuery([dto.userId]));
+        for (let i = 0; i < firebases.length; i++) {
+            const firebase = firebases[i];
+            await this.firebaseService.sendNotification(
+                firebase.token,
+                dto.title,
+                dto.description,
+            );
+        }
+
+        return notification;
     }
 
     @UseGuards(UserAuthGuard)

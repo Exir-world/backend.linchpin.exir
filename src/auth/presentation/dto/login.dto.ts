@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, MinLength, MaxLength, IsOptional } from 'class-validator';
 
 export class LoginDto {
     @ApiProperty({ example: '+1234567890', description: 'User phone number' })
@@ -19,4 +19,9 @@ export class LoginDto {
     @IsString({ message: 'کد یکتای دستگاه باید یک رشته باشد' })
     @IsNotEmpty({ message: 'کد یکتای دستگاه نمی‌تواند خالی باشد' })
     deviceUniqueCode: string;
+
+    @ApiPropertyOptional({ example: 'ABC123XYZ', description: 'Unique code for the user device' })
+    @IsString({ message: 'کد یکتای دستگاه باید یک رشته باشد' })
+    @IsOptional()
+    firebase?: string;
 }

@@ -22,6 +22,8 @@ import { ImprovementParametersModule } from './improvement-parameters/improvemen
 import { UserTimesModule } from './user-times/user-times.module';
 import { CheckPointsModule } from './check-points/check-points.module';
 import { UserCheckPointsModule } from './user-check-points/user-check-points.module';
+import { SharedNotificationModule } from './shared-notification/shared-notification.module';
+import { SharedUsersModule } from './shared-user/shared-user.module';
 
 
 @Module({
@@ -85,6 +87,8 @@ import { UserCheckPointsModule } from './user-check-points/user-check-points.mod
     UserTimesModule,
     CheckPointsModule,
     UserCheckPointsModule,
+    SharedNotificationModule,
+    SharedUsersModule,
   ],
   providers: [ResponseInterceptor],
 })

@@ -18,13 +18,14 @@ export class UserSessionRepositoryImpl implements UserSessionRepository {
         });
     }
 
-    async saveSession(userId: number, refreshToken: string, expires: number): Promise<void> {
+    async saveSession(userId: number, refreshToken: string, expires: number, firebaseToken?: string): Promise<void> {
         await this.sessionRepository.update({ user: { id: userId } }, { isActive: false });
 
         const session = new UserSessionEntity();
         session.refreshToken = refreshToken;
         session.user = { id: userId } as any; // Simplified for brevity
         session.jwtExpires = expires;
+        session.firebaseToken = firebaseToken;
         await this.sessionRepository.save(session);
     }
 }

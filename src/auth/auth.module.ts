@@ -41,6 +41,7 @@ import { OrganizationModule } from 'src/organization/organization.module';
 import { GetAllUsersWithTeamHandler } from './application/queries/handlers/get-all-users-with-team.handler';
 import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-employment-settings.module';
 import { LoginAdminHandler } from './application/commands/handlers/login-admin.handler';
+import { UserSessionSharedRepositoryImpl } from './infrastructure/repositories/user-session-shared.repository';
 
 @Module({
     imports: [
@@ -92,6 +93,10 @@ import { LoginAdminHandler } from './application/commands/handlers/login-admin.h
             provide: 'UserSharedRepository',
             useClass: UserSharedRepositoryImpl,
         },
+        {
+            provide: 'UserSessionSharedRepository',
+            useClass: UserSessionSharedRepositoryImpl,
+        },
 
         // Command Handlers
         CreateRoleHandler,
@@ -116,6 +121,6 @@ import { LoginAdminHandler } from './application/commands/handlers/login-admin.h
         JwtStrategy,
         JwtService,
     ],
-    exports: ['UserSharedRepository'],
+    exports: ['UserSharedRepository', 'UserSessionSharedRepository'],
 })
 export class AuthModule { }
