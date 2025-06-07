@@ -1,0 +1,1312 @@
+{
+  "items": [
+    {
+      "title": "improvement.items.linguistic",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Linguistic.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.verbal_linguistic.write",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.read",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_new_words",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.express_thoughts",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.verbal_discussions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.write_emotions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.persuasion",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_languages",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.storytelling",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.logical",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Logical.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.logical_mathematical.solve_puzzles",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.math_skills",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.pattern_recognition",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.numerical_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.logical_thinking",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.mental_calculations",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.reasoning_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.data_statistics",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.programming_analysis",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.spatial",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Spatial.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.logical_mathematical.solve_puzzles",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.math_skills",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.pattern_recognition",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.numerical_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.logical_thinking",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.mental_calculations",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.reasoning_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.data_statistics",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.programming_analysis",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.musical",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Musical.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.verbal_linguistic.write",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.read",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_new_words",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.express_thoughts",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.verbal_discussions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.write_emotions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.persuasion",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_languages",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.storytelling",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.bodily",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Bodily.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.logical_mathematical.solve_puzzles",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.math_skills",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.pattern_recognition",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.numerical_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.logical_thinking",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.mental_calculations",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.reasoning_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.data_statistics",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.programming_analysis",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.interpersonal",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Interpersonal.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.verbal_linguistic.write",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.read",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_new_words",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.express_thoughts",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.verbal_discussions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.write_emotions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.persuasion",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_languages",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.storytelling",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.intrapersonal",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Intrapersonal.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.logical_mathematical.solve_puzzles",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.math_skills",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.pattern_recognition",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.numerical_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.logical_thinking",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.mental_calculations",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.reasoning_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.data_statistics",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.programming_analysis",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.naturalistic",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Naturalistic.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.verbal_linguistic.write",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.read",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_new_words",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.express_thoughts",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.verbal_discussions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.write_emotions",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.persuasion",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.learn_languages",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.verbal_linguistic.storytelling",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.abiding",
+      "type": "INTELLIGENSE",
+      "image": "https://cdn.exirtu.be/self-improvement/Abiding.webp",
+      "color": "#1467BA",
+      "score": [],
+      "children": [
+        {
+          "title": "improvement.subitems.logical_mathematical.solve_puzzles",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.math_skills",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.pattern_recognition",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.numerical_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.logical_thinking",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.mental_calculations",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.reasoning_problems",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.data_statistics",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        },
+        {
+          "title": "improvement.subitems.logical_mathematical.programming_analysis",
+          "type": "IMPROVEMENT",
+          "image": "",
+          "color": "",
+          "score": [
+            3,
+            6,
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "title": "improvement.items.porn",
+      "type": "FORBIDDEN",
+      "image": "https://cdn.exirtu.be/self-improvement/Porn.webp",
+      "color": "#A00B0B",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.racism",
+      "type": "FORBIDDEN",
+      "image": "https://cdn.exirtu.be/self-improvement/Racism.webp",
+      "color": "#A00B0B",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.gambling",
+      "type": "FORBIDDEN",
+      "image": "https://cdn.exirtu.be/self-improvement/Gambling.webp",
+      "color": "#A00B0B",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.harassment",
+      "type": "FORBIDDEN",
+      "image": "https://cdn.exirtu.be/self-improvement/Harassment.webp",
+      "color": "#A00B0B",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.politics",
+      "type": "FORBIDDEN",
+      "image": "https://cdn.exirtu.be/self-improvement/Politics.webp",
+      "color": "#A00B0B",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.trade",
+      "type": "FORBIDDEN",
+      "image": "https://cdn.exirtu.be/self-improvement/Gambling.webp",
+      "color": "#A00B0B",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.food",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/food.webp",
+      "color": "#005B98",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.podcast",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/podcast.webp",
+      "color": "#C83535",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.suggest",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/suggest.webp",
+      "color": "#278683",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.team",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/team.webp",
+      "color": "#1C8C2B",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.tools",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/tools.webp",
+      "color": "#501DA2",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.walk",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/walk.webp",
+      "color": "#1C8C47",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.education",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/education.webp",
+      "color": "#B38A04",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.discipline",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/discipline.webp",
+      "color": "#8CB04A",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.social",
+      "type": "IMPROVEMENT",
+      "image": "https://cdn.exirtu.be/self-improvement/social.webp",
+      "color": "#881C8C",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.sightSense",
+      "type": "SENSE",
+      "image": "",
+      "color": "#1467BA",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.hearingSense",
+      "type": "SENSE",
+      "image": "",
+      "color": "#1467BA",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.smellSense",
+      "type": "SENSE",
+      "image": "",
+      "color": "#1467BA",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.tasteSense",
+      "type": "SENSE",
+      "image": "",
+      "color": "#1467BA",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.touchSense",
+      "type": "SENSE",
+      "image": "",
+      "color": "#1467BA",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.sixthSense",
+      "type": "SENSE",
+      "image": "",
+      "color": "#1467BA",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.chandelier",
+      "type": "CHANDELIER",
+      "image": "",
+      "color": "#1467BA",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.morning",
+      "type": "HUGGING",
+      "image": "https://cdn.exirtu.be/self-improvement/Linguistic.webp",
+      "color": "#CCCCCC",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.noon",
+      "type": "HUGGING",
+      "image": "https://cdn.exirtu.be/self-improvement/Linguistic.webp",
+      "color": "#CCCCCC",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.afternoon",
+      "type": "HUGGING",
+      "image": "https://cdn.exirtu.be/self-improvement/Linguistic.webp",
+      "color": "#CCCCCC",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.night",
+      "type": "HUGGING",
+      "image": "https://cdn.exirtu.be/self-improvement/Linguistic.webp",
+      "color": "#CCCCCC",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.am",
+      "type": "MIND_FOCUS",
+      "image": "https://cdn.exirtu.be/self-improvement/Linguistic.webp",
+      "color": "#ACBCCC",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    },
+    {
+      "title": "improvement.items.pm",
+      "type": "MIND_FOCUS",
+      "image": "https://cdn.exirtu.be/self-improvement/Linguistic.webp",
+      "color": "#ACBCCC",
+      "score": [
+        3,
+        6,
+        9
+      ],
+      "children": []
+    }
+  ]
+}

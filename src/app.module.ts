@@ -18,6 +18,7 @@ import { UserSelfImprovementModule } from './user-self-improvement/user-self-imp
 import { NotificationsModule } from './notifications/notifications.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 import { PropertiesModule } from './properties/properties.module';
+import { ImprovementParametersModule } from './improvement-parameters/improvement-parameters.module';
 
 
 @Module({
@@ -77,6 +78,7 @@ import { PropertiesModule } from './properties/properties.module';
     UserEmploymentSettingsModule,
     NotificationsModule,
     PropertiesModule,
+    ImprovementParametersModule,
   ],
   providers: [ResponseInterceptor],
 })
