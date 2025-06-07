@@ -16,11 +16,15 @@ export class GetAllUsersHandler implements IQueryHandler<GetAllUsersQuery> {
 
     async execute(query: GetAllUsersQuery): Promise<User[]> {
         const { adminId, organId } = query;
-        const condition = { organizationId: (organId as any) };
-        if (!organId) {
-            const organizations = await this.organizationService.getOrganizationsByAdminId(adminId);
-            condition.organizationId = In(organizations.map(org => org.id));
-        }
+        console.log(adminId, organId);
+
+        const condition: any = {};
+        if (organId)
+            condition.organizationId = (organId as any)
+        // if (!organId) {
+        //     const organizations = await this.organizationService.getOrganizationsByAdminId(adminId);
+        //     condition.organizationId = In(organizations.map(org => org.id));
+        // }
 
         return this.userRepository.findByCondition(condition);
     }
