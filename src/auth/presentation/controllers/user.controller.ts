@@ -10,7 +10,7 @@ import { GetAllUsersQuery } from 'src/auth/application/queries/get-all-users.que
 import { UpdateUserCommand } from 'src/auth/application/commands/update-user.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { GetAllUsersWithTeamQuery } from 'src/auth/application/queries/get-all-users-with-team.query';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -20,7 +20,7 @@ export class UserController {
 
     // @Policies()
     // @UseGuards(UserAuthGuard, PoliciesGuard)
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'ایجاد کاربر جدید' })
@@ -44,7 +44,7 @@ export class UserController {
         );
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get()
     @ApiOperation({ summary: 'دریافت لیست کاربران' })
     @ApiResponse({ status: 200, description: 'لیست کاربران بازگردانده شد.' })
@@ -72,7 +72,7 @@ export class UserController {
         return await this.queryBus.execute(new GetAllUsersWithTeamQuery()); // Placeholder
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get(':id')
     @ApiOperation({ summary: 'دریافت اطلاعات یک کاربر' })
     @ApiResponse({ status: 200, description: 'اطلاعات کاربر بازگردانده شد.' })
@@ -81,7 +81,7 @@ export class UserController {
         return await this.queryBus.execute(new GetUserByIdQuery(id));
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Patch(':id')
     @ApiOperation({ summary: 'به‌روزرسانی اطلاعات یک کاربر' })
     @ApiResponse({ status: 200, description: 'اطلاعات کاربر به‌روزرسانی شد.' })

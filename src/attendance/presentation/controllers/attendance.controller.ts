@@ -14,7 +14,7 @@ import { EndStopCommand } from 'src/attendance/application/commands/end-stop.com
 import { GetDailyAttendanceStatusQuery } from 'src/attendance/application/queries/get-daily-attendance-status.query';
 import { GetMonthlyReportQuery } from 'src/attendance/application/queries/get-monthly-report.query';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 import { CheckOutCheckingCommand } from 'src/attendance/application/commands/check-out-checking.command';
 import { CheckInDto } from '../dto/check-in.dto';
 import { CheckOutDto } from '../dto/check-out.dto';
@@ -124,7 +124,7 @@ export class AttendanceController {
         );
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('work-report/approve')
     @ApiOperation({ summary: 'تأیید یا رد گزارش کار' })
     @ApiResponse({ status: 200, description: 'گزارش کار تأیید یا رد شد.' })
@@ -182,7 +182,7 @@ export class AttendanceController {
         return this.attendanceService.getMonthlyReport(req.user.id, month);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Patch('admin')
     @ApiOperation({ summary: 'ویرایش حضور و غیاب' })
     @ApiResponse({ status: 200, description: 'با موفقیت انجام شد.' })
@@ -242,7 +242,7 @@ export class AttendanceController {
         return attendances;
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get('admin/filter')
     @ApiOperation({ summary: 'دریافت گزارش حضور و غیاب توسط ادمین' })
     @ApiResponse({ status: 200, description: 'گزارش حضور و غیاب با موفقیت دریافت شد.' })

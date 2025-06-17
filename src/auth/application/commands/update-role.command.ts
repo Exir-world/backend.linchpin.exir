@@ -1,10 +1,10 @@
 import { Permission } from "src/auth/domain/enums/permission.enum";
 
-export class CreateRoleCommand {
+export class UpdateRoleCommand {
   constructor(
-    // public readonly orgId: number,
-    public readonly name: string,
-    public readonly description: string,
+    public readonly id: number,
+    public readonly name?: string,
+    public readonly description?: string,
     public readonly permissions: Permission[] = [],
   ) { }
 }

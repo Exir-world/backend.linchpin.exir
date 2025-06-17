@@ -10,7 +10,6 @@ import { GetUserRequestsQuery } from '../application/queries/get-user-requests.q
 import { RequestService } from '../application/services/requests.service';
 import { CancelRequestCommand } from '../application/commands/cancel-request.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { GetRequestTypesQuery } from '../application/queries/get-request-types.query';
 import { GetRequestsUserDto } from './dto/get-requests-user.dto';
 import { GetRequestByIdQuery } from '../application/queries/get-request-by-id.query';
@@ -18,6 +17,7 @@ import { SharedNotificationService } from 'src/shared-notification/shared-notifi
 import { SharedUsersService } from 'src/shared-user/shared-user.service';
 import { RequestType } from '../domain/enums/request-type.enum';
 import { I18nService } from 'nestjs-i18n';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 
 function toCamelCase(value: string): string {
     return value.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
@@ -70,7 +70,7 @@ export class RequestController {
         return request;
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'تایید یا رد درخواست' })
     @ApiResponse({ status: 200, description: 'درخواست بررسی شد.' })
     @ApiResponse({ status: 404, description: 'درخواست پیدا نشد.' })
@@ -103,7 +103,7 @@ export class RequestController {
         return await this.requestService.getUserRequests(query);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'دریافت درخواست‌ها با وضعیت (اختیاری)' })
     @ApiResponse({ status: 200, description: 'لیست درخواست‌ها بازگردانده شد.' })
     @Get()
@@ -112,7 +112,7 @@ export class RequestController {
         return await this.requestService.getAllRequests(query);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'دریافت درخواست بر اساس شناسه' })
     @ApiResponse({ status: 200, description: 'درخواست بازگردانده شد.' })
     @ApiResponse({ status: 404, description: 'درخواست پیدا نشد.' })

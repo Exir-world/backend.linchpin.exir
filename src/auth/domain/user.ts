@@ -14,6 +14,7 @@ export class User {
         public nationalCode: string,
         public personnelCode: string,
         public isDeleted: boolean,
+        public hasAdminPanelAccess: boolean,
         public id: number = 0,
     ) {
         // if (!firstname || firstname.trim() === '') {

@@ -39,12 +39,12 @@ export class LoginAdminHandler implements ICommandHandler<LoginAdminCommand> {
             throw new BadRequestException(this.i18n.t('auth.login.invalidCredentials'));
         }
 
-        if (user.role.name.toLocaleLowerCase() !== 'admin') {
+        if (!user.hasAdminPanelAccess) {
             throw new UnauthorizedException(this.i18n.t('auth.login.notAdmin'));
         }
 
         // Generate tokens
-        const payload = { id: user.id, role: user.role.name };
+        const payload = { id: user.id, role: user.role.id, permissions: user.role.permissions };
         const accessToken = this.jwtService.sign(payload, {
             expiresIn: this.jwtExpires,
             secret: this.jwtSecret,
@@ -59,7 +59,6 @@ export class LoginAdminHandler implements ICommandHandler<LoginAdminCommand> {
 
         // Save refresh token in session
         await this.sessionRepository.saveSession(user.id, refreshToken, expires);
-
 
         return { accessToken, refreshToken, expires };
     }

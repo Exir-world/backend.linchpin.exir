@@ -38,4 +38,7 @@ export class UserEntity {
 
     @Column({ type: 'boolean', default: false })
     isDeleted: boolean;
+
+    @Column({ type: 'boolean', default: false })
+    hasAdminPanelAccess: boolean;
 }

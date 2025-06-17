@@ -39,6 +39,7 @@ export class UserRepositoryImpl extends UserRepository {
             userEntity.nationalCode,
             userEntity.personnelCode,
             userEntity.isDeleted,
+            userEntity.hasAdminPanelAccess,
             userEntity.id,
         );
     }

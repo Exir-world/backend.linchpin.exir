@@ -2,15 +2,16 @@ import { Controller, Post, Get, Body, Param, Put, Delete, UseGuards, Query } fro
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { CreatePropertyDto } from '../dto/create-property.dto';
 import { UpdatePropertyDto } from '../dto/update-property.dto';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreatePropertyCommand } from 'src/properties/application/commands/create-property.command';
 import { GetAllPropertiesQuery } from 'src/properties/application/queries/get-all-properties.query';
 import { GetPropertyByIdQuery } from 'src/properties/application/queries/get-property-by-id.query';
 import { UpdatePropertyCommand } from 'src/properties/application/commands/update-property.command';
 import { DeletePropertyCommand } from 'src/properties/application/commands/delete-property.command';
+import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 
-@UseGuards(AdminAuthGuard)
+@UseGuards(UserAuthGuard, PermissionsGuard)
 @ApiBearerAuth()
 @ApiTags('Property')
 @Controller('properties')

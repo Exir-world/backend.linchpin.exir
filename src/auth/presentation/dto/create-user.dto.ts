@@ -90,4 +90,9 @@ export class CreateUserDto {
     @IsBoolean()
     @IsNotEmpty()
     isDeleted: boolean = false;
+
+    @ApiProperty({ example: false, description: 'دسترسی به پنل ادمین' })
+    @IsBoolean()
+    @IsNotEmpty()
+    hasAdminPanelAccess: boolean = false;
 }

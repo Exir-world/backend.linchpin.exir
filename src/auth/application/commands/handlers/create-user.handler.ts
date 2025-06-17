@@ -2,21 +2,22 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../create-user.command';
 import { UserRepository } from '../../ports/user.repository';
 import { User } from 'src/auth/domain/user';
-import { RoleRepository } from '../../ports/role.repository';
 import { Inject, NotFoundException } from '@nestjs/common';
 import { UserEmploymentSettingsSharedPort } from 'src/user-employment-settings/application/ports/user-employment-settings-shared.port';
+import { RolesRepository } from 'src/auth/infrastructure/repositories/role.repository';
+import { RoleMapper } from 'src/auth/infrastructure/mappers/role.mapper';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
     constructor(
         private readonly userRepository: UserRepository,
-        private readonly roleRepository: RoleRepository,
+        private readonly roleRepository: RolesRepository,
         @Inject('UserEmploymentSettingsSharedPort')
         private readonly userEmploymentSettingsSharedPort: UserEmploymentSettingsSharedPort,
     ) { }
 
     async execute(command: CreateUserCommand): Promise<User> {
-        const role = await this.roleRepository.findById(command.role);
+        const role = await this.roleRepository.findOne({ where: { id: command.role } });
         if (!role) {
             throw new NotFoundException(`Role with ID ${command.role} not found.`);
         }
@@ -29,10 +30,11 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
             command.lastname,
             command.phoneNumber,
             command.password,
-            role,
+            RoleMapper.toDomain(role),
             command.nationalCode,
             command.personnelCode,
             false, // isDeleted
+            false, // hasAdminPanelAccess
             0
         );
         const newUser = await this.userRepository.save(user);

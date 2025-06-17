@@ -1,23 +1,22 @@
-// create-role.dto.ts
+// update-role.dto.ts
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsArray,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import { IsOptional, IsString, MaxLength } from 'class-validator';
+import { IsEnum, IsArray } from 'class-validator';
 import { Permission } from 'src/auth/domain/enums/permission.enum';
 
-export class CreateRoleDto {
-  @ApiProperty({ description: 'Name of the role', maxLength: 50 })
-  @IsNotEmpty()
+export class UpdateRoleDto {
+  @ApiProperty({
+    description: 'Name of the role',
+    maxLength: 50,
+    required: false,
+  })
+  @IsOptional()
   @IsString()
   @MaxLength(50)
-  name: string;
+  name?: string;
 
   @ApiPropertyOptional({ description: 'Description of the role' })
+  @IsOptional()
   @IsString()
   description?: string;
 

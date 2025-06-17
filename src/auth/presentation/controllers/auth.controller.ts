@@ -6,10 +6,8 @@ import { Tokens } from 'src/auth/application/interfaces/token.interface';
 import { LoginCommand } from 'src/auth/application/commands/login.command';
 import { RefreshDto } from '../dto/refresh-token.dto';
 import { RefreshTokenCommand } from 'src/auth/application/commands/refresh-token.command';
-import { I18nService } from 'nestjs-i18n';
 import { LoginAdminCommand } from 'src/auth/application/commands/login-admin.command';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { GetUserEmploymentSettingsQuery } from 'src/user-employment-settings/application/queries/get-user-employment-settings.query';
 import { HandleUserDeviceCodeLoginCommand } from 'src/user-employment-settings/application/commands/handle-user-device-code-login.command';
 
 @ApiTags('Auth')
@@ -17,19 +15,8 @@ import { HandleUserDeviceCodeLoginCommand } from 'src/user-employment-settings/a
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
-        private readonly i18n: I18nService,
         private readonly commandBus: CommandBus,
     ) { }
-
-    @Get('test')
-    @ApiResponse({ status: 200, description: 'Test multi lang' })
-    async test(@Req() req): Promise<any> {
-        throw new BadRequestException(this.i18n.t('test.test'))
-        return {
-            lang: req.headers['accept-language'],
-            test: this.i18n.t('test.test'),
-        }
-    }
 
     @Post('login')
     @HttpCode(HttpStatus.OK)

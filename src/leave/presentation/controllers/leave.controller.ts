@@ -5,7 +5,7 @@ import { CreateLeaveCommand } from '../../application/commands/create-leave.comm
 import { GetUserLeavesQuery } from '../../application/queries/get-user-leaves.query';
 import { CreateLeaveDto } from '../dto/create-leave.dto';
 import { Leave } from '../../domain/leave';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { GetHourlyUserLeavesQuery } from 'src/leave/application/queries/get-user-hourly-leaves.query';
 
@@ -15,7 +15,7 @@ import { GetHourlyUserLeavesQuery } from 'src/leave/application/queries/get-user
 export class LeaveController {
     constructor(private readonly leaveService: LeaveService) { }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'ثبت مرخصی توسط ادمین' })
     @ApiResponse({ status: 201, description: 'مرخصی با موفقیت ثبت شد.' })
     @Post('create')
@@ -39,7 +39,7 @@ export class LeaveController {
         return await this.leaveService.getUserLeaves(query);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get('hourly/user/:userId')
     @ApiOperation({ summary: 'دریافت مرخصی‌های ساعتی یک کاربر در بازه دلخواه' })
     @ApiResponse({ status: 200, description: 'لیست مرخصی‌های ساعتی کاربر بازگردانده شد.' })
