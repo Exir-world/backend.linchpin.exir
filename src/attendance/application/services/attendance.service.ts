@@ -249,7 +249,7 @@ export class AttendanceService {
             } else {
                 acc.push({
                     userId: a.userId,
-                    name: user.name,
+                    firstname: user.firstname,
                     lastname: user.lastname,
                     phoneNumber: user.phoneNumber,
                     att: a.attendances,
