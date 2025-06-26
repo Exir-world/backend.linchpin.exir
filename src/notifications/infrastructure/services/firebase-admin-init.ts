@@ -5,12 +5,12 @@ import { config } from 'dotenv';
 
 config(); // Load .env
 
-const serviceAccountPath = path.resolve(process.env.FIREBASE_ADMIN_SDK_PATH);
+// const serviceAccountPath = path.resolve(process.env.FIREBASE_ADMIN_SDK_PATH);
 
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'));
+// const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf-8'));
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-});
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+// });
 
-export default admin;
+// export default admin;

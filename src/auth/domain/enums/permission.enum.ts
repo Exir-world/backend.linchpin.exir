@@ -4,4 +4,8 @@ export enum Permission {
     ReadRole = 'role:read',
     UpdateRole = 'role:update',
     DeleteRole = 'role:delete',
+
+    // User
+    CreateUser = 'user:create',
+    ReadUser = 'user:read',
 }

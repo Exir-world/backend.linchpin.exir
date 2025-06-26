@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import admin from './firebase-admin-init'; // همان فایل مرحله قبل
+// import admin from './firebase-admin-init'; // همان فایل مرحله قبل
 
 @Injectable()
 export class FirebaseNotificationService {
@@ -14,6 +14,6 @@ export class FirebaseNotificationService {
             },
         };
 
-        await admin.messaging().send(message);
+        // await admin.messaging().send(message);
     }
 }
