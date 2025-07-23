@@ -31,6 +31,10 @@ import { CheckPointController } from './presentation/controllers/check-point.con
     ],
     controllers: [
         CheckPointController,
+    ],
+    exports: [
+        TypeOrmModule
     ]
+
 })
 export class CheckPointsModule { }

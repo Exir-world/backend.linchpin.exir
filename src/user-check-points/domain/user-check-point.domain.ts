@@ -6,8 +6,8 @@ export class UserCheckPoint {
         public readonly userId: number,
         public readonly lat: number,
         public readonly lng: number,
-        public readonly report: boolean,
-        public readonly checkPointId: number,
+        public readonly report: string,
+        public readonly checkPointItemId: number,
         public readonly createdAt: Date,
         public readonly attachments: UserCheckPointAttachment[] = [],
     ) { }

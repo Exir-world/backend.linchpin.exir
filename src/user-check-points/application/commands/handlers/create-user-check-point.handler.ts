@@ -16,14 +16,14 @@ export class CreateUserCheckPointHandler implements ICommandHandler<CreateUserCh
     ) { }
 
     async execute(command: CreateUserCheckPointCommand): Promise<UserCheckPointEntity> {
-        const { dto } = command;
+        const { userId, dto } = command;
 
         const userCP = this.userCPRepo.create({
-            userId: dto.userId,
-            checkPointId: dto.checkPointId,
+            userId,
+            checkPointItemId: dto.checkPointId,
             lat: dto.lat,
             lng: dto.lng,
-            report: dto.report ?? false,
+            report: dto.report ?? '',
         });
 
         const saved = await this.userCPRepo.save(userCP);

@@ -24,18 +24,14 @@ export class UserCheckPointEntity {
     @Column('decimal', { precision: 10, scale: 6 })
     lng: number;
 
-    @Column({ default: false })
-    report: boolean;
+    @Column()
+    report: string;
 
     @CreateDateColumn()
     createdAt: Date;
 
     @Column()
-    checkPointId: number;
-
-    //   @ManyToOne(() => CheckPointEntity, { onDelete: 'CASCADE' })
-    //   @JoinColumn({ name: 'checkPointId' })
-    //   checkPoint: CheckPointEntity;
+    checkPointItemId: number;
 
     @OneToMany(() => UserCheckPointAttachmentEntity, (a) => a.userCheckPoint, {
         cascade: true,

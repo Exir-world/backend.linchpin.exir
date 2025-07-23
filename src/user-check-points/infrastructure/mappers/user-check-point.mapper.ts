@@ -10,7 +10,7 @@ export class UserCheckPointMapper {
             +entity.lat,
             +entity.lng,
             entity.report,
-            entity.checkPointId,
+            entity.checkPointItemId,
             entity.createdAt,
             entity.attachments?.map(UserCheckPointAttachmentMapper.toDomain) || [],
         );
@@ -23,7 +23,7 @@ export class UserCheckPointMapper {
         entity.lat = domain.lat;
         entity.lng = domain.lng;
         entity.report = domain.report;
-        entity.checkPointId = domain.checkPointId;
+        entity.checkPointItemId = domain.checkPointItemId;
         entity.createdAt = domain.createdAt;
         entity.attachments =
             domain.attachments?.map(UserCheckPointAttachmentMapper.toEntity) || [];

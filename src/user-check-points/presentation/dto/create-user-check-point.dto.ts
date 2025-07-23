@@ -29,9 +29,9 @@ export class UserCheckPointAttachmentInputDto {
 }
 
 export class CreateUserCheckPointDto {
-    @ApiProperty()
-    @IsNumber()
-    userId: number;
+    // @ApiProperty()
+    // @IsNumber()
+    // userId: number;
 
     @ApiProperty()
     @IsNumber()
@@ -45,10 +45,10 @@ export class CreateUserCheckPointDto {
     @IsNumber()
     lng: number;
 
-    @ApiPropertyOptional({ default: false })
+    @ApiProperty({ default: "text" })
     @IsOptional()
-    @IsBoolean()
-    report?: boolean = false;
+    @IsString()
+    report?: string;
 
     @ApiPropertyOptional({ type: [UserCheckPointAttachmentInputDto] })
     @IsOptional()
