@@ -24,7 +24,7 @@ export class UserCheckPointEntity {
     @Column('decimal', { precision: 10, scale: 6 })
     lng: number;
 
-    @Column()
+    @Column({ default: '' })
     report: string;
 
     @CreateDateColumn()
