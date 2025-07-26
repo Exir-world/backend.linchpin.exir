@@ -15,8 +15,13 @@ export class UserRepositoryImpl extends UserRepository {
         this.ormRepository = this.dataSource.getRepository(UserEntity);
     }
 
-    async findByCondition(condition: any): Promise<User[]> {
-        const users = await this.ormRepository.find({ where: condition, relations: ['role', 'role.permissions'] });
+    async findByCondition(condition: any, options: { take: number; skip: number }): Promise<User[]> {
+        const users = await this.ormRepository.find({
+            where: condition,
+            relations: ['role', 'role.permissions'],
+            take: options.take,
+            skip: options.skip,
+        });
         return users.map(UserMapper.toDomain);
     }
 

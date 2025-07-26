@@ -8,4 +8,6 @@ export enum Permission {
     // User
     CreateUser = 'user:create',
     ReadUser = 'user:read',
+    UpdateUser = 'user:update',
+    DeleteUser = 'user:delete',
 }

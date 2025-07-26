@@ -8,6 +8,11 @@ class SettingsDto {
     @IsOptional()
     teamId?: number;
 
+    @ApiPropertyOptional({ example: 1, description: 'شناسه دپارتمان' })
+    @IsNumber()
+    @IsOptional()
+    departmentId?: number;
+
     @ApiPropertyOptional({ example: 5, description: 'شناسه شیفت' })
     @IsNumber()
     @IsOptional()
@@ -24,11 +29,6 @@ class SettingsDto {
 }
 
 export class CreateUserDto {
-    @ApiProperty({ example: 1, description: 'شناسه سازمان' })
-    @IsNumber()
-    @IsNotEmpty()
-    organizationId: number;
-
     @ApiProperty({ example: 'John', description: 'نام کاربر' })
     @IsString({ message: 'نام باید یک رشته باشد' })
     @IsNotEmpty({ message: 'نام نمی‌تواند خالی باشد' })

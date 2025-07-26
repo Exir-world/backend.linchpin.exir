@@ -6,6 +6,9 @@ export class RoleEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true })
+    organizationId: number;
+
     @Column({ type: 'varchar', length: 50, unique: true })
     name: string;
 

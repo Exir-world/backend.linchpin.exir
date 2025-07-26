@@ -6,5 +6,5 @@ export abstract class UserRepository {
     abstract findAll(): Promise<User[]>;
     abstract findById(id: number): Promise<User | null>;
     abstract delete(id: number): Promise<void>;
-    abstract findByCondition(condition: any): Promise<User[]>;
+    abstract findByCondition(condition: any, options: { take: number; skip: number }): Promise<User[]>;
 }

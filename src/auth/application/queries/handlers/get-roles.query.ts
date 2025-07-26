@@ -1,5 +1,5 @@
 export class GetRolesQuery {
   constructor(
-    // public readonly orgId: number
+    public readonly orgId: number
   ) { }
 }

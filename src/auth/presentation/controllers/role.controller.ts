@@ -37,8 +37,12 @@ export class RoleController {
     @Post()
     @ApiOperation({ summary: 'Create a new role' })
     async createRole(@Body() createRoleDto: CreateRoleDto, @Req() req) {
+        const organizationId = req.user.organizationId;
+        console.log('Creating role with organizationId:', req.user);
+
         const result = await this.commandBus.execute(
             new CreateRoleCommand(
+                organizationId,
                 createRoleDto.name,
                 createRoleDto.description,
                 createRoleDto.permissions,
@@ -52,7 +56,8 @@ export class RoleController {
     @Get()
     @ApiOperation({ summary: 'Get all roles' })
     async getRoles(@Req() req) {
-        return this.queryBus.execute(new GetRolesQuery());
+        const organizationId = req.user.organizationId;
+        return this.queryBus.execute(new GetRolesQuery(organizationId));
     }
 
     @Permissions(Permission.ReadRole)

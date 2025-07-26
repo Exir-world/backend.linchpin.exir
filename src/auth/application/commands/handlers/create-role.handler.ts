@@ -9,8 +9,9 @@ export class CreateRoleHandler implements ICommandHandler<CreateRoleCommand> {
   constructor(private readonly rolesRepository: RolesRepository) { }
 
   async execute(command: CreateRoleCommand): Promise<RoleEntity> {
-    const { name, permissions, description } = command;
+    const { organizationId, name, permissions, description } = command;
     const role = this.rolesRepository.create({
+      organizationId,
       name,
       permissions: (permissions || []) as any,
       description,

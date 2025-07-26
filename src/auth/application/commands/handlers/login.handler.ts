@@ -39,7 +39,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         }
 
         // Generate tokens
-        const payload = { id: user.id, role: user.role.name };
+        const payload = { id: user.id, role: user.role.id, organizationId: user.organizationId };
         const accessToken = this.jwtService.sign(payload, {
             expiresIn: this.jwtExpires,
             secret: this.jwtSecret,

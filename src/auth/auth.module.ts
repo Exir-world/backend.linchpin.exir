@@ -24,7 +24,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UserSharedRepositoryImpl } from './infrastructure/repositories/user-shared.repository';
 import { RefreshTokenHandler } from './application/commands/handlers/refresh-token.handler';
 import { OrganizationModule } from 'src/organization/organization.module';
-import { GetAllUsersWithTeamHandler } from './application/queries/handlers/get-all-users-with-team.handler';
 import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-employment-settings.module';
 import { LoginAdminHandler } from './application/commands/handlers/login-admin.handler';
 import { UserSessionSharedRepositoryImpl } from './infrastructure/repositories/user-session-shared.repository';
@@ -91,7 +90,6 @@ import { GetAllPermissionHandler } from './application/queries/handlers/get-all-
         GetAllRolesHandler,
         GetRoleByIdHandler,
         GetAllPermissionHandler,
-        GetAllUsersWithTeamHandler,
 
         // Others
         JwtStrategy,

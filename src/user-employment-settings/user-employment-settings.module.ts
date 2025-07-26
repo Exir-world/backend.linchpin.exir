@@ -11,6 +11,7 @@ import { GetAllUsersEmploymentSettingsHandler } from './application/queries/hand
 import { UpdateUserEmploymentSettingsHandler } from './application/commands/handlers/update-user-employment-settings.handler';
 import { RemoveDeviceUniqueCodeByUserIdHandler } from './application/commands/handlers/remove-device-unique-code.handler';
 import { HandleUserDeviceCodeLoginHandler } from './application/commands/handlers/handle-user-device-code-login.handler';
+import { GetUserIdsByDepartmentAndTeamHandler } from './application/queries/handlers/get-user-ids-by-department-and-team.handler';
 
 @Module({
     imports: [
@@ -29,6 +30,7 @@ import { HandleUserDeviceCodeLoginHandler } from './application/commands/handler
         GetUserEmploymentSettingsHandler,
         GetUsersEmploymentSettingsHandler,
         GetAllUsersEmploymentSettingsHandler,
+        GetUserIdsByDepartmentAndTeamHandler,
 
         {
             provide: 'UserEmploymentSettingsSharedPort',
