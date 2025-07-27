@@ -15,14 +15,14 @@ export class UserRepositoryImpl extends UserRepository {
         this.ormRepository = this.dataSource.getRepository(UserEntity);
     }
 
-    async findByCondition(condition: any, options: { take: number; skip: number }): Promise<User[]> {
-        const users = await this.ormRepository.find({
+    async findByCondition(condition: any, options: { take: number; skip: number }): Promise<any> {
+        const [users, count] = await this.ormRepository.findAndCount({
             where: condition,
             relations: ['role'],
             take: options.take,
             skip: options.skip,
         });
-        return users.map(UserMapper.toDomain);
+        return [users.map(UserMapper.toDomain), count];
     }
 
     async findByPhoneNumber(phoneNumber: string): Promise<User | null> {
