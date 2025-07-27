@@ -18,7 +18,7 @@ export class UserRepositoryImpl extends UserRepository {
     async findByCondition(condition: any, options: { take: number; skip: number }): Promise<User[]> {
         const users = await this.ormRepository.find({
             where: condition,
-            relations: ['role', 'role.permissions'],
+            relations: ['role'],
             take: options.take,
             skip: options.skip,
         });
@@ -55,12 +55,12 @@ export class UserRepositoryImpl extends UserRepository {
     }
 
     async findAll(): Promise<User[]> {
-        const users = await this.ormRepository.find({ relations: ['role', 'role.permissions'] });
+        const users = await this.ormRepository.find({ relations: ['role'] });
         return users.map(UserMapper.toDomain);
     }
 
     async findById(id: number): Promise<User | null> {
-        const user = await this.ormRepository.findOne({ where: { id }, relations: ['role', 'role.permissions'] });
+        const user = await this.ormRepository.findOne({ where: { id }, relations: ['role'] });
         return user ? UserMapper.toDomain(user) : null;
     }
 
