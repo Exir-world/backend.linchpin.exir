@@ -50,6 +50,7 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
             lastname: user.lastname,
             personnelCode: user.personnelCode,
             profileImage: user.profileImage,
+            organizationId: user.organizationId,
         }));
     }
 

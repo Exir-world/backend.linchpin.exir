@@ -6,4 +6,5 @@ export class UserDto {
     lastname?: string;
     firstname?: string;
     personnelCode?: string;
+    organizationId?: number;
 }

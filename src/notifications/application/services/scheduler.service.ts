@@ -6,7 +6,7 @@ import { SendNotificationUseCase } from '../use-cases/send-notification.use-case
 export class NotificationSchedulerService {
     constructor(private sendNotification: SendNotificationUseCase) { }
 
-    @Cron('0 8 * * *') // هر روز ساعت ۸ صبح
+    // @Cron('0 8 * * *') // هر روز ساعت ۸ صبح
     async handleReminder() {
         const tokens = ['user_fcm_token_1', 'user_fcm_token_2']; // از دیتابیس واقعی بگیر
         for (const token of tokens) {

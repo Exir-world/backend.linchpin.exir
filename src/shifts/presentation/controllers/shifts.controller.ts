@@ -5,6 +5,7 @@ import { Shift } from "src/shifts/domain/shift.domain";
 import { CreateShiftDto } from "../dto/create-shift.dto";
 import { CreateShiftCommand } from "src/shifts/application/commands/create-shift.command";
 import { GetShiftsByOrganizationQuery } from "src/shifts/application/queries/get-shifts-by-organization.query";
+import { ShiftsCronService } from "src/shifts/application/services/shifts-cron.service";
 
 @ApiTags("Shifts")
 @Controller("shifts")
@@ -12,6 +13,7 @@ export class ShiftsController {
     constructor(
         private readonly commandBus: CommandBus,
         private readonly queryBus: QueryBus,
+        private readonly shiftsCronService: ShiftsCronService,
     ) { }
 
     @Post()
@@ -26,5 +28,11 @@ export class ShiftsController {
     @ApiResponse({ status: 200, description: "List of shifts", type: [Shift] })
     async getShiftsByOrganization(@Param("organizationId") organizationId: number): Promise<Shift[]> {
         return this.queryBus.execute(new GetShiftsByOrganizationQuery(organizationId));
+    }
+
+    @Get("check")
+    @ApiOperation({ summary: "Check Shifts for notif" })
+    async checkShifts(): Promise<any> {
+        return this.shiftsCronService.checkShifts();
     }
 }

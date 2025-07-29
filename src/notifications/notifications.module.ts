@@ -35,5 +35,6 @@ import { AuthModule } from 'src/auth/auth.module';
         SendNotificationUseCase,
         NotificationSchedulerService,
     ],
+    exports: [INotificationRepository]
 })
 export class NotificationsModule { }
