@@ -32,6 +32,7 @@ import { GetAllRolesHandler } from './application/queries/get-roles.handler';
 import { GetRoleByIdHandler } from './application/queries/get-role.handler';
 import { RolesRepository } from './infrastructure/repositories/role.repository';
 import { GetAllPermissionHandler } from './application/queries/handlers/get-all-permissions.handler';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
     imports: [
@@ -43,6 +44,7 @@ import { GetAllPermissionHandler } from './application/queries/handlers/get-all-
         CqrsModule,
         forwardRef(() => OrganizationModule),
         UserEmploymentSettingsModule,
+        HttpModule,
     ],
     controllers: [
         RoleController,

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested, IsBoolean, IsEmail } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class SettingsDto {
@@ -95,4 +95,9 @@ export class CreateUserDto {
     @IsBoolean()
     @IsNotEmpty()
     hasAdminPanelAccess: boolean = false;
+
+    @ApiProperty()
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 }

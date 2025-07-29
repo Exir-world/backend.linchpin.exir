@@ -10,6 +10,7 @@ export class UserMapper {
             userEntity.organizationId,
             userEntity.firstname,
             userEntity.name,
+            userEntity.email,
             userEntity.profileImage,
             userEntity.lastname,
             userEntity.phoneNumber,
@@ -29,6 +30,7 @@ export class UserMapper {
         userEntity.organizationId = user.organizationId;
         userEntity.firstname = user.firstname;
         userEntity.name = user.name;
+        userEntity.email = user.email;
         userEntity.lastname = user.lastname;
         userEntity.phoneNumber = user.phoneNumber;
         userEntity.password = user.password;

@@ -36,6 +36,7 @@ export class UserRepositoryImpl extends UserRepository {
             userEntity.organizationId,
             userEntity.firstname,
             userEntity.name,
+            userEntity.email,
             userEntity.profileImage,
             userEntity.lastname,
             userEntity.phoneNumber,

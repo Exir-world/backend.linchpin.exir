@@ -6,6 +6,7 @@ export class User {
         public organizationId: number,
         public firstname: string,
         public name: string,
+        public email: string,
         public profileImage: string,
         public lastname: string,
         public phoneNumber: string,

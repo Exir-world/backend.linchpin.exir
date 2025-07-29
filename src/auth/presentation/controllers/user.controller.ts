@@ -33,6 +33,7 @@ export class UserController {
             new CreateUserCommand(
                 organizationId,
                 dto.name,
+                dto.email,
                 dto.profileImage,
                 dto.lastname,
                 dto.phoneNumber,
