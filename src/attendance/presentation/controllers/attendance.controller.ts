@@ -70,9 +70,11 @@ export class AttendanceController {
     })
     async mainPageActions(@Request() req, @Body() body: { actionType: string; workReport?: string; reason?: string, lat: number, lng: number }) {
         const { lat, lng } = body;
+        const organizationId = req.user.organizationId;
+
         switch (body.actionType) {
             case 'check-in':
-                await this.attendanceService.checkIn(req.user.id, lat, lng);
+                await this.attendanceService.checkIn(req.user.id, lat, lng, organizationId);
                 break;
             case 'check-out':
                 if (!body.workReport) throw new BadRequestException('Submit your work report!');
@@ -97,7 +99,8 @@ export class AttendanceController {
     @HttpCode(HttpStatus.OK)
     async checkIn(@Request() req, @Body() dto: CheckInDto) {
         const { lat, lng } = dto;
-        return this.attendanceService.checkIn(req.user.id, lat, lng);
+        const organizationId = req.user.organizationId;
+        return this.attendanceService.checkIn(req.user.id, lat, lng, organizationId);
     }
 
     @UseGuards(UserAuthGuard)

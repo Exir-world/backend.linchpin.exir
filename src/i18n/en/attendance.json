@@ -22,5 +22,6 @@
     "location": {
         "turnOn": "Turn on your GPS",
         "outOfRange": "Location Out of range"
-    }
+    },
+    "nextTimeCheckIn": "You must check in after {time}"
 }

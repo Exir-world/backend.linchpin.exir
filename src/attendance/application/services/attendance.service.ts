@@ -23,6 +23,7 @@ import { GetDailyAttendancesReportQuery } from '../queries/get-daily-attendances
 import { GetAdminAttendancesReportQuery } from '../queries/get-admin-attendances-report.query';
 import { UserSharedRepository } from 'src/auth/application/ports/user-shared.repository';
 import { FilterAttendancesByAdminQuery } from '../queries/filter-attendances-admin.query';
+import { UserTimesSharedService } from 'src/user-times/application/services/user-times-shared.service';
 
 @Injectable()
 export class AttendanceService {
@@ -38,29 +39,37 @@ export class AttendanceService {
         private readonly i18n: I18nService,
         @Inject('UserSharedRepository')
         private readonly userSharedPort: UserSharedRepository,
+        private readonly userTimesSharedService: UserTimesSharedService,
     ) { }
 
     /**
      * ثبت ورود
      * @param command CheckInCommand
      */
-    async checkIn(userId: number, lat: number, lng: number): Promise<void> {
+    async checkIn(userId: number, lat: number, lng: number, organizationId: number): Promise<void> {
+        let startTime;
         const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
-        const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+        const userTime = await this.userTimesSharedService.getLatestUserTimesForUser(userId);
+        if (userTime) {
+            startTime = userTime.weeklyTimes[0].startTime;
+        } else {
+            const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+            startTime = shifts.shiftTimes.at(0).startTime;
+        }
 
         if (settings.needLocation) {
             if (!lat || !lng) throw new BadRequestException(this.i18n.t('attendance.location.turnOn'));
 
-            const location = await this.organizationService.getLocationByOrgId(shifts.organizationId);
+            const location = await this.organizationService.getLocationByOrgId(organizationId);
 
             const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
             if (!locationChcek)
                 throw new BadRequestException(this.i18n.t('attendance.location.outOfRange'));
         }
 
-        const startOfDay = DateUtil.convertTimeToUTC(shifts.shiftTimes.at(0).startTime);
+        const startOfDay = DateUtil.convertTimeToUTC(startTime);
 
-        return this.commandBus.execute(new CheckInCommand(userId, startOfDay, lat, lng));
+        return this.commandBus.execute(new CheckInCommand(userId, startOfDay, startTime, lat, lng));
     }
 
     /**
