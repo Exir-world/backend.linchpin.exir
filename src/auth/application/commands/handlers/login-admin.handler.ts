@@ -27,7 +27,7 @@ export class LoginAdminHandler implements ICommandHandler<LoginAdminCommand> {
     refreshExpires = this.configService.get('REFRESH_EXPIRES') || '90d';
 
     async execute(command: LoginAdminCommand): Promise<Tokens> {
-        const { phoneNumber, password } = command;
+        const { phoneNumber, password, firebase } = command;
 
         if (!phoneNumber || !password) {
             throw new BadRequestException(this.i18n.t('auth.login.validation'));
@@ -58,7 +58,7 @@ export class LoginAdminHandler implements ICommandHandler<LoginAdminCommand> {
         const expires = calculateJwtExpiresAt(this.jwtExpires);
 
         // Save refresh token in session
-        await this.sessionRepository.saveSession(user.id, refreshToken, expires);
+        await this.sessionRepository.saveSession(user.id, refreshToken, expires, firebase);
 
         return { accessToken, refreshToken, expires };
     }

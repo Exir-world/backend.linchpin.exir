@@ -44,7 +44,8 @@ export class AuthController {
         const data = await this.authService.login(
             new LoginAdminCommand(
                 loginDto.phoneNumber,
-                loginDto.password
+                loginDto.password,
+                loginDto.firebase,
             )
         );
 
