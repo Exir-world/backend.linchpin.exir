@@ -92,4 +92,13 @@ export class NotificationController {
     async markAsReadMulti(@Request() req, @Body() dto: MarkAsReadMultiDto) {
         return this.commandBus.execute(new MarkAsReadCommand(req.user.id, dto.ids));
     }
+
+    @UseGuards(UserAuthGuard)
+    @Get('has-unread')
+    @ApiOperation({ summary: 'بررسی وجود نوتیفیکیشن خوانده‌نشده برای کاربر' })
+    @ApiResponse({ status: 200, description: 'آیا نوتیفیکیشن خوانده‌نشده وجود دارد یا خیر', schema: { type: 'object', properties: { hasUnread: { type: 'boolean' } } } })
+    async hasUnread(@Request() req) {
+        const res = await this.queryBus.execute(new GetNotificationsQuery(req.user.id, 1, 1, true));
+        return { hasUnread: res.notifications.length > 0 };
+    }
 }

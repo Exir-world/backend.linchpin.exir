@@ -4,6 +4,6 @@ export const INotificationRepository = Symbol('INotificationRepository'); // Ø§Ø
 
 export interface INotificationRepository {
     create(notification: Notification): Promise<void>;
-    findByUserId(userId: number, page: number, limit: number): Promise<{ notifications: Notification[]; total: number }>;
+    findByUserId(userId: number, page: number, limit: number, unreadOnly: boolean): Promise<{ notifications: Notification[]; total: number }>;
     markAsRead(userId: number, ids: number[]): Promise<void>;
 }

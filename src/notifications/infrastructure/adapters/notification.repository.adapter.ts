@@ -39,9 +39,14 @@ export class NotificationRepositoryAdapter implements INotificationRepository {
         });
     }
 
-    async findByUserId(userId: number, page: number, limit: number): Promise<{ notifications: Notification[]; total: number }> {
+    async findByUserId(userId: number, page: number, limit: number, unreadOnly: boolean): Promise<{ notifications: Notification[]; total: number }> {
+        const where: any = { userId };
+        if (unreadOnly) {
+            where.read = false;
+        }
+
         const [entities, total] = await this.repository.findAndCount({
-            where: { userId },
+            where,
             order: { createdAt: 'DESC' },
             take: limit,
             skip: (page - 1) * limit,
