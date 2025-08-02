@@ -3,7 +3,7 @@ FROM node:lts-alpine AS builder
 RUN apk update && apk upgrade && \
     apk add --no-cache bash git openssh python3 make g++
 
-RUN npm install --legacy peer deps
+RUN npm install -g npm
 
 ENV NODE_ENV=build
 
