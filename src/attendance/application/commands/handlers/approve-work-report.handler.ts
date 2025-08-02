@@ -7,11 +7,12 @@ import { I18nService } from 'nestjs-i18n';
 @CommandHandler(ApproveWorkReportCommand)
 export class ApproveWorkReportHandler implements ICommandHandler<ApproveWorkReportCommand> {
     constructor(
+
         private readonly workReportRepository: WorkReportRepository,
         private readonly i18n: I18nService,
     ) { }
 
-    
+
     async execute(command: ApproveWorkReportCommand): Promise<void> {
         // بازیابی گزارش کار از مخزن
         const report = await this.workReportRepository.findById(command.workReportId);
