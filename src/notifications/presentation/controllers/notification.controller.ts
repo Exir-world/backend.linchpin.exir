@@ -10,6 +10,7 @@ import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 import { MarkAsReadMultiDto } from '../dto/mark-as-read-multi.dto';
 import { FirebaseNotificationService } from 'src/notifications/infrastructure/services/firebase-notification.service';
 import { GetFirebaseTokensQuery } from 'src/notifications/application/queries/get-firebase-tokens.query';
+import { GetNotificationsDto } from '../dto/get-notifications.dto';
 
 @ApiBearerAuth()
 @ApiTags('Notifications')
@@ -69,8 +70,8 @@ export class NotificationController {
     @Get()
     @ApiOperation({ summary: 'دریافت لیست نوتیفیکیشن‌های کاربر با Pagination' })
     @ApiResponse({ status: 200, description: 'لیست نوتیفیکیشن‌ها' })
-    async getAll(@Request() req, /*@Query() dto: GetNotificationsDto*/) {
-        const res = await this.queryBus.execute(new GetNotificationsQuery(req.user.id/*, dto.page, dto.limit*/));
+    async getAll(@Request() req, @Query() dto: GetNotificationsDto) {
+        const res = await this.queryBus.execute(new GetNotificationsQuery(req.user.id, dto.page, dto.limit));
         await this.commandBus.execute(new MarkAsReadCommand(req.user.id, res.notifications.map(n => n.id)));
 
         return res;
