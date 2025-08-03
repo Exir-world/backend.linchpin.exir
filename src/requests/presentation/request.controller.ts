@@ -18,6 +18,8 @@ import { SharedUsersService } from 'src/shared-user/shared-user.service';
 import { RequestType } from '../domain/enums/request-type.enum';
 import { I18nService } from 'nestjs-i18n';
 import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
+import { Permissions } from 'src/auth/application/decorators/permissions.decorator';
 
 function toCamelCase(value: string): string {
     return value.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
@@ -70,6 +72,7 @@ export class RequestController {
         return request;
     }
 
+    @Permissions(Permission.ReviewRequest)
     @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'تایید یا رد درخواست' })
     @ApiResponse({ status: 200, description: 'درخواست بررسی شد.' })
@@ -103,6 +106,7 @@ export class RequestController {
         return await this.requestService.getUserRequests(query);
     }
 
+    @Permissions(Permission.ReadRequest)
     @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'دریافت درخواست‌ها با وضعیت (اختیاری)' })
     @ApiResponse({ status: 200, description: 'لیست درخواست‌ها بازگردانده شد.' })
@@ -112,6 +116,7 @@ export class RequestController {
         return await this.requestService.getAllRequests(query);
     }
 
+    @Permissions(Permission.ReadRequest)
     @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'دریافت درخواست بر اساس شناسه' })
     @ApiResponse({ status: 200, description: 'درخواست بازگردانده شد.' })

@@ -4,6 +4,7 @@ import { UserSessionSharedRepository } from 'src/auth/application/ports/user-ses
 import { FirebaseNotificationService } from 'src/notifications/infrastructure/services/firebase-notification.service';
 import { UserSharedRepository } from 'src/auth/application/ports/user-shared.repository';
 import { SendNotificationToAdminsDto } from './dto/send-notification-to-admins.dto';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
 
 @Injectable()
 export class SharedNotificationService {
@@ -24,7 +25,7 @@ export class SharedNotificationService {
     }
 
     async sendToAdmins(dto: SendNotificationToAdminsDto): Promise<void> {
-        const admins = await this.userSharedPort.getAdmins();
+        const admins = await this.userSharedPort.getAdmins([Permission.ReadRequest]);
         const tokens = await this.userSessionSharedPort.getFirebaseTokens(admins);
 
         for (const { firebaseToken } of tokens) {

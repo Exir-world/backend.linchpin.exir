@@ -53,7 +53,7 @@ export class LoginHandler implements ICommandHandler<LoginCommand> {
         const expires = calculateJwtExpiresAt(this.jwtExpires);
 
         // Save refresh token in session
-        await this.sessionRepository.saveSession(user.id, refreshToken, expires, firebaseToken);
+        await this.sessionRepository.saveSession(user.id, refreshToken, expires, firebaseToken, false);
 
 
         return { tokenData: { accessToken, refreshToken, expires }, userId: user.id };

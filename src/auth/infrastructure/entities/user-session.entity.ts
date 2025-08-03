@@ -20,4 +20,10 @@ export class UserSessionEntity {
 
     @Column({ nullable: true })
     firebaseToken: string;
+
+    @Column({ default: false })
+    isAdmin: boolean;
+
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    createdAt: Date;
 }

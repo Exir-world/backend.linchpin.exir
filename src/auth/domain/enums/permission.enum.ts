@@ -10,4 +10,8 @@ export enum Permission {
     ReadUser = 'user:read',
     UpdateUser = 'user:update',
     DeleteUser = 'user:delete',
+
+    // Requests
+    ReadRequest = 'request:read',
+    ReviewRequest = 'request:review',
 }
