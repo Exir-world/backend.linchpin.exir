@@ -1,5 +1,5 @@
 import { Controller, Post, Get, Body, Req, UseGuards, Request, Param, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { LeaveService } from '../../application/services/leave.service';
 import { CreateLeaveCommand } from '../../application/commands/create-leave.command';
 import { GetUserLeavesQuery } from '../../application/queries/get-user-leaves.query';
@@ -43,12 +43,16 @@ export class LeaveController {
     @Get('hourly/user/:userId')
     @ApiOperation({ summary: 'دریافت مرخصی‌های ساعتی یک کاربر در بازه دلخواه' })
     @ApiResponse({ status: 200, description: 'لیست مرخصی‌های ساعتی کاربر بازگردانده شد.' })
+    @ApiQuery({ name: 'startDate', required: false, type: String })
+    @ApiQuery({ name: 'endDate', required: false, type: String })
     async getHourlyLeavesInRange(
         @Param('userId') userId: number,
-        @Query('startDate') startDate: string,
-        @Query('endDate') endDate: string,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string,
     ): Promise<Leave[]> {
-        return await this.leaveService.getHourlyLeavesInRange(new GetHourlyUserLeavesQuery(userId, startDate, endDate));
+        return await this.leaveService.getHourlyLeavesInRange(
+            new GetHourlyUserLeavesQuery(userId, startDate, endDate)
+        );
     }
 
 }
