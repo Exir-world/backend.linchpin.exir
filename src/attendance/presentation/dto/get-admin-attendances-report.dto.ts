@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDateString, IsNotEmpty, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class GetAdminAttendancesReportDto {
@@ -20,9 +20,15 @@ export class GetAdminAttendancesReportDto {
 
   @ApiProperty({
     description: 'The number of holidays within the date range.',
-    example: 5,
+    example: 0,
   })
   @IsOptional()
   @IsNotEmpty()
   holidaysDayCount: number;
+
+  @ApiPropertyOptional({
+    example: 0,
+  })
+  @IsOptional()
+  userId?: number;
 }

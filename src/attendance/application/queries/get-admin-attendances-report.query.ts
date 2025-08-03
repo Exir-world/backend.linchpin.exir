@@ -5,5 +5,6 @@ export class GetAdminAttendancesReportQuery {
         public readonly startDate: string,
         public readonly endDate: string,
         public readonly holidaysDayCount: number,
+        public readonly userId: number,
     ) { }
 }

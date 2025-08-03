@@ -14,4 +14,7 @@ export enum Permission {
     // Requests
     ReadRequest = 'request:read',
     ReviewRequest = 'request:review',
+
+    // Attendance
+    ReportAttendance = 'attendance:report'
 }

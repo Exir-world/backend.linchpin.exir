@@ -28,6 +28,8 @@ import { GetAdminAttendancesReportDto } from '../dto/get-admin-attendances-repor
 import { GetAdminAttendancesReportQuery } from 'src/attendance/application/queries/get-admin-attendances-report.query';
 import { generateExcel } from 'src/attendance/application/utils/excel.util';
 import { Response } from 'express';
+import { Permissions } from 'src/auth/application/decorators/permissions.decorator';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -225,7 +227,8 @@ export class AttendanceController {
         );
     }
 
-    // @UseGuards(UserAuthGuard)
+    @Permissions(Permission.ReportAttendance)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('admin/report')
     @ApiOperation({})
     @HttpCode(HttpStatus.OK)
@@ -235,9 +238,9 @@ export class AttendanceController {
     ) {
         const workDuration = 440;
 
-        const { startDate, endDate, holidaysDayCount } = dto;
+        const { startDate, endDate, holidaysDayCount, userId } = dto;
         const attendances = await this.attendanceService.getAdminAttendancesReport(
-            new GetAdminAttendancesReportQuery(startDate, endDate, holidaysDayCount)
+            new GetAdminAttendancesReportQuery(startDate, endDate, holidaysDayCount, userId)
         );
 
         generateExcel(res, attendances, workDuration, holidaysDayCount);
