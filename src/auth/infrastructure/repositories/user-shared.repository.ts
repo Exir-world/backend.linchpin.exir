@@ -60,18 +60,22 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
             hasAdminPanelAccess: true,
         };
 
-        if (permissions.length > 0) {
-            whereCondition.role = {
-                permissions: In(permissions)
-            };
-        }
-
         const users = await this.userRepository.find({
             where: whereCondition,
             relations: ['role']
         });
 
-        return users.map(user => user.id);
+        // if (permissions.length > 0) {
+        //     whereCondition.role = {
+        //         permissions: In(permissions)
+        //     };
+        // }
+        return users
+            .filter(user =>
+                permissions.length > 0 &&
+                permissions.every(permission => user.role.permissions.includes(permission))
+            )
+            .map(user => user.id);
     }
 
     async getUserById(userId: number): Promise<UserDto | null> {

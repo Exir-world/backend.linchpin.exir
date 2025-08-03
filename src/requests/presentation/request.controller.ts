@@ -67,7 +67,7 @@ export class RequestController {
         this.notifier.sendToAdmins({
             title: 'درخواست جدید',
             message: `درخواست ${typeTitle} توسط ${user?.firstname || ''} ${user?.lastname || ''} ثبت شد`,
-        });
+        }, [Permission.ReadRequest]);
 
         return request;
     }

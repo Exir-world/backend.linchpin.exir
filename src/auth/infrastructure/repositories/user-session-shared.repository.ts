@@ -11,7 +11,7 @@ export class UserSessionSharedRepositoryImpl implements UserSessionSharedReposit
         private readonly userSessionRepository: Repository<UserSessionEntity>,
     ) { }
 
-    async getFirebaseTokens(userIds: number[]): Promise<{ userId: number; firebaseToken: string }[]> {
+    async getFirebaseTokens(userIds: number[], isAdmin: boolean = false): Promise<{ userId: number; firebaseToken: string }[]> {
         const now = new Date();
 
         // همه سشن‌های فعال و معتبر کاربران
@@ -19,6 +19,7 @@ export class UserSessionSharedRepositoryImpl implements UserSessionSharedReposit
             where: {
                 user: { id: In(userIds) },
                 isActive: true,
+                isAdmin,
                 // jwtExpires: () => `expires_at > NOW()`, // معادل: expiresAt > now
             },
             order: {

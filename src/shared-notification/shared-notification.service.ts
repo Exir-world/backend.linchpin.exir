@@ -17,16 +17,17 @@ export class SharedNotificationService {
     ) { }
 
     async sendToUsers(dto: SendNotificationToUsersDto): Promise<void> {
-        const tokens = await this.userSessionSharedPort.getFirebaseTokens(dto.userIds);
+        const tokens = await this.userSessionSharedPort.getFirebaseTokens(dto.userIds, false);
 
         for (const { firebaseToken } of tokens) {
             await this.firebaseService.sendNotification(firebaseToken, dto.title, dto.message);
         }
     }
 
-    async sendToAdmins(dto: SendNotificationToAdminsDto): Promise<void> {
-        const admins = await this.userSharedPort.getAdmins([Permission.ReadRequest]);
-        const tokens = await this.userSessionSharedPort.getFirebaseTokens(admins);
+    async sendToAdmins(dto: SendNotificationToAdminsDto, permissions: Permission[] = []): Promise<void> {
+        const admins = await this.userSharedPort.getAdmins(permissions);
+        const tokens = await this.userSessionSharedPort.getFirebaseTokens(admins, true);
+        console.log(tokens);
 
         for (const { firebaseToken } of tokens) {
             await this.firebaseService.sendNotification(firebaseToken, dto.title, dto.message);

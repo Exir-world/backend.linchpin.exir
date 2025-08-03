@@ -17,7 +17,7 @@ export class FirebaseNotificationService {
         try {
             await admin.messaging().send(message);
         } catch (error) {
-            console.log('Error sending firebase notification!');
+            console.log('Error sending firebase notification!', error);
         }
     }
 }

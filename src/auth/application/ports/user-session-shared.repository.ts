@@ -1,3 +1,3 @@
 export abstract class UserSessionSharedRepository {
-    abstract getFirebaseTokens(userIds: number[]): Promise<{ userId: number; firebaseToken: string; }[]>;
+    abstract getFirebaseTokens(userIds: number[], isAdmin?: boolean): Promise<{ userId: number; firebaseToken: string; }[]>;
 }
