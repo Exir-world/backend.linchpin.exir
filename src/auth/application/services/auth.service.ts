@@ -15,8 +15,4 @@ export class AuthService {
     async refreshToken(command: RefreshTokenCommand): Promise<Tokens> {
         return this.commandBus.execute(command);
     }
-
-    async refreshToken(command: RefreshTokenCommand): Promise<Tokens> {
-        return this.commandBus.execute(command);
-    }
 }

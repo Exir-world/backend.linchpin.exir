@@ -25,6 +25,9 @@ import { GetTeamsByDepartmentIdHandler } from './application/queries/handlers/ge
 import { CreateDepartmentHandler } from './application/commands/handlers/create-department.handler';
 import { UpdateDepartmentHandler } from './application/commands/handlers/update-department.handler';
 import { GetDepartmentHandler } from './application/queries/handlers/get-department.handler';
+import { OrganizationSettingsRepositoryPort } from './application/ports/organization-settings.repository';
+import { TypeOrmOrganizationSettingsRepository } from './infrastructure/repositories/typeorm-organization-settings.repository';
+import { OrganizationSettings } from './infrastructure/entities/organization-settings.entity';
 
 @Module({
     imports: [
@@ -36,6 +39,7 @@ import { GetDepartmentHandler } from './application/queries/handlers/get-departm
             LocationEntity,
             SelfImprovementSubItemEntity,
             DepartmentEntity,
+            OrganizationSettings,
         ]),
         CqrsModule,
         forwardRef(() => AuthModule),
@@ -55,10 +59,15 @@ import { GetDepartmentHandler } from './application/queries/handlers/get-departm
         //     provide: 'LeaveSharedRepository',
         //     useClass: LeaveSharedRepositoryImpl,
         // },
-
+        TypeOrmOrganizationSettingsRepository,
         {
             provide: 'OrganizationSharedPort',
             useClass: OrganizationService,
+        },
+
+        {
+            provide: OrganizationSettingsRepositoryPort,
+            useClass: TypeOrmOrganizationSettingsRepository,
         },
 
 
@@ -80,6 +89,6 @@ import { GetDepartmentHandler } from './application/queries/handlers/get-departm
         GetTeamsByDepartmentIdHandler,
         GetDepartmentHandler,
     ],
-    exports: ['OrganizationSharedPort']
+    exports: ['OrganizationSharedPort', OrganizationSettingsRepositoryPort]
 })
 export class OrganizationModule { }

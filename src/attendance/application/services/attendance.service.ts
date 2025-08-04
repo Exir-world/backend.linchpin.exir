@@ -24,6 +24,7 @@ import { GetAdminAttendancesReportQuery } from '../queries/get-admin-attendances
 import { UserSharedRepository } from 'src/auth/application/ports/user-shared.repository';
 import { FilterAttendancesByAdminQuery } from '../queries/filter-attendances-admin.query';
 import { UserTimesSharedService } from 'src/user-times/application/services/user-times-shared.service';
+import { OrganizationSettingsRepositoryPort } from 'src/organization/application/ports/organization-settings.repository';
 
 @Injectable()
 export class AttendanceService {
@@ -40,7 +41,49 @@ export class AttendanceService {
         @Inject('UserSharedRepository')
         private readonly userSharedPort: UserSharedRepository,
         private readonly userTimesSharedService: UserTimesSharedService,
+        private readonly orgSettingsRepo: OrganizationSettingsRepositoryPort,
     ) { }
+
+    async checkLocation(userId: number, lat: number, lng: number, organizationId: number, gpsIsOn: boolean): Promise<void> {
+        const orgSettings = await this.orgSettingsRepo.findByOrganizationId(organizationId);
+        const lastAttendance = await this.queryBus.execute(new GetLastAttendanceQuery(userId));
+        const checkedIn = lastAttendance && !lastAttendance.checkOut;
+        if (checkedIn) {
+            if (!gpsIsOn) {
+                if (orgSettings?.notifyAdminOnUserExit || true) {
+
+                }
+                if (orgSettings?.registerUserExit || false) {
+
+                }
+            }
+        }
+
+        return
+        // let startTime;
+        // const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
+        // const userTime = await this.userTimesSharedService.getLatestUserTimesForUser(userId);
+        // if (userTime) {
+        //     startTime = userTime.weeklyTimes[0].startTime;
+        // } else {
+        //     const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
+        //     startTime = shifts.shiftTimes.at(0).startTime;
+        // }
+
+        // if (settings.needLocation) {
+        //     if (!lat || !lng) throw new BadRequestException(this.i18n.t('attendance.location.turnOn'));
+
+        //     const location = await this.organizationService.getLocationByOrgId(organizationId);
+
+        //     const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
+        //     if (!locationChcek)
+        //         throw new BadRequestException(this.i18n.t('attendance.location.outOfRange'));
+        // }
+
+        // const startOfDay = DateUtil.convertTimeToUTC(startTime);
+
+        // return this.commandBus.execute(new CheckInCommand(userId, startOfDay, startTime, lat, lng));
+    }
 
     /**
      * ثبت ورود
