@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY_URL = 'docker.exirtu.be'
-        IMAGE_NAME = 'backend.linchpin.exir.test'
+        IMAGE_NAME = 'backend.linchpin.exir'
         GIT_REPO_URL = 'git@github.com:Exir-world/backend.linchpin.exir.git'
         TELEGRAM_CHAT_ID = '-1002585379912'
         TELEGRAM_BOT_TOKEN = '8027466900:AAG6Q_0p6rSeEXtg8e0gDcYJmIJ_R7zBVew'
@@ -16,17 +16,11 @@ pipeline {
             }
         }
 
-    stage('Checkout Code') {
-        steps {
-            checkout([$class: 'GitSCM',
-                branches: [[name: '*/develop']],
-                userRemoteConfigs: [[
-                    url: 'https://github.com/Exir-world/backend.linchpin.exir.git',
-                    credentialsId: 'your-git-credentials-id' // optional if repo is public
-                ]]
-            ])
+        stage('Checkout Code') {
+            steps {
+                checkout scm 
+            }
         }
-    }
 
         stage('Get Latest Image Tag') {
             steps {
