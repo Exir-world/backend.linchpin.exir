@@ -9,8 +9,10 @@ import { GetUserByIdQuery } from 'src/auth/application/queries/get-user-by-id.qu
 import { GetAllUsersQuery } from 'src/auth/application/queries/get-all-users.query';
 import { UpdateUserCommand } from 'src/auth/application/commands/update-user.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
-import { GetAllUsersWithTeamQuery } from 'src/auth/application/queries/get-all-users-with-team.query';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
+import { Permissions } from 'src/auth/application/decorators/permissions.decorator';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
+import { GetAllUsersDto } from '../dto/get-all-users.dto';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -18,19 +20,20 @@ import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 export class UserController {
     constructor(private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) { }
 
-    // @Policies()
-    // @UseGuards(UserAuthGuard, PoliciesGuard)
-    @UseGuards(AdminAuthGuard)
+    @Permissions(Permission.CreateUser)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @ApiOperation({ summary: 'ایجاد کاربر جدید' })
     @ApiResponse({ status: 201, description: 'کاربر با موفقیت ایجاد شد.' })
     @ApiResponse({ status: 400, description: 'اطلاعات وارد شده نامعتبر است.' })
-    async createUser(@Body() dto: CreateUserDto) {
+    async createUser(@Req() req, @Body() dto: CreateUserDto) {
+        const organizationId = req.user.organizationId;
         return await this.commandBus.execute(
             new CreateUserCommand(
-                dto.organizationId,
+                organizationId,
                 dto.name,
+                dto.email,
                 dto.profileImage,
                 dto.lastname,
                 dto.phoneNumber,
@@ -44,35 +47,24 @@ export class UserController {
         );
     }
 
-    @UseGuards(AdminAuthGuard)
+    @Permissions(Permission.ReadUser)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get()
     @ApiOperation({ summary: 'دریافت لیست کاربران' })
     @ApiResponse({ status: 200, description: 'لیست کاربران بازگردانده شد.' })
     @ApiResponse({ status: 400, description: 'شناسه سازمان نامعتبر است.' })
-    @ApiQuery({
-        name: 'organizationId',
-        required: false,
-        type: Number,
-        description: 'شناسه سازمان (اختیاری)'
-    })
     async getAllUsers(
-        @Query('organizationId') organizationId?: number,
+        @Query() query: GetAllUsersDto,
         @Req() req?: any
     ) {
-        const adminId = req?.user?.id;
+        const orgId = req?.user?.organizationId;
         return await this.queryBus.execute(
-            new GetAllUsersQuery(adminId, organizationId || null)
+            new GetAllUsersQuery(orgId, query)
         );
     }
 
-    @Get('with-team')
-    @ApiOperation({ summary: 'دریافت لیست کاربران' })
-    @ApiResponse({ status: 200, description: 'لیست کاربران بازگردانده شد.' })
-    async getAllUsersWithTeam() {
-        return await this.queryBus.execute(new GetAllUsersWithTeamQuery()); // Placeholder
-    }
-
-    @UseGuards(AdminAuthGuard)
+    @Permissions(Permission.ReadUser)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get(':id')
     @ApiOperation({ summary: 'دریافت اطلاعات یک کاربر' })
     @ApiResponse({ status: 200, description: 'اطلاعات کاربر بازگردانده شد.' })
@@ -81,7 +73,8 @@ export class UserController {
         return await this.queryBus.execute(new GetUserByIdQuery(id));
     }
 
-    @UseGuards(AdminAuthGuard)
+    @Permissions(Permission.UpdateUser)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Patch(':id')
     @ApiOperation({ summary: 'به‌روزرسانی اطلاعات یک کاربر' })
     @ApiResponse({ status: 200, description: 'اطلاعات کاربر به‌روزرسانی شد.' })
@@ -97,6 +90,7 @@ export class UserController {
         );
     }
 
+    @Permissions(Permission.DeleteUser)
     @Delete(':id')
     @ApiOperation({ summary: 'حذف یک کاربر' })
     @ApiResponse({ status: 200, description: 'کاربر با موفقیت حذف شد.' })

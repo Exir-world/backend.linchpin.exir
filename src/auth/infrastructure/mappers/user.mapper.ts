@@ -10,6 +10,7 @@ export class UserMapper {
             userEntity.organizationId,
             userEntity.firstname,
             userEntity.name,
+            userEntity.email,
             userEntity.profileImage,
             userEntity.lastname,
             userEntity.phoneNumber,
@@ -18,6 +19,7 @@ export class UserMapper {
             userEntity.nationalCode,
             userEntity.personnelCode,
             userEntity.isDeleted,
+            userEntity.hasAdminPanelAccess,
             userEntity.id,
         );
     }
@@ -28,6 +30,7 @@ export class UserMapper {
         userEntity.organizationId = user.organizationId;
         userEntity.firstname = user.firstname;
         userEntity.name = user.name;
+        userEntity.email = user.email;
         userEntity.lastname = user.lastname;
         userEntity.phoneNumber = user.phoneNumber;
         userEntity.password = user.password;
@@ -35,6 +38,8 @@ export class UserMapper {
         userEntity.nationalCode = user.nationalCode;
         userEntity.personnelCode = user.personnelCode;
         userEntity.isDeleted = user.isDeleted;
+        userEntity.profileImage = user.profileImage;
+        userEntity.hasAdminPanelAccess = user.hasAdminPanelAccess;
         return userEntity;
     }
 }

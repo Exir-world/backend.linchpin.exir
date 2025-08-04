@@ -12,7 +12,7 @@ export class GetNotificationsHandler implements IQueryHandler<GetNotificationsQu
     ) { }
 
     async execute(query: GetNotificationsQuery) {
-        const notifs = await this.notificationRepository.findByUserId(query.userId, query.page, query.limit);
+        const notifs = await this.notificationRepository.findByUserId(query.userId, query.page, query.limit, query.unreadOnly);
         return {
             notifications: notifs.notifications.map(notif => ({
                 ...notif,

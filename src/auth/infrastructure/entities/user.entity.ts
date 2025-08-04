@@ -12,6 +12,9 @@ export class UserEntity {
     @Column({ type: 'varchar', length: 50 })
     name: string;
 
+    @Column({ type: 'varchar', default: '' })
+    email: string;
+
     @Column({ nullable: true })
     profileImage: string;
 
@@ -38,4 +41,7 @@ export class UserEntity {
 
     @Column({ type: 'boolean', default: false })
     isDeleted: boolean;
+
+    @Column({ type: 'boolean', default: false })
+    hasAdminPanelAccess: boolean;
 }

@@ -15,9 +15,14 @@ export class UserRepositoryImpl extends UserRepository {
         this.ormRepository = this.dataSource.getRepository(UserEntity);
     }
 
-    async findByCondition(condition: any): Promise<User[]> {
-        const users = await this.ormRepository.find({ where: condition, relations: ['role', 'role.permissions'] });
-        return users.map(UserMapper.toDomain);
+    async findByCondition(condition: any, options: { take: number; skip: number }): Promise<any> {
+        const [users, count] = await this.ormRepository.findAndCount({
+            where: condition,
+            relations: ['role'],
+            take: options.take,
+            skip: options.skip,
+        });
+        return [users.map(UserMapper.toDomain), count];
     }
 
     async findByPhoneNumber(phoneNumber: string): Promise<User | null> {
@@ -31,6 +36,7 @@ export class UserRepositoryImpl extends UserRepository {
             userEntity.organizationId,
             userEntity.firstname,
             userEntity.name,
+            userEntity.email,
             userEntity.profileImage,
             userEntity.lastname,
             userEntity.phoneNumber,
@@ -39,6 +45,7 @@ export class UserRepositoryImpl extends UserRepository {
             userEntity.nationalCode,
             userEntity.personnelCode,
             userEntity.isDeleted,
+            userEntity.hasAdminPanelAccess,
             userEntity.id,
         );
     }
@@ -49,12 +56,12 @@ export class UserRepositoryImpl extends UserRepository {
     }
 
     async findAll(): Promise<User[]> {
-        const users = await this.ormRepository.find({ relations: ['role', 'role.permissions'] });
+        const users = await this.ormRepository.find({ relations: ['role'] });
         return users.map(UserMapper.toDomain);
     }
 
     async findById(id: number): Promise<User | null> {
-        const user = await this.ormRepository.findOne({ where: { id }, relations: ['role', 'role.permissions'] });
+        const user = await this.ormRepository.findOne({ where: { id }, relations: ['role'] });
         return user ? UserMapper.toDomain(user) : null;
     }
 

@@ -90,15 +90,17 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
         return AttendanceMapper.toDomainList(attendances);
     }
 
-    async filterByRange(startTime: Date, endTime: Date, orderAsc: boolean = false): Promise<Attendance[]> {
+    async filterByRange(startTime: Date, endTime: Date, orderAsc: boolean = false, userId?: number): Promise<Attendance[]> {
+
+        const where: any = {
+            checkIn: Between(startTime, endTime)
+        };
+        if (userId !== undefined) {
+            where.userId = userId;
+        }
 
         const attendances = await this.attendanceRepo.find({
-            where: {
-                checkIn: Between(
-                    startTime,
-                    endTime
-                )
-            },
+            where,
             relations: [
                 'stops'
             ],

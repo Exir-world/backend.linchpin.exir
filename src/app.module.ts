@@ -19,6 +19,11 @@ import { NotificationsModule } from './notifications/notifications.module';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 import { PropertiesModule } from './properties/properties.module';
 import { ImprovementParametersModule } from './improvement-parameters/improvement-parameters.module';
+import { UserTimesModule } from './user-times/user-times.module';
+import { CheckPointsModule } from './check-points/check-points.module';
+import { UserCheckPointsModule } from './user-check-points/user-check-points.module';
+import { SharedNotificationModule } from './shared-notification/shared-notification.module';
+import { SharedUsersModule } from './shared-user/shared-user.module';
 
 
 @Module({
@@ -79,6 +84,11 @@ import { ImprovementParametersModule } from './improvement-parameters/improvemen
     NotificationsModule,
     PropertiesModule,
     ImprovementParametersModule,
+    UserTimesModule,
+    CheckPointsModule,
+    UserCheckPointsModule,
+    SharedNotificationModule,
+    SharedUsersModule,
   ],
   providers: [ResponseInterceptor],
 })

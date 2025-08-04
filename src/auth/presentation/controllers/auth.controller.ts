@@ -6,36 +6,58 @@ import { Tokens } from 'src/auth/application/interfaces/token.interface';
 import { LoginCommand } from 'src/auth/application/commands/login.command';
 import { RefreshDto } from '../dto/refresh-token.dto';
 import { RefreshTokenCommand } from 'src/auth/application/commands/refresh-token.command';
-import { I18nService } from 'nestjs-i18n';
 import { LoginAdminCommand } from 'src/auth/application/commands/login-admin.command';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { HandleUserDeviceCodeLoginCommand } from 'src/user-employment-settings/application/commands/handle-user-device-code-login.command';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
-        private readonly i18n: I18nService,
+        private readonly commandBus: CommandBus,
     ) { }
-
-    @Get('test')
-    @ApiResponse({ status: 200, description: 'Test multi lang' })
-    async test(@Req() req): Promise<any> {
-        throw new BadRequestException(this.i18n.t('test.test'))
-        return {
-            lang: req.headers['accept-language'],
-            test: this.i18n.t('test.test'),
-        }
-    }
 
     @Post('login')
     @HttpCode(HttpStatus.OK)
     @ApiResponse({ status: 200, description: 'Login successful' })
     async login(@Body() loginDto: LoginDto): Promise<Tokens> {
-        return this.authService.login(
+        const { deviceUniqueCode, firebase } = loginDto;
+
+        const { tokenData, userId } = await this.authService.login(
             new LoginCommand(
                 loginDto.phoneNumber,
-                loginDto.password
+                loginDto.password,
+                firebase,
             )
+        );
+
+        await this.commandBus.execute(new HandleUserDeviceCodeLoginCommand(userId, deviceUniqueCode));
+
+        return tokenData;
+    }
+
+    @Post('login/admin')
+    @HttpCode(HttpStatus.OK)
+    @ApiResponse({ status: 200, description: 'Login successful' })
+    async loginAdmin(@Body() loginDto: LoginDto): Promise<Tokens> {
+        const data = await this.authService.login(
+            new LoginAdminCommand(
+                loginDto.phoneNumber,
+                loginDto.password,
+                loginDto.firebase,
+            )
+        );
+
+        return data;
+    }
+
+    @Post('refresh')
+    @HttpCode(HttpStatus.OK)
+    @ApiResponse({ status: 200 })
+    async refresh(@Body() refreshDto: RefreshDto): Promise<Tokens> {
+        return this.authService.refreshToken(
+            new RefreshTokenCommand(refreshDto.refreshToken)
         );
     }
 

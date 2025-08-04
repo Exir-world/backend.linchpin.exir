@@ -1,12 +1,13 @@
-import { Controller, Post, Get, Body, Req, UseGuards, Request } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Post, Get, Body, Req, UseGuards, Request, Param, Query } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { LeaveService } from '../../application/services/leave.service';
 import { CreateLeaveCommand } from '../../application/commands/create-leave.command';
 import { GetUserLeavesQuery } from '../../application/queries/get-user-leaves.query';
 import { CreateLeaveDto } from '../dto/create-leave.dto';
 import { Leave } from '../../domain/leave';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
+import { GetHourlyUserLeavesQuery } from 'src/leave/application/queries/get-user-hourly-leaves.query';
 
 @ApiBearerAuth()
 @ApiTags('Leave')
@@ -14,7 +15,7 @@ import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 export class LeaveController {
     constructor(private readonly leaveService: LeaveService) { }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'ثبت مرخصی توسط ادمین' })
     @ApiResponse({ status: 201, description: 'مرخصی با موفقیت ثبت شد.' })
     @Post('create')
@@ -37,4 +38,21 @@ export class LeaveController {
         const query = new GetUserLeavesQuery(req.user.id);
         return await this.leaveService.getUserLeaves(query);
     }
+
+    @UseGuards(UserAuthGuard, PermissionsGuard)
+    @Get('hourly/user/:userId')
+    @ApiOperation({ summary: 'دریافت مرخصی‌های ساعتی یک کاربر در بازه دلخواه' })
+    @ApiResponse({ status: 200, description: 'لیست مرخصی‌های ساعتی کاربر بازگردانده شد.' })
+    @ApiQuery({ name: 'startDate', required: false, type: String })
+    @ApiQuery({ name: 'endDate', required: false, type: String })
+    async getHourlyLeavesInRange(
+        @Param('userId') userId: number,
+        @Query('startDate') startDate?: string,
+        @Query('endDate') endDate?: string,
+    ): Promise<Leave[]> {
+        return await this.leaveService.getHourlyLeavesInRange(
+            new GetHourlyUserLeavesQuery(userId, startDate, endDate)
+        );
+    }
+
 }

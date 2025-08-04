@@ -9,6 +9,9 @@ import { UserEmploymentSettingsService } from './application/services/user-emplo
 import { GetUsersEmploymentSettingsHandler } from './application/queries/handlers/get-users-employment-settings.handler';
 import { GetAllUsersEmploymentSettingsHandler } from './application/queries/handlers/get-all-users-employment-settings.handler';
 import { UpdateUserEmploymentSettingsHandler } from './application/commands/handlers/update-user-employment-settings.handler';
+import { RemoveDeviceUniqueCodeByUserIdHandler } from './application/commands/handlers/remove-device-unique-code.handler';
+import { HandleUserDeviceCodeLoginHandler } from './application/commands/handlers/handle-user-device-code-login.handler';
+import { GetUserIdsByDepartmentAndTeamHandler } from './application/queries/handlers/get-user-ids-by-department-and-team.handler';
 
 @Module({
     imports: [
@@ -21,10 +24,13 @@ import { UpdateUserEmploymentSettingsHandler } from './application/commands/hand
     providers: [
         CreateUserEmploymentSettingsHandler,
         UpdateUserEmploymentSettingsHandler,
+        RemoveDeviceUniqueCodeByUserIdHandler,
+        HandleUserDeviceCodeLoginHandler,
 
         GetUserEmploymentSettingsHandler,
         GetUsersEmploymentSettingsHandler,
         GetAllUsersEmploymentSettingsHandler,
+        GetUserIdsByDepartmentAndTeamHandler,
 
         {
             provide: 'UserEmploymentSettingsSharedPort',

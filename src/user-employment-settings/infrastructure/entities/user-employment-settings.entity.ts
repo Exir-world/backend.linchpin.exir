@@ -19,4 +19,7 @@ export class UserEmploymentSettingsEntity {
 
     @Column({ default: true })
     needLocation: boolean;
+
+    @Column({ nullable: true })
+    deviceUniqueCode: string;
 }

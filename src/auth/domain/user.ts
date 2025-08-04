@@ -6,6 +6,7 @@ export class User {
         public organizationId: number,
         public firstname: string,
         public name: string,
+        public email: string,
         public profileImage: string,
         public lastname: string,
         public phoneNumber: string,
@@ -14,6 +15,7 @@ export class User {
         public nationalCode: string,
         public personnelCode: string,
         public isDeleted: boolean,
+        public hasAdminPanelAccess: boolean,
         public id: number = 0,
     ) {
         // if (!firstname || firstname.trim() === '') {

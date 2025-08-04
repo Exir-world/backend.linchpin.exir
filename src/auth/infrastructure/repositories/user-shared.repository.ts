@@ -4,6 +4,7 @@ import { In, Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { UserSharedRepository } from 'src/auth/application/ports/user-shared.repository';
 import { UserDto } from 'src/shared/dto/user.dto';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
 
 @Injectable()
 export class UserSharedRepositoryImpl implements UserSharedRepository {
@@ -50,7 +51,31 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
             lastname: user.lastname,
             personnelCode: user.personnelCode,
             profileImage: user.profileImage,
+            organizationId: user.organizationId,
         }));
+    }
+
+    async getAdmins(permissions: Permission[] = []): Promise<number[]> {
+        const whereCondition: any = {
+            hasAdminPanelAccess: true,
+        };
+
+        const users = await this.userRepository.find({
+            where: whereCondition,
+            relations: ['role']
+        });
+
+        // if (permissions.length > 0) {
+        //     whereCondition.role = {
+        //         permissions: In(permissions)
+        //     };
+        // }
+        return users
+            .filter(user =>
+                permissions.length > 0 &&
+                permissions.every(permission => user.role.permissions.includes(permission))
+            )
+            .map(user => user.id);
     }
 
     async getUserById(userId: number): Promise<UserDto | null> {

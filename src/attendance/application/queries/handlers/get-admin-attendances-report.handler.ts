@@ -17,7 +17,7 @@ export class GetAdminAttendancesReportHandler implements IQueryHandler<GetAdminA
     async execute(query: GetAdminAttendancesReportQuery): Promise<any> {
         const { startDate, endDate } = query;
 
-        const lunchTime = { startTime: '13:00:00', endTime: '13:40:00' };
+        const lunchTime = { startTime: '14:00:00', endTime: '14:40:00' };
         const lunchDuration = 40;
 
         const attendances = await this.attendanceRepo.filterByRange(new Date(startDate), new Date(endDate), true);

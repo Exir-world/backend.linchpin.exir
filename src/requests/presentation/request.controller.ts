@@ -10,16 +10,32 @@ import { GetUserRequestsQuery } from '../application/queries/get-user-requests.q
 import { RequestService } from '../application/services/requests.service';
 import { CancelRequestCommand } from '../application/commands/cancel-request.command';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
 import { GetRequestTypesQuery } from '../application/queries/get-request-types.query';
 import { GetRequestsUserDto } from './dto/get-requests-user.dto';
 import { GetRequestByIdQuery } from '../application/queries/get-request-by-id.query';
+import { SharedNotificationService } from 'src/shared-notification/shared-notification.service';
+import { SharedUsersService } from 'src/shared-user/shared-user.service';
+import { RequestType } from '../domain/enums/request-type.enum';
+import { I18nService } from 'nestjs-i18n';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
+import { Permissions } from 'src/auth/application/decorators/permissions.decorator';
+
+function toCamelCase(value: string): string {
+    return value.toLowerCase().replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+}
+
 
 @ApiBearerAuth()
 @ApiTags('Requests') // نام بخش در Swagger
 @Controller('requests')
 export class RequestController {
-    constructor(private readonly requestService: RequestService) { }
+    constructor(
+        private readonly requestService: RequestService,
+        private readonly userService: SharedUsersService,
+        private readonly notifier: SharedNotificationService,
+        private readonly i18n: I18nService
+    ) { }
 
     @UseGuards(UserAuthGuard)
     @ApiOperation({ summary: 'ایجاد درخواست جدید' })
@@ -38,10 +54,26 @@ export class RequestController {
             dto.startTime,
             dto.endTime
         );
-        return await this.requestService.createRequest(command);
+        const request = await this.requestService.createRequest(command);
+
+        const users = await this.userService.getUsers({ userIds: [req.user.id] });
+
+        const user = users[0];
+
+        const enumKey = toCamelCase(RequestType[dto.type]);
+
+        const typeTitle = this.i18n.t(`request.types.${enumKey}`, { lang: 'fa' });
+
+        this.notifier.sendToAdmins({
+            title: 'درخواست جدید',
+            message: `درخواست ${typeTitle} توسط ${user?.firstname || ''} ${user?.lastname || ''} ثبت شد`,
+        }, [Permission.ReadRequest]);
+
+        return request;
     }
 
-    @UseGuards(AdminAuthGuard)
+    @Permissions(Permission.ReviewRequest)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'تایید یا رد درخواست' })
     @ApiResponse({ status: 200, description: 'درخواست بررسی شد.' })
     @ApiResponse({ status: 404, description: 'درخواست پیدا نشد.' })
@@ -74,7 +106,8 @@ export class RequestController {
         return await this.requestService.getUserRequests(query);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @Permissions(Permission.ReadRequest)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'دریافت درخواست‌ها با وضعیت (اختیاری)' })
     @ApiResponse({ status: 200, description: 'لیست درخواست‌ها بازگردانده شد.' })
     @Get()
@@ -83,7 +116,8 @@ export class RequestController {
         return await this.requestService.getAllRequests(query);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @Permissions(Permission.ReadRequest)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @ApiOperation({ summary: 'دریافت درخواست بر اساس شناسه' })
     @ApiResponse({ status: 200, description: 'درخواست بازگردانده شد.' })
     @ApiResponse({ status: 404, description: 'درخواست پیدا نشد.' })

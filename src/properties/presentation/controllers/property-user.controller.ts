@@ -6,7 +6,7 @@ import { AssignPropertyCommand } from 'src/properties/application/commands/assig
 import { UnassignPropertyCommand } from 'src/properties/application/commands/unassign-property.command';
 import { GetUserPropertiesQuery } from 'src/properties/application/queries/get-user-properties.query';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 import { UnassignPropertyDto } from '../dto/unassign-property.dto';
 import { GetUserPropertiesForAdminQuery } from '../../application/queries/get-user-properties-for-admin.query';
 
@@ -20,7 +20,7 @@ export class PropertyUserController {
         private readonly queryBus: QueryBus,
     ) { }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('assign')
     @ApiOperation({ summary: 'اختصاص دادن اموال به کاربر (ادمین)' })
     assign(@Body() dto: AssignPropertyDto) {
@@ -30,7 +30,7 @@ export class PropertyUserController {
         return this.commandBus.execute(command);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('unassign')
     @ApiOperation({ summary: 'حذف اموال از کاربر (ادمین)' })
     unassign(@Body() dto: UnassignPropertyDto) {

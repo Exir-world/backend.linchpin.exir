@@ -10,6 +10,7 @@ import { LeaveController } from './presentation/controllers/leave.controller';
 import { LeaveService } from './application/services/leave.service';
 import { LeaveSharedRepositoryImpl } from './infrastructure/repositories/leave-shared.repository';
 import { AuthModule } from 'src/auth/auth.module';
+import { GetHourlyUserLeavesHandler } from './application/queries/handlers/get-user-hourly-leaves.handler';
 
 @Module({
     imports: [
@@ -38,6 +39,7 @@ import { AuthModule } from 'src/auth/auth.module';
 
         // Query Handlers
         GetUserLeavesHandler,
+        GetHourlyUserLeavesHandler,
     ],
     exports: ['LeaveSharedRepository']
 })

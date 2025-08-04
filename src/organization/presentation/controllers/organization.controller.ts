@@ -3,12 +3,13 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiParam, ApiResponse,
 import { OrganizationService } from 'src/organization/application/services/organization.service';
 import { CreateSelfImprovementDto } from '../dto/create-self-improvement.dto';
 import { UseGuards, Request } from '@nestjs/common';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 import { CreateOrUpdateOrganizationDto } from '../dto/create-or-update-organization.dto';
 import { Team } from 'src/organization/domain/team.domain';
 import { CreateTeamDto } from '../dto/create-team.dto';
 import { CreateDepartmentDto } from '../dto/create-department.dto';
 import { UpdateDepartmentDto } from '../dto/update-department.dto';
+import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('Organization')
@@ -18,7 +19,7 @@ export class OrganizationController {
         private readonly organizationService: OrganizationService,
     ) { }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get('admin/organizations')
     @ApiOperation({ summary: 'Get organizations for admin' })
     @ApiResponse({ status: 200, description: 'Successful response' })
@@ -28,7 +29,7 @@ export class OrganizationController {
         return this.organizationService.getOrganizationsByAdminId(adminId);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post()
     @ApiOperation({ summary: 'Create a new organization' })
     @ApiResponse({ status: 201, description: 'Organization created successfully.' })
@@ -38,7 +39,7 @@ export class OrganizationController {
         return this.organizationService.createOrganization(dto, creatorUserId);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Patch('admin/organizations/:organizationId')
     @ApiOperation({ summary: 'Update an organization by admin' })
     @ApiParam({ name: 'organizationId', required: true, description: 'Organization ID' })
@@ -80,7 +81,7 @@ export class OrganizationController {
         return this.organizationService.getDepartmentsByOrgId(organiztionId);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get(':organiztionId/teams')
     @ApiOperation({ summary: 'Get teams by organization ID' })
     @ApiParam({ name: 'organiztionId', required: true, description: 'Organization ID' })
@@ -90,7 +91,7 @@ export class OrganizationController {
         return this.organizationService.getTeamsByOrgId(organiztionId);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get('departments/:departmentId/teams')
     @ApiOperation({ summary: 'Get teams by department ID' })
     @ApiParam({ name: 'departmentId', required: true, description: 'Department ID' })
@@ -100,7 +101,7 @@ export class OrganizationController {
         return this.organizationService.getTeamsByDepartmentId(departmentId);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('departments')
     @ApiOperation({ summary: 'Create a new department' })
     @ApiResponse({ status: 201, description: 'Department created successfully.' })
@@ -110,7 +111,7 @@ export class OrganizationController {
         return this.organizationService.createDepartment(dto);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Patch('departments/:departmentId')
     @ApiOperation({ summary: 'Update a department by ID' })
     @ApiParam({ name: 'departmentId', required: true, description: 'Department ID' })
@@ -126,7 +127,7 @@ export class OrganizationController {
         return this.organizationService.updateDepartment(departmentId, dto);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get('departments/:departmentId')
     @ApiOperation({ summary: 'Get a department by ID' })
     @ApiParam({ name: 'departmentId', required: true, description: 'Department ID' })
@@ -136,7 +137,7 @@ export class OrganizationController {
         return this.organizationService.getDepartmentById(departmentId);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('teams')
     @ApiOperation({ summary: 'Create a new team' })
     @ApiCreatedResponse({ type: Team })

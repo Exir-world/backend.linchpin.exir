@@ -22,5 +22,6 @@
     "location": {
         "turnOn": "GPS خود را روشن کنید",
         "outOfRange": "مکان خارج از محدوده است"
-    }
+    },
+    "nextTimeCheckIn": "شما باید از ساعت {{time}} به بعد ورود ثبت کنید"
 }

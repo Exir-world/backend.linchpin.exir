@@ -1,20 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { INotificationRepository } from '../../application/ports/notification.repository';
 import { NotificationEntity } from '../entities/notification.entity';
 import { Notification } from 'src/notifications/domain/notification.domain';
+import { FirebaseNotificationService } from '../services/firebase-notification.service';
+import { UserSessionSharedRepository } from 'src/auth/application/ports/user-session-shared.repository';
 
 @Injectable()
 export class NotificationRepositoryAdapter implements INotificationRepository {
     constructor(
+        @Inject('UserSessionSharedRepository')
+        private readonly sessionRepository: UserSessionSharedRepository,
         @InjectRepository(NotificationEntity)
         private readonly repository: Repository<NotificationEntity>,
+        private readonly firebaseService: FirebaseNotificationService,
     ) { }
 
     async create(notification: Notification): Promise<void> {
+        const userId = notification.getUserId();
+
         const entity = this.repository.create({
-            userId: notification.getUserId(),
+            userId,
             type: notification.getType(),
             title: notification.getTitle(),
             description: notification.getDescription(),
@@ -23,14 +30,26 @@ export class NotificationRepositoryAdapter implements INotificationRepository {
         });
 
         await this.repository.save(entity);
+
+        const firebaseTokens = await this.sessionRepository.getFirebaseTokens([userId]);
+        firebaseTokens.forEach(({ firebaseToken }) => {
+            if (firebaseToken) {
+                this.firebaseService.sendNotification(firebaseToken, notification.getTitle(), notification.getDescription());
+            }
+        });
     }
 
-    async findByUserId(userId: number/*, page: number, limit: number*/): Promise<{ notifications: Notification[]; total: number }> {
+    async findByUserId(userId: number, page: number, limit: number, unreadOnly: boolean): Promise<{ notifications: Notification[]; total: number }> {
+        const where: any = { userId };
+        if (unreadOnly) {
+            where.read = false;
+        }
+
         const [entities, total] = await this.repository.findAndCount({
-            where: { userId },
+            where,
             order: { createdAt: 'DESC' },
-            // take: limit,
-            // skip: (page - 1) * limit,
+            take: limit,
+            skip: (page - 1) * limit,
         });
 
         const notifications = entities.map((entity) =>

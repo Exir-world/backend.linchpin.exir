@@ -35,6 +35,7 @@ import { GetAttendancesReportHandler } from './application/queries/handlers/get-
 import { GetDailyAttendancesReportHandler } from './application/queries/handlers/get-daily-attendances-report.handler';
 import { GetAdminAttendancesReportHandler } from './application/queries/handlers/get-admin-attendances-report.handler';
 import { FilterAttendancesByAdminHandler } from './application/queries/handlers/filter-attendances-admin.handler';
+import { UserTimesModule } from 'src/user-times/user-times.module';
 
 @Module({
     imports: [
@@ -49,7 +50,8 @@ import { FilterAttendancesByAdminHandler } from './application/queries/handlers/
         OrganizationModule,
         ShiftsModule,
         UserEmploymentSettingsModule,
-        ScheduleModule.forRoot()
+        ScheduleModule.forRoot(),
+        UserTimesModule,
     ],
     controllers: [
         AttendanceController,

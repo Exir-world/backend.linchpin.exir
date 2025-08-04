@@ -1,20 +1,23 @@
-// src/modules/auth/infrastructure/entities/role.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
-import { PermissionEntity } from './permission.entity';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 @Entity('roles')
 export class RoleEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column({ nullable: true })
+    organizationId: number;
+
     @Column({ type: 'varchar', length: 50, unique: true })
     name: string;
 
-    @ManyToMany(() => PermissionEntity, (permission) => permission.roles, { cascade: true })
-    @JoinTable({
-        name: 'role_permissions',
-        joinColumn: { name: 'role_id', referencedColumnName: 'id' },
-        inverseJoinColumn: { name: 'permission_id', referencedColumnName: 'id' },
-    })
-    permissions: PermissionEntity[];
+    @Column({ nullable: true })
+    description: string;
+
+    @Column({ array: true, type: 'enum', enum: Permission, default: [] })
+    permissions: Permission[];
+
+    @CreateDateColumn()
+    createdAt: Date;
 }

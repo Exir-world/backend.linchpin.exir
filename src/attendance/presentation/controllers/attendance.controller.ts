@@ -14,7 +14,7 @@ import { EndStopCommand } from 'src/attendance/application/commands/end-stop.com
 import { GetDailyAttendanceStatusQuery } from 'src/attendance/application/queries/get-daily-attendance-status.query';
 import { GetMonthlyReportQuery } from 'src/attendance/application/queries/get-monthly-report.query';
 import { UserAuthGuard } from 'src/auth/application/guards/user-auth.guard';
-import { AdminAuthGuard } from 'src/auth/application/guards/admin-auth.guard';
+import { PermissionsGuard } from 'src/auth/application/guards/permission.guard';
 import { CheckOutCheckingCommand } from 'src/attendance/application/commands/check-out-checking.command';
 import { CheckInDto } from '../dto/check-in.dto';
 import { CheckOutDto } from '../dto/check-out.dto';
@@ -28,6 +28,8 @@ import { GetAdminAttendancesReportDto } from '../dto/get-admin-attendances-repor
 import { GetAdminAttendancesReportQuery } from 'src/attendance/application/queries/get-admin-attendances-report.query';
 import { generateExcel } from 'src/attendance/application/utils/excel.util';
 import { Response } from 'express';
+import { Permissions } from 'src/auth/application/decorators/permissions.decorator';
+import { Permission } from 'src/auth/domain/enums/permission.enum';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -70,9 +72,11 @@ export class AttendanceController {
     })
     async mainPageActions(@Request() req, @Body() body: { actionType: string; workReport?: string; reason?: string, lat: number, lng: number }) {
         const { lat, lng } = body;
+        const organizationId = req.user.organizationId;
+
         switch (body.actionType) {
             case 'check-in':
-                await this.attendanceService.checkIn(req.user.id, lat, lng);
+                await this.attendanceService.checkIn(req.user.id, lat, lng, organizationId);
                 break;
             case 'check-out':
                 if (!body.workReport) throw new BadRequestException('Submit your work report!');
@@ -97,7 +101,8 @@ export class AttendanceController {
     @HttpCode(HttpStatus.OK)
     async checkIn(@Request() req, @Body() dto: CheckInDto) {
         const { lat, lng } = dto;
-        return this.attendanceService.checkIn(req.user.id, lat, lng);
+        const organizationId = req.user.organizationId;
+        return this.attendanceService.checkIn(req.user.id, lat, lng, organizationId);
     }
 
     @UseGuards(UserAuthGuard)
@@ -124,7 +129,7 @@ export class AttendanceController {
         );
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('work-report/approve')
     @ApiOperation({ summary: 'تأیید یا رد گزارش کار' })
     @ApiResponse({ status: 200, description: 'گزارش کار تأیید یا رد شد.' })
@@ -182,7 +187,7 @@ export class AttendanceController {
         return this.attendanceService.getMonthlyReport(req.user.id, month);
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Patch('admin')
     @ApiOperation({ summary: 'ویرایش حضور و غیاب' })
     @ApiResponse({ status: 200, description: 'با موفقیت انجام شد.' })
@@ -222,7 +227,8 @@ export class AttendanceController {
         );
     }
 
-    // @UseGuards(UserAuthGuard)
+    @Permissions(Permission.ReportAttendance)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Post('admin/report')
     @ApiOperation({})
     @HttpCode(HttpStatus.OK)
@@ -232,9 +238,9 @@ export class AttendanceController {
     ) {
         const workDuration = 440;
 
-        const { startDate, endDate, holidaysDayCount } = dto;
+        const { startDate, endDate, holidaysDayCount, userId } = dto;
         const attendances = await this.attendanceService.getAdminAttendancesReport(
-            new GetAdminAttendancesReportQuery(startDate, endDate, holidaysDayCount)
+            new GetAdminAttendancesReportQuery(startDate, endDate, holidaysDayCount, userId)
         );
 
         generateExcel(res, attendances, workDuration, holidaysDayCount);
@@ -242,7 +248,7 @@ export class AttendanceController {
         return attendances;
     }
 
-    @UseGuards(AdminAuthGuard)
+    @UseGuards(UserAuthGuard, PermissionsGuard)
     @Get('admin/filter')
     @ApiOperation({ summary: 'دریافت گزارش حضور و غیاب توسط ادمین' })
     @ApiResponse({ status: 200, description: 'گزارش حضور و غیاب با موفقیت دریافت شد.' })

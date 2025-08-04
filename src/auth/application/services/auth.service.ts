@@ -8,7 +8,11 @@ import { RefreshTokenCommand } from '../commands/refresh-token.command';
 export class AuthService {
     constructor(private readonly commandBus: CommandBus) { }
 
-    async login(command: LoginCommand): Promise<Tokens> {
+    async login(command: LoginCommand): Promise<any> {
+        return this.commandBus.execute(command);
+    }
+
+    async refreshToken(command: RefreshTokenCommand): Promise<Tokens> {
         return this.commandBus.execute(command);
     }
 

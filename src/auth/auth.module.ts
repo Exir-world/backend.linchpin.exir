@@ -1,22 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 import { RoleController } from './presentation/controllers/role.controller';
-import { RoleService } from './application/services/role.service';
 import { CreateRoleHandler } from './application/commands/handlers/create-role.handler';
-import { GetRolesHandler } from './application/queries/handlers/get-roles.handler';
-import { GetRoleDetailsHandler } from './application/queries/handlers/get-role-details.handler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RoleEntity } from './infrastructure/entities/role.entity';
-import { PermissionEntity } from './infrastructure/entities/permission.entity';
-import { RoleRepositoryImpl } from './infrastructure/repositories/role.repository';
-import { RoleRepository } from './application/ports/role.repository';
-import { PermissionRepositoryImpl } from './infrastructure/repositories/permission.repository';
-import { PermissionRepository } from './application/ports/permission.repository';
-import { AddPermissionsToRoleHandler } from './application/commands/handlers/add-permissions-to-role.handler';
-import { PermissionController } from './presentation/controllers/permission.controller';
-import { PermissionService } from './application/services/permission.service';
-import { CreatePermissionHandler } from './application/commands/handlers/create-permission.handler';
-import { GetAllPermissionsHandler } from './application/queries/handlers/get-all-permissions.handler';
 import { AuthService } from './application/services/auth.service';
 import { JwtStrategy } from './application/services/strategies/jwt.strategy';
 import { UserSessionRepositoryImpl } from './infrastructure/repositories/user-session.repository';
@@ -26,7 +13,6 @@ import { UserRepositoryImpl } from './infrastructure/repositories/user.repositor
 import { UserEntity } from './infrastructure/entities/user.entity';
 import { UserSessionEntity } from './infrastructure/entities/user-session.entity';
 import { AuthController } from './presentation/controllers/auth.controller';
-import { PolicyService } from './application/services/policy.service';
 import { UserController } from './presentation/controllers/user.controller';
 import { CreateUserHandler } from './application/commands/handlers/create-user.handler';
 import { UpdateUserHandler } from './application/commands/handlers/update-user.handler';
@@ -38,46 +24,39 @@ import { JwtService } from '@nestjs/jwt';
 import { UserSharedRepositoryImpl } from './infrastructure/repositories/user-shared.repository';
 import { RefreshTokenHandler } from './application/commands/handlers/refresh-token.handler';
 import { OrganizationModule } from 'src/organization/organization.module';
-import { GetAllUsersWithTeamHandler } from './application/queries/handlers/get-all-users-with-team.handler';
 import { UserEmploymentSettingsModule } from 'src/user-employment-settings/user-employment-settings.module';
 import { LoginAdminHandler } from './application/commands/handlers/login-admin.handler';
+import { UserSessionSharedRepositoryImpl } from './infrastructure/repositories/user-session-shared.repository';
+import { UpdateRoleHandler } from './application/commands/handlers/update-role.handler';
+import { GetAllRolesHandler } from './application/queries/get-roles.handler';
+import { GetRoleByIdHandler } from './application/queries/get-role.handler';
+import { RolesRepository } from './infrastructure/repositories/role.repository';
+import { GetAllPermissionHandler } from './application/queries/handlers/get-all-permissions.handler';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             RoleEntity,
-            PermissionEntity,
             UserEntity,
             UserSessionEntity
         ]),
         CqrsModule,
         forwardRef(() => OrganizationModule),
         UserEmploymentSettingsModule,
+        HttpModule,
     ],
     controllers: [
         RoleController,
-        PermissionController,
         AuthController,
         UserController,
     ],
     providers: [
         // Services
         AuthService,
-        RoleService,
-        PermissionService,
-        PolicyService,
 
         // Repositories
-        RoleRepositoryImpl,
-        {
-            provide: RoleRepository,
-            useClass: RoleRepositoryImpl
-        },
-        PermissionRepositoryImpl,
-        {
-            provide: PermissionRepository,
-            useClass: PermissionRepositoryImpl
-        },
+        RolesRepository,
         UserSessionRepositoryImpl,
         {
             provide: UserSessionRepository,
@@ -92,11 +71,14 @@ import { LoginAdminHandler } from './application/commands/handlers/login-admin.h
             provide: 'UserSharedRepository',
             useClass: UserSharedRepositoryImpl,
         },
+        {
+            provide: 'UserSessionSharedRepository',
+            useClass: UserSessionSharedRepositoryImpl,
+        },
 
         // Command Handlers
         CreateRoleHandler,
-        AddPermissionsToRoleHandler,
-        CreatePermissionHandler,
+        UpdateRoleHandler,
         CreateUserHandler,
         UpdateUserHandler,
         DeleteUserHandler,
@@ -107,15 +89,14 @@ import { LoginAdminHandler } from './application/commands/handlers/login-admin.h
         // Query Handlers
         GetUserByIdHandler,
         GetAllUsersHandler,
-        GetRolesHandler,
-        GetRoleDetailsHandler,
-        GetAllPermissionsHandler,
-        GetAllUsersWithTeamHandler,
+        GetAllRolesHandler,
+        GetRoleByIdHandler,
+        GetAllPermissionHandler,
 
         // Others
         JwtStrategy,
         JwtService,
     ],
-    exports: ['UserSharedRepository'],
+    exports: ['UserSharedRepository', 'UserSessionSharedRepository'],
 })
 export class AuthModule { }

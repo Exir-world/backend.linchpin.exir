@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsPhoneNumber, MinLength, MaxLength, IsInt, IsNumber, IsOptional, ValidateNested, IsBoolean, IsEmail } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class SettingsDto {
@@ -7,6 +7,11 @@ class SettingsDto {
     @IsNumber()
     @IsOptional()
     teamId?: number;
+
+    @ApiPropertyOptional({ example: 1, description: 'شناسه دپارتمان' })
+    @IsNumber()
+    @IsOptional()
+    departmentId?: number;
 
     @ApiPropertyOptional({ example: 5, description: 'شناسه شیفت' })
     @IsNumber()
@@ -24,11 +29,6 @@ class SettingsDto {
 }
 
 export class CreateUserDto {
-    @ApiProperty({ example: 1, description: 'شناسه سازمان' })
-    @IsNumber()
-    @IsNotEmpty()
-    organizationId: number;
-
     @ApiProperty({ example: 'John', description: 'نام کاربر' })
     @IsString({ message: 'نام باید یک رشته باشد' })
     @IsNotEmpty({ message: 'نام نمی‌تواند خالی باشد' })
@@ -90,4 +90,14 @@ export class CreateUserDto {
     @IsBoolean()
     @IsNotEmpty()
     isDeleted: boolean = false;
+
+    @ApiProperty({ example: false, description: 'دسترسی به پنل ادمین' })
+    @IsBoolean()
+    @IsNotEmpty()
+    hasAdminPanelAccess: boolean = false;
+
+    @ApiProperty()
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 }
