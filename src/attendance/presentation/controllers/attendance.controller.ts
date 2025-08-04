@@ -30,6 +30,7 @@ import { generateExcel } from 'src/attendance/application/utils/excel.util';
 import { Response } from 'express';
 import { Permissions } from 'src/auth/application/decorators/permissions.decorator';
 import { Permission } from 'src/auth/domain/enums/permission.enum';
+import { CheckLocationDto } from '../dto/check-location.dto';
 
 @ApiBearerAuth()
 @ApiTags('Attendance')
@@ -271,6 +272,15 @@ export class AttendanceController {
             startDate || todayStart,
             endDate || endToday,
         );
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Get('check-location')
+    @ApiOperation({ summary: 'بررسی لوکیشن کاربر در زمان ورود' })
+    async checkLocation(@Request() req, @Body() dto: CheckLocationDto) {
+        const { lat, lng, gpsIsOn } = dto;
+        const organizationId = req.user.organizationId;
+        return this.attendanceService.checkLocation(req.user.id, lat, lng, organizationId, gpsIsOn);
     }
 
     // @ApiOperation({})

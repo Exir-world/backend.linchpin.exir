@@ -60,25 +60,4 @@ export class AuthController {
             new RefreshTokenCommand(refreshDto.refreshToken)
         );
     }
-
-    @Post('login/admin')
-    @HttpCode(HttpStatus.OK)
-    @ApiResponse({ status: 200, description: 'Login successful' })
-    async loginAdmin(@Body() loginDto: LoginDto): Promise<Tokens> {
-        return this.authService.login(
-            new LoginAdminCommand(
-                loginDto.phoneNumber,
-                loginDto.password
-            )
-        );
-    }
-
-    @Post('refresh')
-    @HttpCode(HttpStatus.OK)
-    @ApiResponse({ status: 200 })
-    async refresh(@Body() refreshDto: RefreshDto): Promise<Tokens> {
-        return this.authService.refreshToken(
-            new RefreshTokenCommand(refreshDto.refreshToken)
-        );
-    }
 }
