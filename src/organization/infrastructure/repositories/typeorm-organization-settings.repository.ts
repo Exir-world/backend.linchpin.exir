@@ -24,4 +24,9 @@ export class TypeOrmOrganizationSettingsRepository implements OrganizationSettin
 
         return OrganizationSettingsMapper.toDomain(entity);
     }
+
+    async findAll(): Promise<OrganizationSettingsDomain[]> {
+        const entities = await this.repo.find({ relations: ['organization'] });
+        return entities.map(entity => OrganizationSettingsMapper.toDomain(entity));
+    }
 }

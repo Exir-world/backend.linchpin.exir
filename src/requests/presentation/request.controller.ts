@@ -47,6 +47,8 @@ export class RequestController {
         @Body() dto: CreateRequestDto,
         @Request() req: any // درخواست‌کننده برای userId
     ) {
+        const organizationId = req.user.organizationId;
+
         const command = new CreateRequestCommand(
             req.user.id, // فرض بر اینکه userId در JWT موجود است
             dto.type,
@@ -64,7 +66,7 @@ export class RequestController {
 
         const typeTitle = this.i18n.t(`request.types.${enumKey}`, { lang: 'fa' });
 
-        this.notifier.sendToAdmins({
+        this.notifier.sendToAdmins(organizationId, {
             title: 'درخواست جدید',
             message: `درخواست ${typeTitle} توسط ${user?.firstname || ''} ${user?.lastname || ''} ثبت شد`,
         }, [Permission.ReadRequest]);

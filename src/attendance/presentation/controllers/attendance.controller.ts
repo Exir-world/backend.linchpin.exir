@@ -275,7 +275,7 @@ export class AttendanceController {
     }
 
     @UseGuards(UserAuthGuard)
-    @Get('check-location')
+    @Post('check-location')
     @ApiOperation({ summary: 'بررسی لوکیشن کاربر در زمان ورود' })
     async checkLocation(@Request() req, @Body() dto: CheckLocationDto) {
         const { lat, lng, gpsIsOn } = dto;

@@ -55,9 +55,10 @@ export class UserSharedRepositoryImpl implements UserSharedRepository {
         }));
     }
 
-    async getAdmins(permissions: Permission[] = []): Promise<number[]> {
+    async getAdmins(organizationId: number, permissions: Permission[] = []): Promise<number[]> {
         const whereCondition: any = {
             hasAdminPanelAccess: true,
+            organizationId,
         };
 
         const users = await this.userRepository.find({
