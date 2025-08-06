@@ -24,8 +24,8 @@ export class SharedNotificationService {
         }
     }
 
-    async sendToAdmins(dto: SendNotificationToAdminsDto, permissions: Permission[] = []): Promise<void> {
-        const admins = await this.userSharedPort.getAdmins(permissions);
+    async sendToAdmins(organizationId: number, dto: SendNotificationToAdminsDto, permissions: Permission[] = []): Promise<void> {
+        const admins = await this.userSharedPort.getAdmins(organizationId, permissions);
         const tokens = await this.userSessionSharedPort.getFirebaseTokens(admins, true);
         console.log(tokens);
 

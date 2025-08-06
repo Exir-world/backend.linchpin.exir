@@ -275,12 +275,20 @@ export class AttendanceController {
     }
 
     @UseGuards(UserAuthGuard)
-    @Get('check-location')
+    @Post('check-location')
     @ApiOperation({ summary: 'بررسی لوکیشن کاربر در زمان ورود' })
     async checkLocation(@Request() req, @Body() dto: CheckLocationDto) {
         const { lat, lng, gpsIsOn } = dto;
         const organizationId = req.user.organizationId;
         return this.attendanceService.checkLocation(req.user.id, lat, lng, organizationId, gpsIsOn);
+    }
+
+    @UseGuards(UserAuthGuard)
+    @Get('work-times-for-user')
+    @ApiOperation({ summary: 'دریافت ساعت شروع و پایان برای کاربر' })
+    async getWorkTimesForUser(@Request() req) {
+        const { id, organizationId } = req.user;
+        return this.attendanceService.getWorkTimesForUser(id, organizationId);
     }
 
     // @ApiOperation({})

@@ -36,13 +36,19 @@ import { GetDailyAttendancesReportHandler } from './application/queries/handlers
 import { GetAdminAttendancesReportHandler } from './application/queries/handlers/get-admin-attendances-report.handler';
 import { FilterAttendancesByAdminHandler } from './application/queries/handlers/filter-attendances-admin.handler';
 import { UserTimesModule } from 'src/user-times/user-times.module';
+import { SharedNotificationModule } from 'src/shared-notification/shared-notification.module';
+import { UpsertUserLastLocationHandler } from './application/commands/handlers/upsert-user-location.handler';
+import { UserLastLocation } from './infrastructure/entities/user-last-location.entity';
+import { LocationCheckCron } from './application/services/location.cron';
+import { SharedUsersModule } from 'src/shared-user/shared-user.module';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
             AttendanceEntity,
             WorkReportEntity,
-            StopEntity
+            StopEntity,
+            UserLastLocation,
         ]),
         CqrsModule,
         AuthModule,
@@ -52,6 +58,8 @@ import { UserTimesModule } from 'src/user-times/user-times.module';
         UserEmploymentSettingsModule,
         ScheduleModule.forRoot(),
         UserTimesModule,
+        SharedNotificationModule,
+        SharedUsersModule,
     ],
     controllers: [
         AttendanceController,
@@ -59,6 +67,7 @@ import { UserTimesModule } from 'src/user-times/user-times.module';
     providers: [
         // Services
         AttendanceService,
+        LocationCheckCron,
 
         // Repositories
         AttendanceRepositoryImpl,
@@ -99,7 +108,7 @@ import { UserTimesModule } from 'src/user-times/user-times.module';
         EndStopHandler,
         CheckOutCheckingHandler,
         UpdateAttendanceAdminHandler,
-
+        UpsertUserLastLocationHandler,
 
         // Query Handlers
         GetLastAttendanceHandler,

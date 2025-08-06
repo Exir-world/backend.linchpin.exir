@@ -25,6 +25,10 @@ import { UserSharedRepository } from 'src/auth/application/ports/user-shared.rep
 import { FilterAttendancesByAdminQuery } from '../queries/filter-attendances-admin.query';
 import { UserTimesSharedService } from 'src/user-times/application/services/user-times-shared.service';
 import { OrganizationSettingsRepositoryPort } from 'src/organization/application/ports/organization-settings.repository';
+import { OrganizationSettingsDomain } from 'src/organization/domain/organization-settings.domain';
+import { SharedNotificationService } from 'src/shared-notification/shared-notification.service';
+import { UpsertUserLastLocationCommand } from '../commands/upsert-user-location.command';
+import { GetShiftsByOrganizationQuery } from 'src/shifts/application/queries/get-shifts-by-organization.query';
 
 @Injectable()
 export class AttendanceService {
@@ -42,7 +46,54 @@ export class AttendanceService {
         private readonly userSharedPort: UserSharedRepository,
         private readonly userTimesSharedService: UserTimesSharedService,
         private readonly orgSettingsRepo: OrganizationSettingsRepositoryPort,
+        private readonly notificationService: SharedNotificationService,
     ) { }
+
+    async getWorkTimesForUser(id: number, organizationId: number) {
+        const jsDay = new Date().getDay();
+        const shamsiDay = (jsDay + 1) % 7;
+
+        const latestUserTime = await this.userTimesSharedService.getLatestUserTimesForUser(id);
+        if (latestUserTime) {
+            const times = latestUserTime.weeklyTimes.find(w => w.dayOfWeek == shamsiDay);
+            return {
+                startTime: times.isAbsent ? null : times?.startTime || null,
+                endTime: times.isAbsent ? null : times?.endTime || null,
+            }
+        }
+
+        const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(id);
+        const shifts = await this.queryBus.execute(new GetShiftsByOrganizationQuery(organizationId));
+        if (shifts?.length) {
+            const shiftTimes = shifts.find(sh => sh.id == settings.shiftId)?.shiftTimes;
+            return {
+                startTime: shiftTimes[0]?.startTime || null,
+                endTime: shiftTimes[0]?.endTime || null,
+            }
+        }
+    }
+
+    async handleOutOfRangeWhileCheckedIn(orgSettings: OrganizationSettingsDomain, userId: number, organizationId: number, isGpsOn: boolean) {
+        this.notificationService.sendToUsers({
+            userIds: [userId],
+            title: 'خروج از محدوده',
+            message: isGpsOn ? 'شما از محدوده کاری خود خارج شده اید' : 'لطفا لوکیشن دستگاه خود را روشن کنید',
+        });
+
+        if (orgSettings?.notifyAdminOnUserExit || true) {
+            this.notificationService.sendToAdmins(
+                organizationId,
+                {
+                    title: 'خروج از محدوده',
+                    message: isGpsOn ? `کاربر با شناسه ${userId} از محدوده کاری خارج شد` : `لوکیشن کاربر با شناسه ${userId} خاموش می باشد`,
+                },
+                [],
+            );
+        }
+        if (orgSettings?.registerUserExit || false) {
+            await this.commandBus.execute(new CheckOutCommand(userId, 0, 0));
+        }
+    }
 
     async checkLocation(userId: number, lat: number, lng: number, organizationId: number, gpsIsOn: boolean): Promise<void> {
         const orgSettings = await this.orgSettingsRepo.findByOrganizationId(organizationId);
@@ -50,39 +101,16 @@ export class AttendanceService {
         const checkedIn = lastAttendance && !lastAttendance.checkOut;
         if (checkedIn) {
             if (!gpsIsOn) {
-                if (orgSettings?.notifyAdminOnUserExit || true) {
-
+                this.handleOutOfRangeWhileCheckedIn(orgSettings, userId, organizationId, gpsIsOn);
+            } else {
+                const location = await this.organizationService.getLocationByOrgId(organizationId);
+                const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
+                if (!locationChcek) {
+                    this.handleOutOfRangeWhileCheckedIn(orgSettings, userId, organizationId, gpsIsOn);
                 }
-                if (orgSettings?.registerUserExit || false) {
-
-                }
+                this.commandBus.execute(new UpsertUserLastLocationCommand(userId, lat, lng));
             }
         }
-
-        return
-        // let startTime;
-        // const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(userId);
-        // const userTime = await this.userTimesSharedService.getLatestUserTimesForUser(userId);
-        // if (userTime) {
-        //     startTime = userTime.weeklyTimes[0].startTime;
-        // } else {
-        //     const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
-        //     startTime = shifts.shiftTimes.at(0).startTime;
-        // }
-
-        // if (settings.needLocation) {
-        //     if (!lat || !lng) throw new BadRequestException(this.i18n.t('attendance.location.turnOn'));
-
-        //     const location = await this.organizationService.getLocationByOrgId(organizationId);
-
-        //     const locationChcek = isWithinRadius(lat, lng, location.lat, location.lng, location.radius);
-        //     if (!locationChcek)
-        //         throw new BadRequestException(this.i18n.t('attendance.location.outOfRange'));
-        // }
-
-        // const startOfDay = DateUtil.convertTimeToUTC(startTime);
-
-        // return this.commandBus.execute(new CheckInCommand(userId, startOfDay, startTime, lat, lng));
     }
 
     /**

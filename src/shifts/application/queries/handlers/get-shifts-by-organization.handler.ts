@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { GetShiftsByOrganizationQuery } from "../get-shifts-by-organization.query";
 import { ShiftEntity } from "src/shifts/infrastructure/entities/shift.entity";
 import { ShiftMapper } from "src/shifts/infrastructure/mappers/shift.mapper";
+import { Shift } from "src/shifts/domain/shift.domain";
 
 @QueryHandler(GetShiftsByOrganizationQuery)
 export class GetShiftsByOrganizationHandler implements IQueryHandler<GetShiftsByOrganizationQuery> {
@@ -12,7 +13,7 @@ export class GetShiftsByOrganizationHandler implements IQueryHandler<GetShiftsBy
         private readonly shiftRepository: Repository<ShiftEntity>
     ) { }
 
-    async execute(query: GetShiftsByOrganizationQuery): Promise<any> {
+    async execute(query: GetShiftsByOrganizationQuery): Promise<Shift[]> {
         const { organizationId } = query;
 
         const shifts = await this.shiftRepository.find({

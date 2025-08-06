@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsBoolean, IsNumber } from 'class-validator';
 
 export class CheckLocationDto {
     @ApiProperty({ example: 36.3636, description: 'عرض جغرافیایی' })
@@ -11,6 +11,6 @@ export class CheckLocationDto {
     lng: number;
 
     @ApiProperty({ example: true, description: 'وضعیت روشن بودن GPS' })
-    @IsNumber()
+    @IsBoolean()
     gpsIsOn: boolean;
 }
