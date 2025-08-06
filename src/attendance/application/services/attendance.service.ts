@@ -111,6 +111,12 @@ export class AttendanceService {
                 this.commandBus.execute(new UpsertUserLastLocationCommand(userId, lat, lng));
             }
         }
+
+        await this.notificationService.sendToUsers({
+            userIds: [userId],
+            title: 'تست چک لوکیشن',
+            message: 'درخواست با موفقیت به پایان رسید'
+        })
     }
 
     /**
