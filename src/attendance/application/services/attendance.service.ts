@@ -28,6 +28,7 @@ import { OrganizationSettingsRepositoryPort } from 'src/organization/application
 import { OrganizationSettingsDomain } from 'src/organization/domain/organization-settings.domain';
 import { SharedNotificationService } from 'src/shared-notification/shared-notification.service';
 import { UpsertUserLastLocationCommand } from '../commands/upsert-user-location.command';
+import { GetShiftsByOrganizationQuery } from 'src/shifts/application/queries/get-shifts-by-organization.query';
 
 @Injectable()
 export class AttendanceService {
@@ -47,6 +48,30 @@ export class AttendanceService {
         private readonly orgSettingsRepo: OrganizationSettingsRepositoryPort,
         private readonly notificationService: SharedNotificationService,
     ) { }
+
+    async getWorkTimesForUser(id: number, organizationId: number) {
+        const jsDay = new Date().getDay();
+        const shamsiDay = (jsDay + 1) % 7;
+
+        const latestUserTime = await this.userTimesSharedService.getLatestUserTimesForUser(id);
+        if (latestUserTime) {
+            const times = latestUserTime.weeklyTimes.find(w => w.dayOfWeek == shamsiDay);
+            return {
+                startTime: times.isAbsent ? null : times?.startTime || null,
+                endTime: times.isAbsent ? null : times?.endTime || null,
+            }
+        }
+
+        const settings = await this.userEmploymentSettingsSharedPort.getSettingsByUserId(id);
+        const shifts = await this.queryBus.execute(new GetShiftsByOrganizationQuery(organizationId));
+        if (shifts?.length) {
+            const shiftTimes = shifts.find(sh => sh.id == settings.shiftId)?.shiftTimes;
+            return {
+                startTime: shiftTimes[0]?.startTime || null,
+                endTime: shiftTimes[0]?.endTime || null,
+            }
+        }
+    }
 
     async handleOutOfRangeWhileCheckedIn(orgSettings: OrganizationSettingsDomain, userId: number, organizationId: number, isGpsOn: boolean) {
         this.notificationService.sendToUsers({

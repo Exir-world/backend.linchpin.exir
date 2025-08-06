@@ -283,6 +283,14 @@ export class AttendanceController {
         return this.attendanceService.checkLocation(req.user.id, lat, lng, organizationId, gpsIsOn);
     }
 
+    @UseGuards(UserAuthGuard)
+    @Get('work-times-for-user')
+    @ApiOperation({ summary: 'دریافت ساعت شروع و پایان برای کاربر' })
+    async getWorkTimesForUser(@Request() req) {
+        const { id, organizationId } = req.user;
+        return this.attendanceService.getWorkTimesForUser(id, organizationId);
+    }
+
     // @ApiOperation({})
     // @Post('auto-check-out')
     // async autoCheckout(@Request() req) {
