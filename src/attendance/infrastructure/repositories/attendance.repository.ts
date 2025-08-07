@@ -70,6 +70,7 @@ export class AttendanceRepositoryImpl implements AttendanceRepository {
     }
 
     async filterByUserAndRange(userId: number, startTime: Date, endTime: Date, orderAsc: boolean = false): Promise<Attendance[]> {
+        console.log(userId);
 
         const attendances = await this.attendanceRepo.find({
             where: {
