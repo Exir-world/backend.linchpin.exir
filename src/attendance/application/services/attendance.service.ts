@@ -131,7 +131,7 @@ export class AttendanceService {
             startTime = userTime.weeklyTimes[0].startTime;
         } else {
             const shifts = await this.shiftsSharedPort.getShift(settings.shiftId);
-            startTime = shifts.shiftTimes.at(0).startTime;
+            startTime = shifts.shiftTimes.filter(sh => sh.type == 'WORK').at(0).startTime;
         }
 
         if (settings.needLocation) {
@@ -145,6 +145,9 @@ export class AttendanceService {
         }
 
         const startOfDay = DateUtil.convertTimeToUTC(startTime);
+
+        console.log(startTime);
+
 
         return this.commandBus.execute(new CheckInCommand(userId, startOfDay, startTime, lat, lng));
     }
