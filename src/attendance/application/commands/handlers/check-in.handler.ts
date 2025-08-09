@@ -32,8 +32,8 @@ export class CheckInHandler implements ICommandHandler<CheckInCommand> {
         const diff = this.calculateDifferenceWithNow(command.startTime);
         console.log(diff, command.startTime);
 
-        if (diff < -(TIME_TOLERANCE + 5))
-            throw new BadRequestException(this.i18n.t('attendance.nextTimeCheckIn', { args: { time: this.addMinutes(command.startTime, NEXT_TIME_ENTRY) } }));
+        // if (diff < -(TIME_TOLERANCE + 5))
+        //     throw new BadRequestException(this.i18n.t('attendance.nextTimeCheckIn', { args: { time: this.addMinutes(command.startTime, NEXT_TIME_ENTRY) } }));
 
         const attendance = new Attendance(0, command.userId);
         attendance.setLocation(command.lat, command.lng);
