@@ -146,9 +146,6 @@ export class AttendanceService {
 
         const startOfDay = DateUtil.convertTimeToUTC(startTime);
 
-        console.log(startTime);
-
-
         return this.commandBus.execute(new CheckInCommand(userId, startOfDay, startTime, lat, lng));
     }
 
