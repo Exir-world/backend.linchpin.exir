@@ -4,7 +4,7 @@ import { IsNotEmpty, IsOptional, IsString, IsNumber } from 'class-validator';
 export class CreateTeamDto {
     @ApiProperty()
     @IsNumber()
-    organizationId: number;
+    departmentId: number;
 
     @ApiProperty({ required: false })
     @IsOptional()

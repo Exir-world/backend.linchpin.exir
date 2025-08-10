@@ -71,7 +71,7 @@ export class OrganizationService implements OrganizationSharedPort {
 
     async createTeam(
         creatorId,
-        organizationId,
+        departmentId,
         title,
         supervisorId,
         color,
@@ -79,7 +79,7 @@ export class OrganizationService implements OrganizationSharedPort {
     ) {
         const command = new CreateTeamCommand(
             creatorId,
-            organizationId,
+            departmentId,
             title,
             supervisorId,
             color,
