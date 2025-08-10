@@ -144,7 +144,7 @@ export class OrganizationController {
     async create(@Body() dto: CreateTeamDto, @Request() req: any): Promise<Team> {
         const creatorId = req.user.id; // Extract user ID from JWT token
         const {
-            organizationId,
+            departmentId,
             title,
             supervisorId,
             color,
@@ -153,7 +153,7 @@ export class OrganizationController {
 
         return this.organizationService.createTeam(
             creatorId,
-            organizationId,
+            departmentId,
             title,
             supervisorId,
             color,
