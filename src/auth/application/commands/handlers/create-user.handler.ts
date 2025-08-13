@@ -33,16 +33,19 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
         console.log('Creating user with command:', command);
 
 
-        const { id, userData } = await this.registerApi({ phoneNumber: command.phoneNumber, email: command.email, password: command.password, nickname: command.name });
+        // const { id, userData } = await this.registerApi({ phoneNumber: command.phoneNumber, email: command.email, password: command.password, nickname: command.name });
 
         const user = new User(
             command.organizationId,
             command.firstname,
-            userData?.name || command.name,
-            userData.email,
+            command.name,
+            // userData?.name || command.name,
+            command.email,
+            // userData.email,
             command.profileImage,
             command.lastname,
-            userData.phoneNumber.startsWith('+') ? userData.phoneNumber : '+' + userData.phoneNumber,
+            command.phoneNumber,
+            // userData.phoneNumber.startsWith('+') ? userData.phoneNumber : '+' + userData.phoneNumber,
             command.password,
             RoleMapper.toDomain(role),
             command.nationalCode,
