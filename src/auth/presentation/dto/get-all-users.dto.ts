@@ -52,6 +52,15 @@ export class GetAllUsersDto {
 
     @ApiProperty({
         required: false,
+        type: String,
+        description: 'نام (اختیاری)',
+    })
+    @IsOptional()
+    @IsString()
+    name?: string;
+
+    @ApiProperty({
+        required: false,
         type: Number,
         description: 'شماره صفحه (اختیاری، پیش‌فرض: 1)',
         default: 1,

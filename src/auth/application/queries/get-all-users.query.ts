@@ -7,6 +7,7 @@ export class GetAllUsersQuery {
             personnelCode?: string;
             nationalCode?: string;
             phoneNumber?: string;
+            name?: string;
             page?: number;
             limit?: number;
         },

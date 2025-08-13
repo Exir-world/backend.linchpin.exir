@@ -4,7 +4,7 @@ import { UserRepository } from '../../ports/user.repository';
 import { User } from 'src/auth/domain/user';
 import { Inject } from '@nestjs/common';
 import { OrganizationSharedPort } from 'src/organization/application/ports/organization-shared.port';
-import { In } from 'typeorm';
+import { ILike, In } from 'typeorm';
 import { UserEmploymentSettingsSharedPort } from 'src/user-employment-settings/application/ports/user-employment-settings-shared.port';
 
 @QueryHandler(GetAllUsersQuery)
@@ -23,6 +23,7 @@ export class GetAllUsersHandler implements IQueryHandler<GetAllUsersQuery> {
             personnelCode,
             nationalCode,
             phoneNumber,
+            name,
             page = 1,
             limit = 10,
         } = queryParams || {};
@@ -36,10 +37,13 @@ export class GetAllUsersHandler implements IQueryHandler<GetAllUsersQuery> {
             condition.personnelCode = personnelCode;
         }
         if (nationalCode) {
-            condition.nationalCode = nationalCode;
+            condition.nationalCode = ILike(`${nationalCode}%`); // شروع با nationalCode
         }
         if (phoneNumber) {
-            condition.phoneNumber = phoneNumber;
+            condition.phoneNumber = ILike(`${phoneNumber}%`); // شروع با phoneNumber
+        }
+        if (name) {
+            condition.name = ILike(`${name}%`); // شروع با name
         }
 
         if (departmentId || teamId) {
